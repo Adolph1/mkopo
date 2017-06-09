@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Shelve;
+use backend\models\Location;
 
 /**
- * ShelveSearch represents the model behind the search form about `backend\models\Shelve`.
+ * LocationSearch represents the model behind the search form about `backend\models\Location`.
  */
-class ShelveSearch extends Shelve
+class LocationSearch extends Location
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ShelveSearch extends Shelve
     public function rules()
     {
         return [
-            [['id', 'loc_id', 'max_box_no'], 'integer'],
-            [['title', 'status', 'maker_id', 'maker_time'], 'safe'],
+            [['id'], 'integer'],
+            [['location_name', 'status', 'maker_id', 'maker_time'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ShelveSearch extends Shelve
      */
     public function search($params)
     {
-        $query = Shelve::find();
+        $query = Location::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,10 @@ class ShelveSearch extends Shelve
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'loc_id' => $this->loc_id,
-            'max_box_no' => $this->max_box_no,
             'maker_time' => $this->maker_time,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
+        $query->andFilterWhere(['like', 'location_name', $this->location_name])
             ->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'maker_id', $this->maker_id]);
 

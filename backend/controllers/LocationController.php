@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Shelve;
-use backend\models\ShelveSearch;
+use backend\models\Location;
+use backend\models\LocationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ShelveController implements the CRUD actions for Shelve model.
+ * LocationController implements the CRUD actions for Location model.
  */
-class ShelveController extends Controller
+class LocationController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class ShelveController extends Controller
     }
 
     /**
-     * Lists all Shelve models.
+     * Lists all Location models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ShelveSearch();
+        $searchModel = new LocationSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class ShelveController extends Controller
     }
 
     /**
-     * Displays a single Shelve model.
+     * Displays a single Location model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +57,15 @@ class ShelveController extends Controller
     }
 
     /**
-     * Creates a new Shelve model.
+     * Creates a new Location model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Shelve();
+        $model = new Location();
+        $model->maker_id = Yii::$app->user->identity->username;
+        $model->maker_time = date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +77,7 @@ class ShelveController extends Controller
     }
 
     /**
-     * Updates an existing Shelve model.
+     * Updates an existing Location model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -83,6 +85,8 @@ class ShelveController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->maker_id = Yii::$app->user->identity->username;
+        $model->maker_time = date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -94,7 +98,7 @@ class ShelveController extends Controller
     }
 
     /**
-     * Deletes an existing Shelve model.
+     * Deletes an existing Location model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,15 +111,15 @@ class ShelveController extends Controller
     }
 
     /**
-     * Finds the Shelve model based on its primary key value.
+     * Finds the Location model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Shelve the loaded model
+     * @return Location the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Shelve::findOne($id)) !== null) {
+        if (($model = Location::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

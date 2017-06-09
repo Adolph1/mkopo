@@ -63,7 +63,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-green sidebar-mini">
 <?php $this->beginBody() ?>
 <div class="wrapper">
 
@@ -212,6 +212,7 @@ desired effect
 
                         ["label" =>Yii::t('app','Shelves'), "url" =>  ["/shelve/index"], "icon" => "fa fa-building",],
 
+
                         [
                             "label" =>Yii::t('app','Branches'),
                             "url" =>  "#",
@@ -232,6 +233,8 @@ desired effect
                                 ],
 
                         ],
+
+                        ["label" =>Yii::t('app','Locations'), "url" =>  ["/location/index"], "icon" => "fa fa-sitemap",],
 
 
 
@@ -304,7 +307,7 @@ desired effect
         </section>
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content" style="background: #fff">
             <div style="padding-top: 10px"><?= Alert::widget() ?></div>
             <?= $content ?>
         </section><!-- /.content -->

@@ -32,8 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
                 //'id',
             'title',
-            'branch.branch_name',
-            'dept.dept_name',
+            'loc_id',
             'max_box_no',
            // 'status',
             //'maker_id',

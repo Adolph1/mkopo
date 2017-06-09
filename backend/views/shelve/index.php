@@ -8,16 +8,26 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Shelves');
-$this->params['breadcrumbs'][] = $this->title;
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="col-md-12" style="margin-left: 10px">
+    <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-th"></i><strong> SHELVES LIST</strong></h3>
+    <hr>
+</div>
+
 <div class="shelve-index">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <h1><?php // Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <div class="btn-group btn-group-justified">
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Add Shelve'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <?= Html::a(Yii::t('app', '<i class="fa fa-file-o text-black"></i> NEW SHELVE'), ['create'], ['class' => 'btn btn-success btn-success ']) ?>
+
+
+                <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> SHELVES LIST'), ['create'], ['class' => 'btn btn-success btn-success ']) ?>
+
+        </div>
+        <hr>
+    </div>
     <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -28,14 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             [
 
-                'attribute'=>'branch_id',
-                'value'=>'branch.branch_name',
+                'attribute'=>'loc_id',
+                'value'=>'loc.location_name',
             ],
-            [
 
-                'attribute'=>'dept_id',
-                'value'=>'dept.dept_name',
-            ],
             'max_box_no',
             // 'status',
             // 'maker_id',

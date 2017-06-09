@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\ShelveSearch */
+/* @var $model backend\models\LocationSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="shelve-search">
+<div class="location-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,18 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'title') ?>
+    <?= $form->field($model, 'location_name') ?>
 
+    <?= $form->field($model, 'status') ?>
 
-    <?= $form->field($model, 'loc_id') ?>
+    <?= $form->field($model, 'maker_id') ?>
 
-    <?= $form->field($model, 'max_box_no') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'maker_id') ?>
-
-    <?php // echo $form->field($model, 'maker_time') ?>
+    <?= $form->field($model, 'maker_time') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
