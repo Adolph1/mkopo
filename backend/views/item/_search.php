@@ -11,31 +11,49 @@ use yii\widgets\ActiveForm;
 <div class="item-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'action' => ['advancesearch'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
+<div class="row">
+    <div class="col-md-4">
     <?= $form->field($model, 'item_reference') ?>
-
+    </div>
+    <div class="col-md-4">
     <?= $form->field($model, 'item_name') ?>
-
+    </div>
+    <div class="col-md-4">
     <?= $form->field($model, 'year') ?>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-3">
+    <?= $form->field($model, 'location_id')->dropDownList(\backend\models\Location::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'branch_id')->dropDownList(\backend\models\Branch::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'department_id')->dropDownList(\backend\models\Department::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        </div>
+        <div class="col-md-3">
+    <?= $form->field($model, 'shelve_id')->dropDownList(\backend\models\Shelve::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'description') ?>
 
-    <?php // echo $form->field($model, 'shelve_id') ?>
+        <div class="form-group">
 
-    <?php // echo $form->field($model, 'status') ?>
+<div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-3">
+        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary btn-block']) ?>
+    </div>
+    <div class="col-md-3">
+        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-warning btn-block']) ?>
+    </div>
 
-    <?php // echo $form->field($model, 'maker_id') ?>
-
-    <?php // echo $form->field($model, 'maker_time') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+    </div>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -444,13 +444,13 @@ desired effect
 
 
 <script>
-    $("#shelve-branch_id").change(function(){
-        var id =document.getElementById("shelve-branch_id").value;
+    $("#item-branch_id").change(function(){
+        var id =document.getElementById("item-branch_id").value;
         //alert(id);
         $.get("<?php echo Yii::$app->urlManager->createUrl(['department/filter','id'=>'']);?>"+id,function(data) {
 
             //alert(data);
-            $("#shelve-dept_id").html(data);
+            $("#item-department_id").html(data);
 
         });
     });

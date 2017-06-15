@@ -43,6 +43,7 @@ $this->title = Yii::t('app', 'Shelves');
             ],
 
             'max_box_no',
+            'balance',
             // 'status',
             // 'maker_id',
             // 'maker_time',

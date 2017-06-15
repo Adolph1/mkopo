@@ -7,17 +7,25 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\ItemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Items');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Box List');
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="row">
+    <div class="col-md-12" style="margin-left: 20px">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-th"></i><strong> <?= Html::encode(strtoupper($this->title)) ?></strong></h3>
+    </div>
+</div>
+<hr>
 <div class="item-index">
 
-    <h1><?php // Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Add Item'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="col-md-12 pull-right">
+        <div class="btn-group btn-group-justified">
+            <?= Html::a(Yii::t('app', '<i class="fa fa-plus text-white"></i> Add new box'), ['create'], ['class' => 'btn btn-primary btn-block']) ?>
+            <?= Html::a(Yii::t('app', '<i class="fa fa-search text-white"></i> Advance search'), ['advancesearch'], ['class' => 'btn btn-primary btn-block']) ?>
+            <?= Html::a(Yii::t('app', ' <i class="fa fa-eye text-white"></i> View Box List'), ['index'], ['class' => 'btn btn-primary btn-block']) ?>
+        </div>
+        <hr>
+    </div>
     <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,21 +33,47 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'item_reference',
+
             'item_name',
             'year',
             'description:ntext',
+             //'shelve_id',
             [
-                    'attribute'=>'shelve_id',
-                    'value'=>function($model){
-                        return $model->shelve->branch->branch_name ." / ". $model->shelve->dept->dept_name." / ".$model->shelve->title;
-                    }
+                'attribute'=>'location_id'
+                ,                   'value'=>'location.location_name',
             ],
-            // 'status',
-            // 'maker_id',
-            // 'maker_time',
+            'item_reference',
+            [
+                'attribute'=>'branch_id'
+                ,                   'value'=>'branch.branch_name',
+            ],
+            [
+                'attribute'=>'department_id'
+                ,                   'value'=>'department.dept_name',
+            ],
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
+
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Actions',
+                'template'=>'{view}',
+                'buttons'=>[
+                    'view' => function ($url, $model) {
+                        $url=['view','id' => $model->id];
+                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                            'title' => 'View',
+                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                            'class'=>'btn btn-info',
+
+                        ]);
+
+
+                    },
+
+                ]
+            ],
         ],
     ]); ?>
 </div>
+
+

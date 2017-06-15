@@ -65,7 +65,9 @@ class ShelveController extends Controller
     {
         $model = new Shelve();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->balance=$_POST['Shelve']['max_box_no'];
+          $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

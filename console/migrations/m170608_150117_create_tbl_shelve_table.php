@@ -17,6 +17,7 @@ class m170608_150117_create_tbl_shelve_table extends Migration
             'title'=>$this->string(200)->notNull(),
             'loc_id'=>$this->integer(),
             'max_box_no'=>$this->integer(),
+            'balance'=>$this->integer(),
             'status'=>$this->char(1),
             'maker_id'=>$this->string(200),
             'maker_time'=>$this->dateTime(),
