@@ -5,16 +5,29 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Branch */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Branch',
-]) . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Branches'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->title = Yii::t('app', 'Update Branch');
 ?>
-<div class="branch-update">
+<div class="row">
+    <div class="col-md-12">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-pencil-square text-danger"></i><strong> UPDATE BRANCH : <?= strtoupper($model->branch_name);?></strong></h3>
+    </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+</div>
+<hr>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+    <div class="btn-group btn-group-justified">
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-file-o text-black"></i> NEW BRANCH'), ['create'], ['class' => 'btn btn-primary']) ?>
+
+
+<?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> BRANCHES LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
+
+</div>
+<hr>
+</div>
+<hr>
+<div class="branch-update">
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -9,10 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="branch-form">
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <?= Yii::t('app', 'Branch Form'); ?>
-        </div>
+
         <div class="panel-body">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -24,11 +21,12 @@ use yii\widgets\ActiveForm;
      <?= $form->field($model, 'status')->dropDownList(['1'=>'Active','0'=>'disable'],['prompt'=>Yii::t('app','--Select--')]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Submit') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
         </div>
-    </div>
 
 </div>

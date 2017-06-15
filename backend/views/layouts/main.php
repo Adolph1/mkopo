@@ -73,9 +73,9 @@ desired effect
         <!-- Logo -->
         <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>KCB</b>DC</span>
+            <span class="logo-mini"><b>MK</b>M</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>KCB DOC</b></span>
+            <span class="logo-lg"><b>Mkopo Manager</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -194,7 +194,7 @@ desired effect
                     <!-- Status -->
                     <?php
                     if (!Yii::$app->user->isGuest) {?>
-                    <p style="color: green"><small><?php //  \backend\models\AuthItem::getRoleName(\backend\models\AuthAssignment::getRoleByUserId($user_id));?> @ <?php // \backend\models\Branch::getBranchName(\backend\models\Employee::getBranchID(Yii::$app->user->identity->emp_id));?></small></p>
+                    <p style="color: green"><small>
                 <?php }?>
                 </div>
             </div>
@@ -208,9 +208,9 @@ desired effect
                     "items" => [
                         ["label" =>Yii::t('app','Home'), "url" =>  Yii::$app->homeUrl, "icon" => "home"],
 
-                        ["label" =>Yii::t('app','Files'), "url" =>  ["/item/index"], "icon" => "fa fa-folder-o",],
+                        ["label" =>Yii::t('app','Customers'), "url" =>  ["/customer/index"], "icon" => "fa fa-user",],
 
-                        ["label" =>Yii::t('app','Shelves'), "url" =>  ["/shelve/index"], "icon" => "fa fa-building",],
+                        ["label" =>Yii::t('app','Loans'), "url" =>  ["/loan/index"], "icon" => "fa fa-building",],
 
 
                         [

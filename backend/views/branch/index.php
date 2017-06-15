@@ -8,16 +8,30 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Branches');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="branch-index">
+<div class="row">
+    <div class="col-md-12">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-sitemap"></i><strong> BRANCHES LIST</strong></h3>
+    </div>
 
-    <h1><?php // Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Add Branch'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="btn-group btn-group-justified">
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-file-o text-black"></i> NEW BRANCH'), ['create'], ['class' => 'btn btn-primary']) ?>
+
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> BRANCHES LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
+
+    </div>
+</div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
     <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -31,7 +45,27 @@ $this->params['breadcrumbs'][] = $this->title;
             //'maker_id',
             // 'maker_time',
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
+
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Actions',
+                'template'=>'{view}',
+                'buttons'=>[
+                    'view' => function ($url, $model) {
+                        $url=['view','id' => $model->id];
+                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                            'title' => 'View',
+                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                            'class'=>'btn btn-info',
+
+                        ]);
+
+
+                    },
+
+                ]
+            ],
         ],
     ]); ?>
+    </div>
 </div>
