@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Customer;
 use Yii;
 use backend\models\CustomerCategory;
 use backend\models\CustomerCategorySearch;
@@ -64,6 +65,9 @@ class CustomerCategoryController extends Controller
     public function actionCreate()
     {
         $model = new CustomerCategory();
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_time=date('Y-m-d:H:i:s');
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -83,6 +87,8 @@ class CustomerCategoryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_time=date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -121,4 +127,6 @@ class CustomerCategoryController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
 }

@@ -16,6 +16,7 @@ $this->title = Yii::t('app', 'New Branch');
 
 </div>
 <hr>
+<div class="row">
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
     <div class="btn-group btn-group-justified">
@@ -26,7 +27,7 @@ $this->title = Yii::t('app', 'New Branch');
         <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> BRANCHES LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
 
     </div>
-    <hr>
+</div>
 </div>
 <hr>
 <div class="row">

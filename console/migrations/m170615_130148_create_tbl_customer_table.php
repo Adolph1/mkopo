@@ -14,7 +14,7 @@ class m170615_130148_create_tbl_customer_table extends Migration
     {
         $this->createTable('tbl_customer', [
             'id' => $this->primaryKey(),
-            'customer_no'=>$this->integer(10)->unique()->notNull(),
+            'customer_no'=>$this->string(10)->unique()->notNull(),
             'first_name'=>$this->string(200)->notNull(),
             'middle_name'=>$this->string(200),
             'last_name'=>$this->string(200)->notNull(),

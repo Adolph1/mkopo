@@ -21,7 +21,7 @@ $this->title = Yii::t('app', 'Customers');
 
         <div class="btn-group btn-group-justified">
 
-            <?= Html::a(Yii::t('app', '<i class="fa fa-user-plus"></i> NEW CUSTOMER'), ['create'], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('app', '<i class="fa fa-user-plus"></i> ADD NEW CUSTOMER'), ['create'], ['class' => 'btn btn-primary']) ?>
 
 
             <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> CUSTOMERS LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
@@ -38,27 +38,66 @@ $this->title = Yii::t('app', 'Customers');
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            [
+                'attribute' => 'photo',
+                'format' => 'html',
+                'label' => 'Photo',
+                'value' => function ($data) {
+                    if($data!=null) {
+                        return Html::img('uploads/' . $data['photo'],
+                            ['width' => '40px', 'height' => '40px', 'class' => 'img-circle']);
+                    }
+                    else{
+                        return Html::img('uploads/avatar.jpeg',
+                            ['width' => '40px', 'height' => '40px', 'class' => 'img-circle']);
+                    }
+
+                },
+            ],
             'customer_no',
             'first_name',
-            'middle_name',
+            //'middle_name',
             'last_name',
-            // 'identification_id',
-            // 'identification_number',
-            // 'address',
-            // 'mobile_no1',
-            // 'mobile_no2',
+            //'identification_id',
+            //'identification_number',
+            //'address',
+            'mobile_no1',
+            //'mobile_no2',
             // 'email:email',
-            // 'customer_type_id',
-            // 'customer_category_id',
-            // 'branch_id',
+           [
+                'attribute'=>'customer_type_id',
+                'value'=>'customerType.name'
+           ],
+            //'customer_category_id',
+            [
+                'attribute'=>'branch_id',
+                'value'=>'branch.branch_name'
+            ],
             // 'photo',
             // 'mod_no',
             // 'record_stat',
             // 'maker_id',
             // 'maker_time',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Actions',
+                'template'=>'{view}',
+                'buttons'=>[
+                    'view' => function ($url, $model) {
+                        $url=['view','id' => $model->id];
+                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                            'title' => 'View',
+                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                            'class'=>'btn btn-info',
+
+                        ]);
+
+
+                    },
+
+                ]
+            ],
         ],
     ]); ?>
     </div>

@@ -64,6 +64,8 @@ class CustomerTypeController extends Controller
     public function actionCreate()
     {
         $model = new CustomerType();
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_time=date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -83,6 +85,8 @@ class CustomerTypeController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_time=date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

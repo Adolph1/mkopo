@@ -16,12 +16,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'indicator')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'maker_id')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'maker_time')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Submit') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

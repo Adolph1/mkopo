@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "tbl_customer".
@@ -37,6 +38,8 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $customer_photo;
+
     public static function tableName()
     {
         return 'tbl_customer';
@@ -48,12 +51,12 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_no', 'first_name', 'last_name', 'identification_id', 'identification_number', 'mobile_no1', 'customer_type_id'], 'required'],
-            [['customer_no', 'identification_id', 'customer_type_id', 'customer_category_id', 'branch_id', 'mod_no'], 'integer'],
+            [['first_name', 'last_name', 'identification_id', 'identification_number', 'mobile_no1', 'customer_type_id'], 'required'],
+            [['identification_id', 'customer_type_id', 'customer_category_id', 'branch_id', 'mod_no'], 'integer'],
             [['maker_time','expire_date'], 'safe'],
             [['first_name', 'middle_name', 'last_name', 'identification_number', 'address', 'email', 'photo', 'maker_id'], 'string', 'max' => 200],
             [['mobile_no1', 'mobile_no2'], 'string', 'max' => 13],
-            [['record_stat'], 'string', 'max' => 1],
+            [[ 'customer_no'], 'string', 'max' => 10],
             [['customer_no'], 'unique'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['customer_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CustomerCategory::className(), 'targetAttribute' => ['customer_category_id' => 'id']],
@@ -121,5 +124,12 @@ class Customer extends \yii\db\ActiveRecord
     public function getIdentification()
     {
         return $this->hasOne(CustomerIdentification::className(), ['id' => 'identification_id']);
+    }
+
+    public static function getImage($id)
+    {
+        $model=Customer::find()->where(['id'=>$id])->one();
+        return Html::img('uploads/' . $model->photo,
+            ['width' => '150px','height'=>'150px','class'=>'img-circle']);
     }
 }

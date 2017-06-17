@@ -47,7 +47,7 @@ class CustomerIdentification extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
-            'indicator' => Yii::t('app', 'Indicator'),
+            'indicator' => Yii::t('app', 'Code'),
             'maker_id' => Yii::t('app', 'Maker ID'),
             'maker_time' => Yii::t('app', 'Maker Time'),
         ];

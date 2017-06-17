@@ -1735,6 +1735,61 @@
         ]
     },
     {
+        "name": "kartik-v/yii2-grid",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/kartik-v/yii2-grid.git",
+            "reference": "c1c6a2e1987fb76d606ebdca467248030d31a65d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/c1c6a2e1987fb76d606ebdca467248030d31a65d",
+            "reference": "c1c6a2e1987fb76d606ebdca467248030d31a65d",
+            "shasum": ""
+        },
+        "require": {
+            "kartik-v/yii2-dialog": "~1.0",
+            "kartik-v/yii2-krajee-base": "~1.7"
+        },
+        "suggest": {
+            "kartik-v/yii2-mpdf": "For exporting grids to PDF"
+        },
+        "time": "2017-01-03T17:51:05+00:00",
+        "type": "yii2-extension",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.1.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "kartik\\grid\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Kartik Visweswaran",
+                "email": "kartikv2@gmail.com",
+                "homepage": "http://www.krajee.com/"
+            }
+        ],
+        "description": "Yii 2 GridView on steroids. Various enhancements and utilities for the Yii 2.0 GridView widget.",
+        "homepage": "https://github.com/kartik-v/yii2-grid",
+        "keywords": [
+            "extension",
+            "grid",
+            "widget",
+            "yii2"
+        ]
+    },
+    {
         "name": "wbraganca/yii2-dynamicform",
         "version": "v2.0.2",
         "version_normalized": "2.0.2.0",
@@ -2208,6 +2263,61 @@
         ]
     },
     {
+        "name": "bower-asset/bootstrap3-dialog",
+        "version": "v1.35.3",
+        "version_normalized": "1.35.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nakupanda/bootstrap3-dialog.git",
+            "reference": "4aa9d536516957e01c39afd1b5e8bdd88976ef7b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nakupanda/bootstrap3-dialog/zipball/4aa9d536516957e01c39afd1b5e8bdd88976ef7b",
+            "reference": "4aa9d536516957e01c39afd1b5e8bdd88976ef7b",
+            "shasum": ""
+        },
+        "require": {
+            "bower-asset/bootstrap": ">=3.1.0",
+            "bower-asset/jquery": ">=1.9.0"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-main": [
+                "dist/less/bootstrap-dialog.less",
+                "dist/css/bootstrap-dialog.min.css",
+                "dist/js/bootstrap-dialog.min.js"
+            ],
+            "bower-asset-ignore": [
+                "source",
+                "spec",
+                ".bowerrc",
+                ".gitignore",
+                ".jshintignore",
+                ".jshintrc",
+                "bower.json",
+                "gruntfile.js",
+                "package.json",
+                "README.md"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "description": "Make use of Bootstrap Modal more monkey-friendly. http://nakupanda.github.io/bootstrap3-dialog/",
+        "keywords": [
+            "css",
+            "framework",
+            "front-end",
+            "js",
+            "less",
+            "mobile-first",
+            "responsive",
+            "web"
+        ]
+    },
+    {
         "name": "bower-asset/datatables-bootstrap3",
         "version": "0.1",
         "version_normalized": "0.1.0.0",
@@ -2341,6 +2451,97 @@
             "CC-BY-3.0"
         ],
         "description": "Font Awesome"
+    },
+    {
+        "name": "bower-asset/gentelella",
+        "version": "1.3.0",
+        "version_normalized": "1.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/puikinsh/gentelella.git",
+            "reference": "6f90d7cc133f5c13fa4513a54cdd2740249cc0f3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/puikinsh/gentelella/zipball/6f90d7cc133f5c13fa4513a54cdd2740249cc0f3",
+            "reference": "6f90d7cc133f5c13fa4513a54cdd2740249cc0f3",
+            "shasum": ""
+        },
+        "require-dev": {
+            "bower-asset/animate.css": ">=3.5.1,<4.0.0",
+            "bower-asset/autosize": ">=3.0.15,<4.0.0",
+            "bower-asset/bootstrap": ">=3.3.6,<4.0.0",
+            "bower-asset/bootstrap-colorpicker": ">=2.3.3,<3.0.0",
+            "bower-asset/bootstrap-daterangepicker": ">=2.1.19,<3.0.0",
+            "bower-asset/bootstrap-progressbar": ">=0.9.0,<0.10.0",
+            "bower-asset/bootstrap-wysiwyg-steveathon": ">=1.0.5,<2.0.0",
+            "bower-asset/chart.js": ">=2.0.2,<3.0.0",
+            "bower-asset/cropper": ">=2.3.0,<3.0.0",
+            "bower-asset/datatables.net": ">=1.10.11,<2.0.0",
+            "bower-asset/datatables.net-bs": ">=1.10.11,<2.0.0",
+            "bower-asset/datatables.net-buttons": ">=1.1.2,<2.0.0",
+            "bower-asset/datatables.net-buttons-bs": ">=1.1.2,<2.0.0",
+            "bower-asset/datatables.net-fixedheader": ">=3.1.1,<4.0.0",
+            "bower-asset/datatables.net-fixedheader-bs": ">=3.1.1,<4.0.0",
+            "bower-asset/datatables.net-keytable": ">=2.1.1,<3.0.0",
+            "bower-asset/datatables.net-responsive": ">=2.0.2,<3.0.0",
+            "bower-asset/datatables.net-responsive-bs": ">=2.0.2,<3.0.0",
+            "bower-asset/datatables.net-scroller": ">=1.4.1,<2.0.0",
+            "bower-asset/datatables.net-scroller-bs": ">=1.4.1,<2.0.0",
+            "bower-asset/devbridge-autocomplete": ">=1.2.24,<2.0.0",
+            "bower-asset/dropzone": ">=4.3.0,<5.0.0",
+            "bower-asset/echarts": ">=3.1.7,<4.0.0",
+            "bower-asset/fastclick": ">=1.0.6,<2.0.0",
+            "bower-asset/flot": ">=0.8.3,<0.9.0",
+            "bower-asset/fontawesome": ">=4.6.1,<5.0.0",
+            "bower-asset/fullcalendar": ">=2.6.1,<3.0.0",
+            "bower-asset/gauge.js": ">=1.2.1,<2.0.0",
+            "bower-asset/icheck": ">=1.0.2,<2.0.0",
+            "bower-asset/ionrangeslider": ">=2.1.3,<3.0.0",
+            "bower-asset/jquery": ">=2.2.3,<3.0.0",
+            "bower-asset/jquery-knob": ">=1.2.13,<2.0.0",
+            "bower-asset/jquery-smart-wizard": ">=3.3.1,<4.0.0",
+            "bower-asset/jquery-sparkline": ">=2.1.3,<3.0.0",
+            "bower-asset/jquery.easy-pie-chart": ">=2.1.6,<3.0.0",
+            "bower-asset/jquery.inputmask": ">=3.3.1,<4.0.0",
+            "bower-asset/jquery.tagsinput": ">=1.3.6,<2.0.0",
+            "bower-asset/jszip": "2.6.0",
+            "bower-asset/malihu-custom-scrollbar-plugin": ">=3.1.3,<4.0.0",
+            "bower-asset/morris.js": ">=0.5.1,<0.6.0",
+            "bower-asset/normalize-css": ">=4.1.1,<5.0.0",
+            "bower-asset/nprogress": ">=0.2.0,<0.3.0",
+            "bower-asset/parsleyjs": ">=2.3.10,<3.0.0",
+            "bower-asset/pdfmake": ">=0.1.20,<0.2.0",
+            "bower-asset/pnotify": ">=3.0.0,<4.0.0",
+            "bower-asset/select2": ">=4.0.2,<5.0.0",
+            "bower-asset/skycons": "*",
+            "bower-asset/starrr": ">=2.0.0,<3.0.0",
+            "bower-asset/switchery": ">=0.8.1,<0.9.0",
+            "bower-asset/validator": ">=1.0.6,<2.0.0"
+        },
+        "type": "bower-asset-library",
+        "extra": {
+            "bower-asset-ignore": [
+                "**/.*",
+                "documentation"
+            ]
+        },
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "description": "Gentellela Admin is a free to use Bootstrap admin template",
+        "keywords": [
+            "admin",
+            "backend",
+            "bootstrap",
+            "css",
+            "html",
+            "js",
+            "responsive",
+            "template",
+            "theme"
+        ]
     },
     {
         "name": "bower-asset/jquery-ui",
@@ -2505,126 +2706,6 @@
             "backup",
             "database",
             "restore",
-            "yii2"
-        ]
-    },
-    {
-        "name": "phpoffice/phpexcel",
-        "version": "dev-develop",
-        "version_normalized": "dev-develop",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/PHPOffice/PHPExcel.git",
-            "reference": "d3373c97e1bd4fceb0687d2e289998bccda514f1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/d3373c97e1bd4fceb0687d2e289998bccda514f1",
-            "reference": "d3373c97e1bd4fceb0687d2e289998bccda514f1",
-            "shasum": ""
-        },
-        "require": {
-            "ext-mbstring": "*",
-            "ext-xml": "*",
-            "ext-xmlwriter": "*",
-            "php": "^5.2|^7.0"
-        },
-        "require-dev": {
-            "squizlabs/php_codesniffer": "2.*"
-        },
-        "time": "2016-09-29T20:13:14+00:00",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "PHPExcel": "Classes/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-2.1"
-        ],
-        "authors": [
-            {
-                "name": "Maarten Balliauw",
-                "homepage": "http://blog.maartenballiauw.be"
-            },
-            {
-                "name": "Erik Tilt"
-            },
-            {
-                "name": "Franck Lefevre",
-                "homepage": "http://rootslabs.net"
-            },
-            {
-                "name": "Mark Baker",
-                "homepage": "http://markbakeruk.net"
-            }
-        ],
-        "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
-        "homepage": "https://github.com/PHPOffice/PHPExcel",
-        "keywords": [
-            "OpenXML",
-            "excel",
-            "php",
-            "spreadsheet",
-            "xls",
-            "xlsx"
-        ]
-    },
-    {
-        "name": "kartik-v/yii2-widget-datepicker",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-            "reference": "92e04c6a9ff90c4290db7566f68af429f2d641d5"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/92e04c6a9ff90c4290db7566f68af429f2d641d5",
-            "reference": "92e04c6a9ff90c4290db7566f68af429f2d641d5",
-            "shasum": ""
-        },
-        "require": {
-            "kartik-v/yii2-krajee-base": "~1.7"
-        },
-        "time": "2016-11-11T15:42:04+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "kartik\\date\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Kartik Visweswaran",
-                "email": "kartikv2@gmail.com",
-                "homepage": "http://www.krajee.com/"
-            }
-        ],
-        "description": "Enhanced Yii2 wrapper for the bootstrap datepicker plugin (sub repo split from yii2-widgets).",
-        "homepage": "https://github.com/kartik-v/yii2-widget-datepicker",
-        "keywords": [
-            "date",
-            "extension",
-            "form",
-            "jquery",
-            "picker",
-            "plugin",
-            "select2",
-            "widget",
             "yii2"
         ]
     },
@@ -2835,102 +2916,6 @@
         ]
     },
     {
-        "name": "bower-asset/gentelella",
-        "version": "1.4.0",
-        "version_normalized": "1.4.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/puikinsh/gentelella.git",
-            "reference": "3448fdfdf16a41707d6e2a8154d592a88d85c41c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/puikinsh/gentelella/zipball/3448fdfdf16a41707d6e2a8154d592a88d85c41c",
-            "reference": "3448fdfdf16a41707d6e2a8154d592a88d85c41c",
-            "shasum": ""
-        },
-        "require-dev": {
-            "bower-asset/animate.css": ">=3.5.1,<4.0.0",
-            "bower-asset/autosize": ">=3.0.15,<4.0.0",
-            "bower-asset/bootstrap": ">=3.3.7,<4.0.0",
-            "bower-asset/bootstrap-colorpicker": ">=2.3.3,<3.0.0",
-            "bower-asset/bootstrap-daterangepicker": "dev-master",
-            "bower-asset/bootstrap-progressbar": ">=0.9.0,<0.10.0",
-            "bower-asset/bootstrap-wysiwyg-steveathon": ">=1.0.5,<2.0.0",
-            "bower-asset/chart.js": ">=2.0.2,<3.0.0",
-            "bower-asset/cropper": ">=2.3.0,<3.0.0",
-            "bower-asset/datatables.net": ">=1.10.11,<2.0.0",
-            "bower-asset/datatables.net-bs": ">=1.10.11,<2.0.0",
-            "bower-asset/datatables.net-buttons": ">=1.1.2,<2.0.0",
-            "bower-asset/datatables.net-buttons-bs": ">=1.1.2,<2.0.0",
-            "bower-asset/datatables.net-fixedheader": ">=3.1.1,<4.0.0",
-            "bower-asset/datatables.net-fixedheader-bs": ">=3.1.1,<4.0.0",
-            "bower-asset/datatables.net-keytable": ">=2.1.1,<3.0.0",
-            "bower-asset/datatables.net-responsive": ">=2.0.2,<3.0.0",
-            "bower-asset/datatables.net-responsive-bs": ">=2.0.2,<3.0.0",
-            "bower-asset/datatables.net-scroller": ">=1.4.1,<2.0.0",
-            "bower-asset/datatables.net-scroller-bs": ">=1.4.1,<2.0.0",
-            "bower-asset/datejs": ">=1.0.0-RC3,<2.0.0",
-            "bower-asset/devbridge-autocomplete": ">=1.2.24,<2.0.0",
-            "bower-asset/dropzone": ">=4.3.0,<5.0.0",
-            "bower-asset/echarts": ">=3.1.7,<4.0.0",
-            "bower-asset/fastclick": ">=1.0.6,<2.0.0",
-            "bower-asset/flot": ">=0.8.3,<0.9.0",
-            "bower-asset/flot-spline": ">=0.8.2,<0.9.0",
-            "bower-asset/flot.curvedlines": ">=1.1.1,<2.0.0",
-            "bower-asset/flot.orderbars": "*",
-            "bower-asset/fontawesome": ">=4.6.1,<5.0.0",
-            "bower-asset/fullcalendar": ">=2.6.1,<3.0.0",
-            "bower-asset/gauge.js": ">=1.2.1,<2.0.0",
-            "bower-asset/icheck": ">=1.0.2,<2.0.0",
-            "bower-asset/ionrangeslider": ">=2.1.3,<3.0.0",
-            "bower-asset/jquery": ">=2.2.3,<3.0.0",
-            "bower-asset/jquery-knob": ">=1.2.13,<2.0.0",
-            "bower-asset/jquery-smart-wizard": ">=3.3.1,<4.0.0",
-            "bower-asset/jquery-sparkline": ">=2.1.3,<3.0.0",
-            "bower-asset/jquery.easy-pie-chart": ">=2.1.6,<3.0.0",
-            "bower-asset/jquery.inputmask": ">=3.3.1,<4.0.0",
-            "bower-asset/jquery.tagsinput": ">=1.3.6,<2.0.0",
-            "bower-asset/jqvmap": "dev-master",
-            "bower-asset/jszip": "2.6.0",
-            "bower-asset/malihu-custom-scrollbar-plugin": ">=3.1.3,<4.0.0",
-            "bower-asset/morris.js": ">=0.5.1,<0.6.0",
-            "bower-asset/normalize-css": ">=4.1.1,<5.0.0",
-            "bower-asset/nprogress": ">=0.2.0,<0.3.0",
-            "bower-asset/parsleyjs": ">=2.3.10,<3.0.0",
-            "bower-asset/pdfmake": ">=0.1.20,<0.2.0",
-            "bower-asset/pnotify": ">=3.0.0,<4.0.0",
-            "bower-asset/select2": ">=4.0.2,<5.0.0",
-            "bower-asset/skycons": "*",
-            "bower-asset/starrr": ">=2.0.0,<3.0.0",
-            "bower-asset/switchery": ">=0.8.1,<0.9.0",
-            "bower-asset/validator": ">=1.0.6,<2.0.0"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-ignore": [
-                "**/.*",
-                "documentation"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "Gentelella Admin is a free to use Bootstrap admin template",
-        "keywords": [
-            "admin",
-            "backend",
-            "bootstrap",
-            "css",
-            "html",
-            "js",
-            "responsive",
-            "template",
-            "theme"
-        ]
-    },
-    {
         "name": "yiister/yii2-gentelella",
         "version": "1.2.1",
         "version_normalized": "1.2.1.0",
@@ -3103,130 +3088,6 @@
         ]
     },
     {
-        "name": "symfony/debug",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/debug.git",
-            "reference": "b90c9f91ad8ac37d9f114e369042d3226b34dc1a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/debug/zipball/b90c9f91ad8ac37d9f114e369042d3226b34dc1a",
-            "reference": "b90c9f91ad8ac37d9f114e369042d3226b34dc1a",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9",
-            "psr/log": "~1.0"
-        },
-        "conflict": {
-            "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
-        },
-        "require-dev": {
-            "symfony/class-loader": "~2.8|~3.0",
-            "symfony/http-kernel": "~2.8|~3.0"
-        },
-        "time": "2017-02-18T17:28:00+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\Debug\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Debug Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/console",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/console.git",
-            "reference": "28fb243a2b5727774ca309ec2d92da240f1af0dd"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/console/zipball/28fb243a2b5727774ca309ec2d92da240f1af0dd",
-            "reference": "28fb243a2b5727774ca309ec2d92da240f1af0dd",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9",
-            "symfony/debug": "~2.8|~3.0",
-            "symfony/polyfill-mbstring": "~1.0"
-        },
-        "require-dev": {
-            "psr/log": "~1.0",
-            "symfony/event-dispatcher": "~2.8|~3.0",
-            "symfony/filesystem": "~2.8|~3.0",
-            "symfony/process": "~2.8|~3.0"
-        },
-        "suggest": {
-            "psr/log": "For using the console logger",
-            "symfony/event-dispatcher": "",
-            "symfony/filesystem": "",
-            "symfony/process": ""
-        },
-        "time": "2017-03-06T19:30:27+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\Console\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Console Component",
-        "homepage": "https://symfony.com"
-    },
-    {
         "name": "stecman/symfony-console-completion",
         "version": "0.7.0",
         "version_normalized": "0.7.0.0",
@@ -3393,348 +3254,6 @@
             "compare",
             "equality"
         ]
-    },
-    {
-        "name": "symfony/dom-crawler",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "403944e294cf4ceb3b8447f54cbad88ea7b99cee"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/403944e294cf4ceb3b8447f54cbad88ea7b99cee",
-            "reference": "403944e294cf4ceb3b8447f54cbad88ea7b99cee",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9",
-            "symfony/polyfill-mbstring": "~1.0"
-        },
-        "require-dev": {
-            "symfony/css-selector": "~2.8|~3.0"
-        },
-        "suggest": {
-            "symfony/css-selector": ""
-        },
-        "time": "2017-02-21T09:12:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\DomCrawler\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony DomCrawler Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/css-selector",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/css-selector.git",
-            "reference": "a48f13dc83c168f1253a5d2a5a4fb46c36244c4c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/css-selector/zipball/a48f13dc83c168f1253a5d2a5a4fb46c36244c4c",
-            "reference": "a48f13dc83c168f1253a5d2a5a4fb46c36244c4c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9"
-        },
-        "time": "2017-02-21T09:12:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\CssSelector\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jean-François Simon",
-                "email": "jeanfrancois.simon@sensiolabs.com"
-            },
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony CssSelector Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/browser-kit",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/browser-kit.git",
-            "reference": "2fe0caa60c1a1dfeefd0425741182687a9b382b8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/2fe0caa60c1a1dfeefd0425741182687a9b382b8",
-            "reference": "2fe0caa60c1a1dfeefd0425741182687a9b382b8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9",
-            "symfony/dom-crawler": "~2.8|~3.0"
-        },
-        "require-dev": {
-            "symfony/css-selector": "~2.8|~3.0",
-            "symfony/process": "~2.8|~3.0"
-        },
-        "suggest": {
-            "symfony/process": ""
-        },
-        "time": "2017-02-21T09:12:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\BrowserKit\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony BrowserKit Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/yaml",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/yaml.git",
-            "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/yaml/zipball/093e416ad096355149e265ea2e4cc1f9ee40ab1a",
-            "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9"
-        },
-        "require-dev": {
-            "symfony/console": "~2.8|~3.0"
-        },
-        "suggest": {
-            "symfony/console": "For validating YAML files using the lint command"
-        },
-        "time": "2017-03-07T16:47:02+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\Yaml\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Yaml Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/event-dispatcher",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/event-dispatcher.git",
-            "reference": "b7a1b9e0a0f623ce43b4c8d775eb138f190c9d8d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/b7a1b9e0a0f623ce43b4c8d775eb138f190c9d8d",
-            "reference": "b7a1b9e0a0f623ce43b4c8d775eb138f190c9d8d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9"
-        },
-        "require-dev": {
-            "psr/log": "~1.0",
-            "symfony/config": "~2.8|~3.0",
-            "symfony/dependency-injection": "~2.8|~3.0",
-            "symfony/expression-language": "~2.8|~3.0",
-            "symfony/stopwatch": "~2.8|~3.0"
-        },
-        "suggest": {
-            "symfony/dependency-injection": "",
-            "symfony/http-kernel": ""
-        },
-        "time": "2017-02-21T09:12:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\EventDispatcher\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony EventDispatcher Component",
-        "homepage": "https://symfony.com"
-    },
-    {
-        "name": "symfony/finder",
-        "version": "v3.2.6",
-        "version_normalized": "3.2.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/finder.git",
-            "reference": "92d7476d2df60cd851a3e13e078664b1deb8ce10"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/finder/zipball/92d7476d2df60cd851a3e13e078664b1deb8ce10",
-            "reference": "92d7476d2df60cd851a3e13e078664b1deb8ce10",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.9"
-        },
-        "time": "2017-02-21T09:12:04+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\Finder\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Finder Component",
-        "homepage": "https://symfony.com"
     },
     {
         "name": "guzzlehttp/psr7",
@@ -4232,6 +3751,536 @@
         ]
     },
     {
+        "name": "symfony/css-selector",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/css-selector.git",
+            "reference": "a48f13dc83c168f1253a5d2a5a4fb46c36244c4c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/css-selector/zipball/a48f13dc83c168f1253a5d2a5a4fb46c36244c4c",
+            "reference": "a48f13dc83c168f1253a5d2a5a4fb46c36244c4c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9"
+        },
+        "time": "2017-02-21T09:12:04+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\CssSelector\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jean-François Simon",
+                "email": "jeanfrancois.simon@sensiolabs.com"
+            },
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony CssSelector Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/yaml",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/yaml.git",
+            "reference": "62b4cdb99d52cb1ff253c465eb1532a80cebb621"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/yaml/zipball/62b4cdb99d52cb1ff253c465eb1532a80cebb621",
+            "reference": "62b4cdb99d52cb1ff253c465eb1532a80cebb621",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9"
+        },
+        "require-dev": {
+            "symfony/console": "~2.8|~3.0"
+        },
+        "suggest": {
+            "symfony/console": "For validating YAML files using the lint command"
+        },
+        "time": "2017-03-20T09:45:15+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Yaml\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/dom-crawler",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/dom-crawler.git",
+            "reference": "403944e294cf4ceb3b8447f54cbad88ea7b99cee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/403944e294cf4ceb3b8447f54cbad88ea7b99cee",
+            "reference": "403944e294cf4ceb3b8447f54cbad88ea7b99cee",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9",
+            "symfony/polyfill-mbstring": "~1.0"
+        },
+        "require-dev": {
+            "symfony/css-selector": "~2.8|~3.0"
+        },
+        "suggest": {
+            "symfony/css-selector": ""
+        },
+        "time": "2017-02-21T09:12:04+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\DomCrawler\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony DomCrawler Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/browser-kit",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/browser-kit.git",
+            "reference": "2fe0caa60c1a1dfeefd0425741182687a9b382b8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/browser-kit/zipball/2fe0caa60c1a1dfeefd0425741182687a9b382b8",
+            "reference": "2fe0caa60c1a1dfeefd0425741182687a9b382b8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9",
+            "symfony/dom-crawler": "~2.8|~3.0"
+        },
+        "require-dev": {
+            "symfony/css-selector": "~2.8|~3.0",
+            "symfony/process": "~2.8|~3.0"
+        },
+        "suggest": {
+            "symfony/process": ""
+        },
+        "time": "2017-02-21T09:12:04+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\BrowserKit\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony BrowserKit Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/debug",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/debug.git",
+            "reference": "56f613406446a4a0a031475cfd0a01751de22659"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/debug/zipball/56f613406446a4a0a031475cfd0a01751de22659",
+            "reference": "56f613406446a4a0a031475cfd0a01751de22659",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9",
+            "psr/log": "~1.0"
+        },
+        "conflict": {
+            "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
+        },
+        "require-dev": {
+            "symfony/class-loader": "~2.8|~3.0",
+            "symfony/http-kernel": "~2.8|~3.0"
+        },
+        "time": "2017-03-28T21:38:24+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Debug\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Debug Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/console",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/console.git",
+            "reference": "c30243cc51f726812be3551316b109a2f5deaf8d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/console/zipball/c30243cc51f726812be3551316b109a2f5deaf8d",
+            "reference": "c30243cc51f726812be3551316b109a2f5deaf8d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9",
+            "symfony/debug": "~2.8|~3.0",
+            "symfony/polyfill-mbstring": "~1.0"
+        },
+        "require-dev": {
+            "psr/log": "~1.0",
+            "symfony/event-dispatcher": "~2.8|~3.0",
+            "symfony/filesystem": "~2.8|~3.0",
+            "symfony/process": "~2.8|~3.0"
+        },
+        "suggest": {
+            "psr/log": "For using the console logger",
+            "symfony/event-dispatcher": "",
+            "symfony/filesystem": "",
+            "symfony/process": ""
+        },
+        "time": "2017-04-04T14:33:42+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Console\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/event-dispatcher",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/event-dispatcher.git",
+            "reference": "154bb1ef7b0e42ccc792bd53edbce18ed73440ca"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/154bb1ef7b0e42ccc792bd53edbce18ed73440ca",
+            "reference": "154bb1ef7b0e42ccc792bd53edbce18ed73440ca",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9"
+        },
+        "require-dev": {
+            "psr/log": "~1.0",
+            "symfony/config": "~2.8|~3.0",
+            "symfony/dependency-injection": "~2.8|~3.0",
+            "symfony/expression-language": "~2.8|~3.0",
+            "symfony/stopwatch": "~2.8|~3.0"
+        },
+        "suggest": {
+            "symfony/dependency-injection": "",
+            "symfony/http-kernel": ""
+        },
+        "time": "2017-04-04T07:26:27+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\EventDispatcher\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony EventDispatcher Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "symfony/finder",
+        "version": "v3.2.7",
+        "version_normalized": "3.2.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/finder.git",
+            "reference": "b20900ce5ea164cd9314af52725b0bb5a758217a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/finder/zipball/b20900ce5ea164cd9314af52725b0bb5a758217a",
+            "reference": "b20900ce5ea164cd9314af52725b0bb5a758217a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.9"
+        },
+        "time": "2017-03-20T09:32:19+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Finder\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Finder Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "phpoffice/phpexcel",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPOffice/PHPExcel.git",
+            "reference": "d3373c97e1bd4fceb0687d2e289998bccda514f1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/d3373c97e1bd4fceb0687d2e289998bccda514f1",
+            "reference": "d3373c97e1bd4fceb0687d2e289998bccda514f1",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "ext-xml": "*",
+            "ext-xmlwriter": "*",
+            "php": "^5.2|^7.0"
+        },
+        "require-dev": {
+            "squizlabs/php_codesniffer": "2.*"
+        },
+        "time": "2016-09-29T20:13:14+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "PHPExcel": "Classes/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Maarten Balliauw",
+                "homepage": "http://blog.maartenballiauw.be"
+            },
+            {
+                "name": "Erik Tilt"
+            },
+            {
+                "name": "Franck Lefevre",
+                "homepage": "http://rootslabs.net"
+            },
+            {
+                "name": "Mark Baker",
+                "homepage": "http://markbakeruk.net"
+            }
+        ],
+        "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+        "homepage": "https://github.com/PHPOffice/PHPExcel",
+        "keywords": [
+            "OpenXML",
+            "excel",
+            "php",
+            "spreadsheet",
+            "xls",
+            "xlsx"
+        ]
+    },
+    {
         "name": "kartik-v/yii2-krajee-base",
         "version": "v1.8.8",
         "version_normalized": "1.8.8.0",
@@ -4285,137 +4334,34 @@
         ]
     },
     {
-        "name": "bower-asset/bootstrap3-dialog",
-        "version": "v1.35.4",
-        "version_normalized": "1.35.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nakupanda/bootstrap3-dialog.git",
-            "reference": "3dd11d586f78de75356af418907ec6e3b347377c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nakupanda/bootstrap3-dialog/zipball/3dd11d586f78de75356af418907ec6e3b347377c",
-            "reference": "3dd11d586f78de75356af418907ec6e3b347377c",
-            "shasum": ""
-        },
-        "require": {
-            "bower-asset/bootstrap": ">=3.1.0",
-            "bower-asset/jquery": ">=1.9.0"
-        },
-        "type": "bower-asset-library",
-        "extra": {
-            "bower-asset-main": [
-                "dist/less/bootstrap-dialog.less",
-                "dist/css/bootstrap-dialog.min.css",
-                "dist/js/bootstrap-dialog.min.js"
-            ],
-            "bower-asset-ignore": [
-                "source",
-                "spec",
-                ".bowerrc",
-                ".gitignore",
-                ".jshintignore",
-                ".jshintrc",
-                "bower.json",
-                "gruntfile.js",
-                "package.json",
-                "README.md"
-            ]
-        },
-        "installation-source": "dist",
-        "license": [
-            "MIT"
-        ],
-        "description": "Make use of Bootstrap Modal more monkey-friendly. http://nakupanda.github.io/bootstrap3-dialog/",
-        "keywords": [
-            "css",
-            "framework",
-            "front-end",
-            "js",
-            "less",
-            "mobile-first",
-            "responsive",
-            "web"
-        ]
-    },
-    {
-        "name": "abhi1693/yii2-sms",
-        "version": "v2.0.0",
-        "version_normalized": "2.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/abhi1693/yii2-sms.git",
-            "reference": "0dd4ca025c749195704d5c3fd796bba5e373fd8d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/abhi1693/yii2-sms/zipball/0dd4ca025c749195704d5c3fd796bba5e373fd8d",
-            "reference": "0dd4ca025c749195704d5c3fd796bba5e373fd8d",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "*",
-            "yiisoft/yii2-swiftmailer": "*"
-        },
-        "time": "2015-02-26T09:10:49+00:00",
-        "type": "yii2-extension",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "abhimanyu\\sms\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT License"
-        ],
-        "authors": [
-            {
-                "name": "Abhimanyu Saharan",
-                "email": "abhimanyu@teamvulcans.com"
-            }
-        ],
-        "description": "Send Free Sms for Yii2",
-        "keywords": [
-            "extension",
-            "sms",
-            "yii2"
-        ]
-    },
-    {
-        "name": "kartik-v/yii2-grid",
+        "name": "kartik-v/yii2-widget-datepicker",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/kartik-v/yii2-grid.git",
-            "reference": "05b889d6b51cdebd7e442be51b3cb7cf4f49fb9a"
+            "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
+            "reference": "9110ecce9deb59dc116fe6c3dd6df5d7eb439a3c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-grid/zipball/05b889d6b51cdebd7e442be51b3cb7cf4f49fb9a",
-            "reference": "05b889d6b51cdebd7e442be51b3cb7cf4f49fb9a",
+            "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/9110ecce9deb59dc116fe6c3dd6df5d7eb439a3c",
+            "reference": "9110ecce9deb59dc116fe6c3dd6df5d7eb439a3c",
             "shasum": ""
         },
         "require": {
-            "kartik-v/yii2-dialog": "~1.0",
             "kartik-v/yii2-krajee-base": "~1.7"
         },
-        "suggest": {
-            "kartik-v/yii2-mpdf": "For exporting grids to PDF"
-        },
-        "time": "2017-03-11T10:54:52+00:00",
+        "time": "2017-04-01T16:03:50+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.1.x-dev"
+                "dev-master": "1.4.x-dev"
             }
         },
         "installation-source": "source",
         "autoload": {
             "psr-4": {
-                "kartik\\grid\\": ""
+                "kartik\\date\\": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -4429,11 +4375,16 @@
                 "homepage": "http://www.krajee.com/"
             }
         ],
-        "description": "Yii 2 GridView on steroids. Various enhancements and utilities for the Yii 2.0 GridView widget.",
-        "homepage": "https://github.com/kartik-v/yii2-grid",
+        "description": "Enhanced Yii2 wrapper for the bootstrap datepicker plugin (sub repo split from yii2-widgets).",
+        "homepage": "https://github.com/kartik-v/yii2-widget-datepicker",
         "keywords": [
+            "date",
             "extension",
-            "grid",
+            "form",
+            "jquery",
+            "picker",
+            "plugin",
+            "select2",
             "widget",
             "yii2"
         ]

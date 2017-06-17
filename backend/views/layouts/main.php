@@ -208,9 +208,42 @@ desired effect
                     "items" => [
                         ["label" =>Yii::t('app','Home'), "url" =>  Yii::$app->homeUrl, "icon" => "home"],
 
-                        ["label" =>Yii::t('app','Customers'), "url" =>  ["/customer/index"], "icon" => "fa fa-user",],
 
-                        ["label" =>Yii::t('app','Loans'), "url" =>  ["/loan/index"], "icon" => "fa fa-building",],
+                        [
+                            "label" =>Yii::t('app','Customer'),
+                            "url" =>  "#",
+                            "icon" => "fa fa-user",
+                            "items" => [
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    "label" => Yii::t('app','Customers List'),
+                                    "url" =>["/customer/index"],
+                                    "icon" => "fa fa-angle-double-right",
+                                ],
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    "label" => Yii::t('app','Category'),
+                                    "url" =>["/customer-category/index"],
+                                    "icon" => "fa fa-angle-double-right",
+                                ],
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    "label" => Yii::t('app','Type'),
+                                    "url" =>["/customer-type/index"],
+                                    "icon" => "fa fa-angle-double-right",
+                                ],
+
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    "label" => Yii::t('app','Identification'),
+                                    "url" =>["/customer-identification/index"],
+                                    "icon" => "fa fa-angle-double-right",
+                                ],
+                            ],
+
+                        ],
+
+                        ["label" =>Yii::t('app','Loans'), "url" =>  ["/contract-master/index"], "icon" => "fa fa-building",],
 
 
                         [
@@ -245,6 +278,29 @@ desired effect
                             "url" => "#",
                             "icon" => "fa fa-gears",
                             "items" => [
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    'label' => Yii::t('app', 'System Setup'),
+                                    'url' => ['/system-setup/index'],
+                                    'icon' => 'fa fa-cog',
+                                ],
+
+                                [
+                                    'label' =>'System Products',
+                                    'url' => ['/product/index'],
+                                    'icon' => 'fa fa-list',
+                                ],
+                                [
+                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                    'label' => Yii::t('app', 'System Rates'),
+                                    'url' => ['/system-rates/index'],
+                                    'icon' => 'fa fa-list',
+                                ],
+                                [
+                                    'label' => Yii::t('app', 'System Charges'),
+                                    'url' => ['/system-charges/index'],
+                                    'icon' => 'fa fa-list',
+                                ],
 
                                 [
                                     'visible' => (Yii::$app->user->identity->username == 'admin'),
@@ -456,3 +512,47 @@ desired effect
     });
 
 </script>
+
+
+
+
+
+<?php //Loans and Deposits javascripts ?>
+
+<script>
+    $("#contractmaster-customer_name").change(function(){
+        var id =document.getElementById("contractmaster-customer_name").value;
+        //alert(id);
+        $("#prodid").html('<i class="fa fa-spinner fa-spin"></i> Looding....');
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/list','id'=>'']);?>"+id,function(data){
+            //alert(data);
+            $("#contractmaster-settle_account").html(data);
+            $("#prodid").html('');
+        });
+        document.getElementById("contractmaster-customer_number").value=id
+
+
+    });
+
+    //load products and set product group
+    $("#contractmaster-product").change(function(){
+        var id =document.getElementById("contractmaster-product").value;
+        //alert(id);
+        $("#prodid").html('<i class="fa fa-spinner fa-spin"></i> Looding....');
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/productgroup','id'=>'']);?>"+id,function(data){
+            //alert(data);
+            document.getElementById("contractmaster-product_type").value=data
+
+        });
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference','id'=>'']);?>"+id,function(data) {
+            //alert(data);
+            document.getElementById("contractmaster-contract_ref_no").value =data;
+            $("#prodid").html('');
+
+        });
+
+
+    });
+</script>
+
+

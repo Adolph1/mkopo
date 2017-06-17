@@ -39,7 +39,7 @@ use kartik\date\DatePicker;
                             'options' => ['placeholder' => 'Enter expire date'],
                             'pluginOptions' => [
                                 'format' => 'yyyy-mm-dd',
-                                'todayHighlight' => true
+                                'todayHighlight' => true,
                             ]
                         ]);?>
                 </div>
@@ -64,24 +64,36 @@ use kartik\date\DatePicker;
     <legend class="scheduler-border" style="color:#005DAD">Other Details</legend>
     <div class="row">
         <div class="col-md-4">
-    <?= $form->field($model, 'customer_type_id')->dropDownList(\backend\models\CustomerIdentification::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+    <?= $form->field($model, 'customer_type_id')->dropDownList(\backend\models\CustomerType::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
         </div>
         <div class="col-md-4">
-    <?= $form->field($model, 'customer_category_id')->dropDownList(\backend\models\CustomerIdentification::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+    <?= $form->field($model, 'customer_category_id')->dropDownList(\backend\models\CustomerCategory::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
         </div>
         <div class="col-md-4">
-    <?= $form->field($model, 'branch_id')->dropDownList(\backend\models\CustomerIdentification::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+    <?= $form->field($model, 'branch_id')->dropDownList(\backend\models\Branch::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-    <?= $form->field($model, 'photo')->fileInput() ?>
+        <div class="col-md-4">
+    <?= $form->field($model, 'customer_photo')->fileInput() ?>
+        </div>
+        <div class="col-md-2">
+            <?php if(!$model->isNewRecord) echo $form->field($model, 'customer_no')->textInput(['readonly'=>'readonly']) ?>
+        </div>
+        <div class="col-md-2">
+            <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_id')->textInput(['readonly'=>'readonly']) ?>
+        </div>
+        <div class="col-md-2">
+            <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_time')->textInput(['readonly'=>'readonly']) ?>
+        </div>
+        <div class="col-md-2">
+            <?php if(!$model->isNewRecord) echo $form->field($model, 'record_stat')->textInput(['readonly'=>'readonly']) ?>
         </div>
     </div>
     <div class="row">
     <div class="form-group">
         <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Next') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
         </div>
     </div>
     </div>
