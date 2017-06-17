@@ -3,15 +3,6 @@
 $vendorDir = dirname(__DIR__);
 
 return array (
-  'yiisoft/yii2-swiftmailer' => 
-  array (
-    'name' => 'yiisoft/yii2-swiftmailer',
-    'version' => '2.0.6.0',
-    'alias' => 
-    array (
-      '@yii/swiftmailer' => $vendorDir . '/yiisoft/yii2-swiftmailer',
-    ),
-  ),
   'yiisoft/yii2-bootstrap' => 
   array (
     'name' => 'yiisoft/yii2-bootstrap',
@@ -102,15 +93,6 @@ return array (
       '@kartik/dialog' => $vendorDir . '/kartik-v/yii2-dialog',
     ),
   ),
-  'kartik-v/yii2-grid' => 
-  array (
-    'name' => 'kartik-v/yii2-grid',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
-    ),
-  ),
   'wbraganca/yii2-dynamicform' => 
   array (
     'name' => 'wbraganca/yii2-dynamicform',
@@ -165,15 +147,6 @@ return array (
       '@spanjeta/modules/backup' => $vendorDir . '/spanjeta/yii2-backup',
     ),
   ),
-  'yiister/yii2-gentelella' => 
-  array (
-    'name' => 'yiister/yii2-gentelella',
-    'version' => '1.2.1.0',
-    'alias' => 
-    array (
-      '@yiister/gentelella' => $vendorDir . '/yiister/yii2-gentelella',
-    ),
-  ),
   '2amigos/yii2-date-picker-widget' => 
   array (
     'name' => '2amigos/yii2-date-picker-widget',
@@ -201,6 +174,96 @@ return array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
     ),
   ),
+  'abhi1693/yii2-sms' => 
+  array (
+    'name' => 'abhi1693/yii2-sms',
+    'version' => '2.0.0.0',
+    'alias' => 
+    array (
+      '@abhimanyu/sms' => $vendorDir . '/abhi1693/yii2-sms',
+    ),
+  ),
+  'kartik-v/yii2-grid' => 
+  array (
+    'name' => 'kartik-v/yii2-grid',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
+    ),
+  ),
+  'kartik-v/yii2-mpdf' => 
+  array (
+    'name' => 'kartik-v/yii2-mpdf',
+    'version' => '1.0.1.0',
+    'alias' => 
+    array (
+      '@kartik/mpdf' => $vendorDir . '/kartik-v/yii2-mpdf',
+    ),
+  ),
+  'yiisoft/yii2-swiftmailer' => 
+  array (
+    'name' => 'yiisoft/yii2-swiftmailer',
+    'version' => '2.0.7.0',
+    'alias' => 
+    array (
+      '@yii/swiftmailer' => $vendorDir . '/yiisoft/yii2-swiftmailer',
+    ),
+  ),
+  'yiister/yii2-gentelella' => 
+  array (
+    'name' => 'yiister/yii2-gentelella',
+    'version' => '1.2.2.0',
+    'alias' => 
+    array (
+      '@yiister/gentelella' => $vendorDir . '/yiister/yii2-gentelella',
+    ),
+  ),
+  'kartik-v/yii2-widget-select2' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-select2',
+    'version' => '2.0.9.0',
+    'alias' => 
+    array (
+      '@kartik/select2' => $vendorDir . '/kartik-v/yii2-widget-select2',
+    ),
+  ),
+  'kartik-v/yii2-widget-activeform' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-activeform',
+    'version' => '1.4.8.0',
+    'alias' => 
+    array (
+      '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform',
+    ),
+  ),
+  'kartik-v/yii2-sortable' => 
+  array (
+    'name' => 'kartik-v/yii2-sortable',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@kartik/sortable' => $vendorDir . '/kartik-v/yii2-sortable',
+    ),
+  ),
+  'kartik-v/yii2-dynagrid' => 
+  array (
+    'name' => 'kartik-v/yii2-dynagrid',
+    'version' => '1.4.5.0',
+    'alias' => 
+    array (
+      '@kartik/dynagrid' => $vendorDir . '/kartik-v/yii2-dynagrid',
+    ),
+  ),
+  'kartik-v/yii2-export' => 
+  array (
+    'name' => 'kartik-v/yii2-export',
+    'version' => '1.2.7.0',
+    'alias' => 
+    array (
+      '@kartik/export' => $vendorDir . '/kartik-v/yii2-export',
+    ),
+  ),
   'kartik-v/yii2-widget-datepicker' => 
   array (
     'name' => 'kartik-v/yii2-widget-datepicker',
@@ -208,6 +271,24 @@ return array (
     'alias' => 
     array (
       '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
+    ),
+  ),
+  'sjaakp/yii2-gcharts' => 
+  array (
+    'name' => 'sjaakp/yii2-gcharts',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@sjaakp/gcharts' => $vendorDir . '/sjaakp/yii2-gcharts',
+    ),
+  ),
+  'reportico/yii2-reportico' => 
+  array (
+    'name' => 'reportico/yii2-reportico',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@reportico/reportico' => $vendorDir . '/reportico/yii2-reportico',
     ),
   ),
 );

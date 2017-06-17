@@ -47,7 +47,6 @@ module.exports = function(Chart) {
 			unit: false, // false == automatic or override with week, month, year, etc.
 			round: false, // none, or override with week, month, year, etc.
 			displayFormat: false, // DEPRECATED
-			isoWeekday: false, // override week start day - see http://momentjs.com/docs/#/get-set/iso-weekday/
 
 			// defaults to unit's corresponding unitFormat below or override using pattern string from http://momentjs.com/docs/#/displaying/format/
 			displayFormats: {
@@ -78,13 +77,6 @@ module.exports = function(Chart) {
 		getLabelMoment: function(datasetIndex, index) {
 			return this.labelMoments[datasetIndex][index];
 		},
-		getMomentStartOf: function(tick) {
-			if (this.options.time.unit === 'week' && this.options.time.isoWeekday !== false) {
-				return tick.clone().startOf('isoWeek').isoWeekday(this.options.time.isoWeekday);
-			} else {
-				return tick.clone().startOf(this.tickUnit);
-			}
-		},
 		determineDataLimits: function() {
 			this.labelMoments = [];
 
@@ -114,7 +106,7 @@ module.exports = function(Chart) {
 				var momentsForDataset = [];
 				var datasetVisible = this.chart.isDatasetVisible(datasetIndex);
 
-				if (typeof dataset.data[0] === 'object' && dataset.data[0] !== null) {
+				if (typeof dataset.data[0] === 'object') {
 					helpers.each(dataset.data, function(value, index) {
 						var labelMoment = this.parseTime(this.getRightValue(value));
 
@@ -216,8 +208,8 @@ module.exports = function(Chart) {
 						unitDefinition = time.units[unitDefinitionIndex];
 
 						this.tickUnit = unitDefinition.name;
-						var leadingUnitBuffer = this.firstTick.diff(this.getMomentStartOf(this.firstTick), this.tickUnit, true);
-						var trailingUnitBuffer = this.getMomentStartOf(this.lastTick.clone().add(1, this.tickUnit)).diff(this.lastTick, this.tickUnit, true);
+						var leadingUnitBuffer = this.firstTick.diff(this.firstTick.clone().startOf(this.tickUnit), this.tickUnit, true);
+						var trailingUnitBuffer = this.lastTick.clone().add(1, this.tickUnit).startOf(this.tickUnit).diff(this.lastTick, this.tickUnit, true);
 						this.scaleSizeInUnits = this.lastTick.diff(this.firstTick, this.tickUnit, true) + leadingUnitBuffer + trailingUnitBuffer;
 						this.displayFormat = this.options.time.displayFormats[unitDefinition.name];
 					}
@@ -228,18 +220,18 @@ module.exports = function(Chart) {
 
 			// Only round the first tick if we have no hard minimum
 			if (!this.options.time.min) {
-				this.firstTick = this.getMomentStartOf(this.firstTick);
+				this.firstTick.startOf(this.tickUnit);
 				roundedStart = this.firstTick;
 			} else {
-				roundedStart = this.getMomentStartOf(this.firstTick);
+				roundedStart = this.firstTick.clone().startOf(this.tickUnit);
 			}
 
 			// Only round the last tick if we have no hard maximum
 			if (!this.options.time.max) {
-				var roundedEnd = this.getMomentStartOf(this.lastTick);
+				var roundedEnd = this.lastTick.clone().startOf(this.tickUnit);
 				if (roundedEnd.diff(this.lastTick, this.tickUnit, true) !== 0) {
 					// Do not use end of because we need this to be in the next time unit
-					this.lastTick = this.getMomentStartOf(this.lastTick.add(1, this.tickUnit));
+					this.lastTick.add(1, this.tickUnit).startOf(this.tickUnit);
 				}
 			}
 
@@ -286,7 +278,7 @@ module.exports = function(Chart) {
 					this.scaleSizeInUnits = this.lastTick.diff(this.firstTick, this.tickUnit, true);
 				}
 			}
-
+			
 			this.ctx.restore();
 		},
 		// Get tooltip label
@@ -307,17 +299,14 @@ module.exports = function(Chart) {
 		// Function to format an individual tick mark
 		tickFormatFunction: function tickFormatFunction(tick, index, ticks) {
 			var formattedTick = tick.format(this.displayFormat);
-			var tickOpts = this.options.ticks;
-			var callback = helpers.getValueOrDefault(tickOpts.callback, tickOpts.userCallback);
 
-			if (callback) {
-				return callback(formattedTick, index, ticks);
+			if (this.options.ticks.userCallback) {
+				return this.options.ticks.userCallback(formattedTick, index, ticks);
 			} else {
 				return formattedTick;
 			}
 		},
 		convertTicksToLabels: function() {
-			this.tickMoments = this.ticks;
 			this.ticks = this.ticks.map(this.tickFormatFunction, this);
 		},
 		getPixelForValue: function(value, index, datasetIndex, includeOffset) {
@@ -342,9 +331,6 @@ module.exports = function(Chart) {
 					return this.top + Math.round(heightOffset);
 				}
 			}
-		},
-		getPixelForTick: function(index, includeOffset) {
-			return this.getPixelForValue(this.tickMoments[index], null, null, includeOffset);
 		},
 		getValueForPixel: function(pixel) {
 			var innerDimension = this.isHorizontal() ? this.width - (this.paddingLeft + this.paddingRight) : this.height - (this.paddingTop + this.paddingBottom);

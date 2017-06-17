@@ -102,6 +102,15 @@ return array (
       '@kartik/dialog' => $vendorDir . '/kartik-v/yii2-dialog',
     ),
   ),
+  'kartik-v/yii2-grid' => 
+  array (
+    'name' => 'kartik-v/yii2-grid',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
+    ),
+  ),
   'wbraganca/yii2-dynamicform' => 
   array (
     'name' => 'wbraganca/yii2-dynamicform',
@@ -156,15 +165,6 @@ return array (
       '@spanjeta/modules/backup' => $vendorDir . '/spanjeta/yii2-backup',
     ),
   ),
-  'kartik-v/yii2-widget-datepicker' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-datepicker',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
-    ),
-  ),
   'yiister/yii2-gentelella' => 
   array (
     'name' => 'yiister/yii2-gentelella',
@@ -201,22 +201,13 @@ return array (
       '@kartik/base' => $vendorDir . '/kartik-v/yii2-krajee-base',
     ),
   ),
-  'abhi1693/yii2-sms' => 
+  'kartik-v/yii2-widget-datepicker' => 
   array (
-    'name' => 'abhi1693/yii2-sms',
-    'version' => '2.0.0.0',
-    'alias' => 
-    array (
-      '@abhimanyu/sms' => $vendorDir . '/abhi1693/yii2-sms',
-    ),
-  ),
-  'kartik-v/yii2-grid' => 
-  array (
-    'name' => 'kartik-v/yii2-grid',
+    'name' => 'kartik-v/yii2-widget-datepicker',
     'version' => '9999999-dev',
     'alias' => 
     array (
-      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
+      '@kartik/date' => $vendorDir . '/kartik-v/yii2-widget-datepicker',
     ),
   ),
 );

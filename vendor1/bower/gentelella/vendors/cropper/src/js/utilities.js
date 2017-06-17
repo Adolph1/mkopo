@@ -70,13 +70,12 @@
     var scaleX = options.scaleX;
     var scaleY = options.scaleY;
 
-    // Scale should come first before rotate (#633)
-    if (isNumber(scaleX) && isNumber(scaleY)) {
-      transforms.push('scale(' + scaleX + ',' + scaleY + ')');
-    }
-
     if (isNumber(rotate)) {
       transforms.push('rotate(' + rotate + 'deg)');
+    }
+
+    if (isNumber(scaleX) && isNumber(scaleY)) {
+      transforms.push('scale(' + scaleX + ',' + scaleY + ')');
     }
 
     return transforms.length ? transforms.join(' ') : 'none';

@@ -90,11 +90,7 @@ desired effect
                 <ul class="nav navbar-nav">
                     <!-- Languages: style can be found in dropdown.less-->
                     <li class="dropdown messages-menu">
-                        <!-- Menu toggle button -->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-flag"></i>
 
-                        </a>
                         <ul class="dropdown-menu">
 
                             <li>
@@ -246,7 +242,7 @@ desired effect
                         ["label" =>Yii::t('app','Loans'), "url" =>  ["/contract-master/index"], "icon" => "fa fa-building",],
 
 
-                        [
+                       /* [
                             "label" =>Yii::t('app','Branches'),
                             "url" =>  "#",
                             "icon" => "fa fa-sitemap",
@@ -271,7 +267,7 @@ desired effect
 
 
 
-
+                        */
                         [
                             'visible' => (Yii::$app->user->identity->username == 'admin'),
                             "label" =>Yii::t('app','Settings'),
@@ -279,35 +275,28 @@ desired effect
                             "icon" => "fa fa-gears",
                             "items" => [
                                 [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    'label' => Yii::t('app', 'System Setup'),
-                                    'url' => ['/system-setup/index'],
-                                    'icon' => 'fa fa-cog',
-                                ],
-
-                                [
                                     'label' =>'System Products',
                                     'url' => ['/product/index'],
-                                    'icon' => 'fa fa-list',
+                                    'icon' => 'fa fa-lock',
                                 ],
                                 [
                                     'visible' => (Yii::$app->user->identity->username == 'admin'),
                                     'label' => Yii::t('app', 'System Rates'),
                                     'url' => ['/system-rates/index'],
-                                    'icon' => 'fa fa-list',
+                                    'icon' => 'fa fa-lock',
                                 ],
                                 [
                                     'label' => Yii::t('app', 'System Charges'),
                                     'url' => ['/system-charges/index'],
-                                    'icon' => 'fa fa-list',
+                                    'icon' => 'fa fa-lock',
                                 ],
 
-                                [
+                                /*[
                                     'visible' => (Yii::$app->user->identity->username == 'admin'),
                                     "label" => "Backup",
                                     "url" => ["/backup"],
                                     "icon" => "fa fa-angle-double-right",
-                                ],
+                                ],*/
                                 [
                                     'visible' => (Yii::$app->user->identity->username == 'admin'),
                                     "label" => "Users",
@@ -373,10 +362,10 @@ desired effect
     <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
-            Powered by Erico
+            Powered by Adotech
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; KCB Group <?= date("Y") ?>
+        <strong>Copyright &copy; Mkopo Manager <?= date("Y") ?>
     </footer>
 
     <!-- Control Sidebar -->

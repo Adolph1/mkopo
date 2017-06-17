@@ -1,6 +1,7 @@
 define(function (require) {
 
     var List = require('../../data/List');
+    var echarts = require('../../echarts');
     var SeriesModel = require('../../model/Series');
     var zrUtil = require('zrender/core/util');
     var completeDimensions = require('../../data/helper/completeDimensions');
@@ -9,9 +10,26 @@ define(function (require) {
     var encodeHTML = formatUtil.encodeHTML;
     var addCommas = formatUtil.addCommas;
 
-    var dataSelectableMixin = require('../../component/helper/selectableMixin');
+    var dataSelectableMixin = require('../helper/dataSelectableMixin');
 
-    var geoCreator = require('../../coord/geo/geoCreator');
+    function fillData(dataOpt, geoJson) {
+        var dataNameMap = {};
+        var features = geoJson.features;
+        for (var i = 0; i < dataOpt.length; i++) {
+            dataNameMap[dataOpt[i].name] = dataOpt[i];
+        }
+
+        for (var i = 0; i < features.length; i++) {
+            var name = features[i].properties.name;
+            if (!dataNameMap[name]) {
+                dataOpt.push({
+                    value: NaN,
+                    name: name
+                });
+            }
+        }
+        return dataOpt;
+    }
 
     var MapSeries = SeriesModel.extend({
 
@@ -31,12 +49,12 @@ define(function (require) {
 
         init: function (option) {
 
-            option = this._fillOption(option, option.map);
+            option = this._fillOption(option);
             this.option = option;
 
             MapSeries.superApply(this, 'init', arguments);
 
-            this.updateSelectedMap(option.data);
+            this.updateSelectedMap();
         },
 
         getInitialData: function (option) {
@@ -50,38 +68,49 @@ define(function (require) {
         },
 
         mergeOption: function (newOption) {
-            if (newOption.data) {
-                newOption = this._fillOption(newOption, this.option.map);
-            }
+            newOption = this._fillOption(newOption);
 
             MapSeries.superCall(this, 'mergeOption', newOption);
 
-            this.updateSelectedMap(this.option.data);
+            this.updateSelectedMap();
         },
 
-        _fillOption: function (option, mapName) {
+        _fillOption: function (option) {
             // Shallow clone
             option = zrUtil.extend({}, option);
 
-            option.data = geoCreator.getFilledRegions(option.data, mapName);
+            var map = echarts.getMap(option.map);
+            var geoJson = map && map.geoJson;
+            geoJson && option.data
+                && (option.data = fillData(option.data, geoJson));
 
             return option;
+        },
+
+        /**
+         * @param {number} zoom
+         */
+        setRoamZoom: function (zoom) {
+            var roamDetail = this.option.roamDetail;
+            roamDetail && (roamDetail.zoom = zoom);
+        },
+
+        /**
+         * @param {number} x
+         * @param {number} y
+         */
+        setRoamPan: function (x, y) {
+            var roamDetail = this.option.roamDetail;
+            if (roamDetail) {
+                roamDetail.x = x;
+                roamDetail.y = y;
+            }
         },
 
         getRawValue: function (dataIndex) {
             // Use value stored in data instead because it is calculated from multiple series
             // FIXME Provide all value of multiple series ?
             return this._data.get('value', dataIndex);
-        },
-
-        /**
-         * Get model of region
-         * @param  {string} name
-         * @return {module:echarts/model/Model}
-         */
-        getRegionModel: function (regionName) {
-            var data = this.getData();
-            return data.getItemModel(data.indexOfName(regionName));
         },
 
         /**
@@ -139,10 +168,12 @@ define(function (require) {
             // 是否开启缩放及漫游模式
             // roam: false,
 
-            // Default on center of map
-            center: null,
-
-            zoom: 1,
+            // 在 roam 开启的时候使用
+            roamDetail: {
+                x: 0,
+                y: 0,
+                zoom: 1
+            },
 
             scaleLimit: null,
 
@@ -154,9 +185,9 @@ define(function (require) {
                     }
                 },
                 emphasis: {
-                    show: true,
+                    show: false,
                     textStyle: {
-                        color: 'rgb(100,0,0)'
+                        color: '#000'
                     }
                 }
             },
@@ -173,14 +204,6 @@ define(function (require) {
                     areaColor: 'rgba(255,215, 0, 0.8)'
                 }
             }
-        },
-
-        setZoom: function (zoom) {
-            this.option.zoom = zoom;
-        },
-
-        setCenter: function (center) {
-            this.option.center = center;
         }
     });
 

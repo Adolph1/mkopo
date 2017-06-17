@@ -115,9 +115,6 @@ define(function (require) {
                         if (seriesModel.legendDataProvider) {
                             var data = seriesModel.legendDataProvider();
                             var idx = data.indexOfName(name);
-                            if (idx < 0) {
-                                return;
-                            }
 
                             var color = data.getItemVisual(idx, 'color');
 

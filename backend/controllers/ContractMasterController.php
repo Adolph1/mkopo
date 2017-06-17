@@ -7,6 +7,7 @@ use backend\models\ContractAmountDueSearch;
 use backend\models\ContractAmountSearch;
 use backend\models\ContractNormalRepayment;
 use backend\models\ContractNormalRepaymentSearch;
+use backend\models\Guarantor;
 use backend\models\SystemCharges;
 use backend\models\SystemSetup;
 use Yii;
@@ -20,6 +21,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\ContractBalance;
 use backend\models\ContractAmount;
+use backend\models\Model;
 
 /**
  * ContractMasterController implements the CRUD actions for ContractMaster model.
@@ -62,34 +64,18 @@ class ContractMasterController extends Controller
  
     //Searching contract and dispalying its schedule
     public function actionView($id)
-    {   $model = $this->findModel($id);
-        $normalpay = $this->findNormalDueDate($id);
-        $modelbal=$this->findModelbalance($model->contract_ref_no);
-        //print_r($modelbal->contract_ref_number);
-        //die;
-        $modeldue= new ContractAmountDue();
-        $searchdues = new ContractAmountDueSearch();
-        $datadues = $searchdues->searchdue($model->contract_ref_no);
-        $datadues->pagination->pageSize=100;
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 
-        $modeldue1= new ContractAmount();
-        $searchdues1 = new ContractAmountSearch();
-        $datadues1 = $searchdues1->searchdue1($model->contract_ref_no);
-        $datadues1->pagination->pageSize=100;
-
-        if($normalpay!=='liquidated') {
-            return $this->render('view', [
-                'model' => $this->findModel($id), 'modeldue' => $modeldue, 'searchdues' => $searchdues,
-                'datadues' => $datadues, 'normalpay' => $normalpay, 'modelbal' => $modelbal, 'modeldue1' => $modeldue1, 'searchdues1' => $searchdues1, 'datadues1' => $datadues1
-            ]);
-        }
-        else
-        {
-            return $this->render('view', [
-                'model' => $this->findModel($id), 'modeldue' => $modeldue, 'searchdues' => $searchdues,
-                'datadues' => $datadues, 'normalpay' => $normalpay, 'modelbal' => $modelbal, 'modeldue1' => $modeldue1, 'searchdues1' => $searchdues1, 'datadues1' => $datadues1
-            ]);
-        }
+    //view schedule
+    public function actionSchedule($id)
+    {
+        return $this->render('schedule', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**
@@ -101,11 +87,10 @@ class ContractMasterController extends Controller
     {
         $model = new ContractMaster();
         $model->module='LD';
-        $model->contract_status='Active';
+        $model->contract_status='A';
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_stamptime=date('Y-m-d:H:s');
-        $model->branch='000';
-        $model->settle_account='000';
+        $guarantors = [new Guarantor()];
 
 
 
@@ -115,21 +100,63 @@ class ContractMasterController extends Controller
 
 
 
+                //saves gurantors
+                $guarantors = Model::createMultiple(Guarantor::classname());
+                Model::loadMultiple($guarantors, Yii::$app->request->post());
+                // print_r($model);
+                //exit;
+
+                // validate all models
+                $valid = $model->validate();
+                $valid = Model::validateMultiple($guarantors) && $valid;
 
 
+                if ($valid) {
 
+
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    //print_r($transaction);
+                    //exit;
+                    try {
+
+
+                        foreach ($guarantors as $guarantor) {
+
+
+                            $guarantor->contract_ref_number = $model->contract_ref_no;
+                            $guarantor->related_customer=$model->customer_number;
+                            $guarantor->maker_id = Yii::$app->user->identity->username;
+                            $guarantor->maker_time = date('Y-m-d:H:i:s');
+
+                            if (!($flag = $guarantor->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            } else {
+                                //$this->updateTotal($subitem->id,$subitem->qty,$subitem->price);
+                            }
+                        }
+
+                        $transaction->commit();
+                        //return $this->redirect(['view', 'id' => $model->id]);
+                    } catch (Exception $e) {
+                        $transaction->rollBack();
+                    }
+
+                }
+
+
+                //calculate repayment schedule
                 $time = $model->frequency;
-
                 $rate = $model->main_component_rate / 100;
-
                 $modelpaymentdate = $model->payment_date;
-
                 $modelinterest = $this->getInterest($model->amount, $time, $rate);
                 $modeloutstanding = $this->getTotalOutstanding($model->amount, $modelinterest);
                 $modelpayment = $this->getMonthlyPayment($modeloutstanding, $time);
                 $modelmonthlyinterest = $this->getMonthlyInterest($model->amount, $rate);
                 $modelmonthlyprincipal = $this->getMonthlyPrincipal($modelpayment, $modelmonthlyinterest);
 
+
+                //posts each payment date principal and interest
                 for ($i = 1; $i <= $model->frequency; $i++) {
 
 
@@ -138,7 +165,7 @@ class ContractMasterController extends Controller
                     $duemodel->component = 'Principal';
                     $duemodel->amount_due = $modelmonthlyprincipal;
                     $duemodel->currency_amt_due = 'TZS';
-                    $duemodel->account_due = $model->settle_account;
+                    $duemodel->account_due = $model->customer_number;
                     $duemodel->amount_settled = '0';
                     $duemodel->customer_number = $model->customer_number;
                     $duemodel->inflow_outflow = 'O';
@@ -150,14 +177,13 @@ class ContractMasterController extends Controller
                     $duemodel->due_date = $model->payment_date;
                     $duemodel->original_due_date = $model->payment_date;
                     $duemodel->status = 'A';
-                    //print_r($duemodel);
                     $duemodel->save();
 
 
                     $duemodel1 = new ContractAmountDue();
                     $duemodel1->contract_ref_number = $model->contract_ref_no;
                     $duemodel1->currency_amt_due = 'TZS';
-                    $duemodel1->account_due = $model->settle_account;
+                    $duemodel1->account_due = $model->customer_number;
                     $duemodel1->amount_settled = '0';
                     $duemodel1->customer_number = $model->customer_number;
                     $duemodel1->inflow_outflow = 'O';
@@ -173,7 +199,6 @@ class ContractMasterController extends Controller
                     $duemodel1->status = 'A';
 
                     $duemodel1->save();
-                    //increment month by i
                     $month = $i . "months";
                     $nextdate = date_create($modelpaymentdate);
                     date_add($nextdate, date_interval_create_from_date_string($month));
@@ -182,33 +207,21 @@ class ContractMasterController extends Controller
                     $model->payment_date = $nextdate;
 
 
-                    /*$contractamount = new ContractAmount();
-                    $contractamount->contract_ref_number = $model->contract_ref_no;
-                    $contractamount->amount_due = $modelpayment;
-                    $contractamount->due_date = $duemodel->due_date;
-                    $contractamount->account_due = $duemodel->account_due;
-                    $contractamount->customer_number = $duemodel->customer_number;
-                    $contractamount->amount_settled = $duemodel->amount_settled;
-                    $contractamount->status = 'A';
-                    $contractamount->save();*/
+
 
 
                 }
 
-                /*$contractbalance = new ContractBalance();
-                $contractbalance->contract_ref_number = $model->contract_ref_no;
-                $contractbalance->contract_amount = $model->amount;
-                $contractbalance->contract_outstanding = $modeloutstanding;
-                $contractbalance->save();
-                */
 
                 $modelrefid=ReferenceIndex::getIDByRef($model->contract_ref_no);
                 ReferenceIndex::updateReference($modelrefid);
 
                 return $this->redirect(['view', 'id' => $model->contract_ref_no]);
             } else {
+
+
                 return $this->render('create', [
-                    'model' => $model,
+                    'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
                 ]);
             }
 

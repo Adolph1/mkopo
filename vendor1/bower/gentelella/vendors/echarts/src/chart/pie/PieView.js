@@ -102,7 +102,6 @@ define(function (require) {
         return {
             fill: textStyleModel.getTextColor()
                 || (isLabelInside ? '#fff' : data.getItemVisual(idx, 'color')),
-            opacity: data.getItemVisual(idx, 'opacity'),
             textFont: textStyleModel.getFont(),
             text: zrUtil.retrieve(
                 data.hostModel.getFormattedLabel(idx, state), data.getName(idx)
@@ -126,19 +125,19 @@ define(function (require) {
                 shape: {
                     endAngle: layout.endAngle
                 }
-            }, seriesModel, idx);
+            }, seriesModel);
         }
         else {
             graphic.updateProps(sector, {
                 shape: sectorShape
-            }, seriesModel, idx);
+            }, seriesModel);
         }
 
         // Update common style
         var itemStyleModel = itemModel.getModel('itemStyle');
         var visualColor = data.getItemVisual(idx, 'color');
 
-        sector.useStyle(
+        sector.setStyle(
             zrUtil.defaults(
                 {
                     fill: visualColor
@@ -206,14 +205,14 @@ define(function (require) {
                     [labelLayout.x, labelLayout.y], [labelLayout.x, labelLayout.y], [labelLayout.x, labelLayout.y]
                 ]
             }
-        }, seriesModel, idx);
+        }, seriesModel);
 
         graphic.updateProps(labelText, {
             style: {
                 x: labelLayout.x,
                 y: labelLayout.y
             }
-        }, seriesModel, idx);
+        }, seriesModel);
         labelText.attr({
             style: {
                 textVerticalAlign: labelLayout.verticalAlign,
@@ -241,8 +240,7 @@ define(function (require) {
 
         // Default use item visual color
         labelLine.setStyle({
-            stroke: visualColor,
-            opacity: data.getItemVisual(idx, 'opacity')
+            stroke: visualColor
         });
         labelLine.setStyle(labelLineModel.getModel('lineStyle').getLineStyle());
 

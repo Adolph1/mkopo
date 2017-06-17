@@ -46,6 +46,9 @@ define(function (require) {
         );
 
         symbolPath.attr({
+            style: {
+                strokeNoScale: true
+            },
             z2: 100,
             culling: true,
             scale: [0, 0]
@@ -57,7 +60,7 @@ define(function (require) {
 
         graphic.initProps(symbolPath, {
             scale: size
-        }, seriesModel, idx);
+        }, seriesModel);
 
         this._symbolType = symbolType;
 
@@ -75,6 +78,7 @@ define(function (require) {
     /**
      * Get scale(aka, current symbol size).
      * Including the change caused by animation
+     * @param {Array.<number>} toLastFrame
      */
     symbolProto.getScale = function () {
         return this.childAt(0).scale;
@@ -109,7 +113,6 @@ define(function (require) {
         symbolPath.draggable = draggable;
         symbolPath.cursor = draggable ? 'move' : 'pointer';
     };
-
     /**
      * Update symbol properties
      * @param  {module:echarts/data/List} data
@@ -126,7 +129,7 @@ define(function (require) {
             var symbolPath = this.childAt(0);
             graphic.updateProps(symbolPath, {
                 scale: symbolSize
-            }, seriesModel, idx);
+            }, seriesModel);
         }
         this._updateCommon(data, idx, symbolSize);
 
@@ -145,18 +148,11 @@ define(function (require) {
         var itemModel = data.getItemModel(idx);
         var normalItemStyleModel = itemModel.getModel(normalStyleAccessPath);
         var color = data.getItemVisual(idx, 'color');
-
-        // Reset style
-        if (symbolPath.type !== 'image') {
-            symbolPath.useStyle({
-                strokeNoScale: true
-            });
-        }
         var elStyle = symbolPath.style;
 
         var hoverStyle = itemModel.getModel(emphasisStyleAccessPath).getItemStyle();
 
-        symbolPath.rotation = (itemModel.getShallow('symbolRotate') || 0) * Math.PI / 180 || 0;
+        symbolPath.rotation = itemModel.getShallow('symbolRotate') * Math.PI / 180 || 0;
 
         var symbolOffset = itemModel.getShallow('symbolOffset');
         if (symbolOffset) {
@@ -184,15 +180,16 @@ define(function (require) {
 
         // Get last value dim
         var dimensions = data.dimensions.slice();
-        var valueDim;
+        var valueDim = dimensions.pop();
         var dataType;
-        while (dimensions.length && (
-            valueDim = dimensions.pop(),
-            dataType = data.getDimensionInfo(valueDim).type,
-            dataType === 'ordinal' || dataType === 'time'
-        )) {} // jshint ignore:line
+        while (
+            ((dataType = data.getDimensionInfo(valueDim).type) === 'ordinal')
+            || (dataType === 'time')
+        ) {
+            valueDim = dimensions.pop();
+        }
 
-        if (valueDim != null && labelModel.get('show')) {
+        if (labelModel.get('show')) {
             graphic.setText(elStyle, labelModel, color);
             elStyle.text = zrUtil.retrieve(
                 seriesModel.getFormattedLabel(idx, 'normal'),
@@ -203,7 +200,7 @@ define(function (require) {
             elStyle.text = '';
         }
 
-        if (valueDim != null && hoverLabelModel.getShallow('show')) {
+        if (hoverLabelModel.getShallow('show')) {
             graphic.setText(hoverStyle, hoverLabelModel, color);
             hoverStyle.text = zrUtil.retrieve(
                 seriesModel.getFormattedLabel(idx, 'emphasis'),
@@ -247,16 +244,11 @@ define(function (require) {
 
     symbolProto.fadeOut = function (cb) {
         var symbolPath = this.childAt(0);
-        // Avoid trigger hoverAnimation when fading
-        symbolPath.off('mouseover')
-            .off('mouseout')
-            .off('emphasis')
-            .off('normal');
         // Not show text when animating
         symbolPath.style.text = '';
         graphic.updateProps(symbolPath, {
             scale: [0, 0]
-        }, this._seriesModel, this.dataIndex, cb);
+        }, this._seriesModel, cb);
     };
 
     zrUtil.inherits(Symbol, graphic.Group);

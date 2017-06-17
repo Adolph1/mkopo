@@ -31,11 +31,6 @@
                         chart.resize();
                     }
 
-                    chart.on('click', function (params) {
-                        console.log(params, params.data);
-                    });
-
-
                     $.getJSON('./data/energy.json')
                     .done(function(data) {
                         chart.setOption({

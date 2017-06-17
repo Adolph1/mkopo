@@ -108,8 +108,6 @@ define(function (require) {
         // scale: false,
         // 分割段数，默认为5
         splitNumber: 5
-        // Minimum interval
-        // minInterval: null
     }, defaultOption);
 
     // FIXME

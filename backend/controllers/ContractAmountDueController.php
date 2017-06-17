@@ -105,6 +105,16 @@ class ContractAmountDueController extends Controller
         }
     }
 
+
+    public function actionLiquidate($id)
+    {
+        $model= $this->findModel($id);
+        $model->amount_settled=$model->amount_due;
+        $model->status='L';
+        $model->save();
+        return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+    }
+
     /**
      * Deletes an existing ContractAmountDue model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

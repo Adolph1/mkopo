@@ -62,7 +62,7 @@ define(function (require) {
                     animateTarget[animateProperty] = layout[animateProperty];
                     graphic[isUpdate? 'updateProps' : 'initProps'](rect, {
                         shape: animateTarget
-                    }, seriesModel, dataIndex);
+                    }, seriesModel);
                 }
                 return rect;
             }
@@ -97,7 +97,7 @@ define(function (require) {
 
                     graphic.updateProps(rect, {
                         shape: layout
-                    }, seriesModel, newIndex);
+                    }, seriesModel);
 
                     data.setItemGraphicEl(newIndex, rect);
 
@@ -113,7 +113,7 @@ define(function (require) {
                             shape: {
                                 width: 0
                             }
-                        }, seriesModel, idx, function () {
+                        }, seriesModel, function () {
                             group.remove(rect);
                         });
                     }
@@ -145,7 +145,7 @@ define(function (require) {
 
                 rect.setShape('r', itemStyleModel.get('barBorderRadius') || 0);
 
-                rect.useStyle(zrUtil.defaults(
+                rect.setStyle(zrUtil.defaults(
                     {
                         fill: color,
                         opacity: opacity
@@ -201,7 +201,7 @@ define(function (require) {
                             shape: {
                                 width: 0
                             }
-                        }, ecModel, el.dataIndex, function () {
+                        }, ecModel, function () {
                             group.remove(el);
                         });
                     });

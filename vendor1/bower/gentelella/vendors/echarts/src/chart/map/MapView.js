@@ -28,7 +28,7 @@ define(function (require) {
                     var mapDraw = this._mapDraw || new MapDraw(api, true);
                     group.add(mapDraw.group);
 
-                    mapDraw.draw(mapModel, ecModel, api, this, payload);
+                    mapDraw.draw(mapModel, ecModel, api, this);
 
                     this._mapDraw = mapDraw;
                 }

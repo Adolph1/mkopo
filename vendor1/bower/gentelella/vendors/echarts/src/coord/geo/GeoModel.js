@@ -3,14 +3,8 @@ define(function (require) {
     'use strict';
     var modelUtil = require('../../util/model');
     var ComponentModel = require('../../model/Component');
-    var Model = require('../../model/Model');
-    var zrUtil = require('zrender/core/util');
 
-    var selectableMixin = require('../../component/helper/selectableMixin');
-
-    var geoCreator = require('./geoCreator');
-
-    var GeoModel = ComponentModel.extend({
+    ComponentModel.extend({
 
         type: 'geo',
 
@@ -26,22 +20,6 @@ define(function (require) {
             modelUtil.defaultEmphasis(
                 option.label, ['position', 'show', 'textStyle', 'distance', 'formatter']
             );
-        },
-
-        optionUpdated: function () {
-            var option = this.option;
-            var self = this;
-
-            option.regions = geoCreator.getFilledRegions(option.regions, option.map);
-
-            this._optionModelMap = zrUtil.reduce(option.regions || [], function (obj, regionOpt) {
-                if (regionOpt.name) {
-                    obj[regionOpt.name] = new Model(regionOpt, self);
-                }
-                return obj;
-            }, {});
-
-            this.updateSelectedMap(option.regions);
         },
 
         defaultOption: {
@@ -65,14 +43,14 @@ define(function (require) {
             // Map type
             map: '',
 
-            // Default on center of map
-            center: null,
-
-            zoom: 1,
+            // 在 roam 开启的时候使用
+            roamDetail: {
+                x: 0,
+                y: 0,
+                zoom: 1
+            },
 
             scaleLimit: null,
-
-            // selectedMode: false
 
             label: {
                 normal: {
@@ -99,18 +77,7 @@ define(function (require) {
                 emphasis: {                 // 也是选中样式
                     color: 'rgba(255,215,0,0.8)'
                 }
-            },
-
-            regions: []
-        },
-
-        /**
-         * Get model of region
-         * @param  {string} name
-         * @return {module:echarts/model/Model}
-         */
-        getRegionModel: function (name) {
-            return this._optionModelMap[name];
+            }
         },
 
         /**
@@ -133,16 +100,17 @@ define(function (require) {
             }
         },
 
-        setZoom: function (zoom) {
-            this.option.zoom = zoom;
+        setRoamZoom: function (zoom) {
+            var roamDetail = this.option.roamDetail;
+            roamDetail && (roamDetail.zoom = zoom);
         },
 
-        setCenter: function (center) {
-            this.option.center = center;
+        setRoamPan: function (x, y) {
+            var roamDetail = this.option.roamDetail;
+            if (roamDetail) {
+                roamDetail.x = x;
+                roamDetail.y = y;
+            }
         }
     });
-
-    zrUtil.mixin(GeoModel, selectableMixin);
-
-    return GeoModel;
 });

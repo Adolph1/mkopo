@@ -1,175 +1,202 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\widgets\DetailView;
-use yii\bootstrap\Modal;
-//use yii\grid\GridView;
-use kartik\grid\GridView;
-use dosamigos\editable\Editable;
+use yii\widgets\ActiveForm;
+use dosamigos\datepicker\DatePicker;
+use backend\models\Product;
+use yii\helpers\ArrayHelper;
+use backend\models\Customer;
+use backend\models\Branch;
+use backend\models\PaymentMethod;
+use backend\models\Account;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ContractMaster */
-
-$this->title = $model->contract_ref_no;
-$this->params['breadcrumbs'][] = ['label' => 'Contract Masters', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+/* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="contract-master-view">
-
-
+<div class="row">
     <div class="col-md-12">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN DETAILS</strong></h3>
+    </div>
 
-        <?php
-        if($model->contract_status=='Active') {
-            ?>
-            <div style="margin-bottom: 5px"><?= Html::a('Liquidate', ['normalpayment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-warning']) ?></div>
-            <?php
-        }
-        ?>
+</div>
+<hr>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <?= Yii::t('app', 'Loan Details'); ?>
+        <div class="btn-group btn-group-justified">
 
+            <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-primary']) ?>
 
 
-            </div>
-            <div class="panel-body" style="font-size: 12px">
-
-                <div class="row">
-
-                    <div class="col-md-7"><b>Reference:</b> <?= $model->contract_ref_no;?></div>
-                    <div class="col-md-5"><b>Booking Date:</b> <?= $model->booking_date;?> | <b>Maturity Date:</b> <?= $model->maturity_date;?></div>
-
-                </div>
-                <hr/>
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Contract Product:</div>
-                            <div class="col-md-7"> <?= $model->product;?></div>
-
-                        </div>
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Contract Amount:</div>
-                            <div class="col-md-7"> <?= $modelbal->contract_amount;?></div>
-                        </div>
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Payment Type:</div>
-                            <div class="col-md-7"> <?= $model->payment_method;?></div>
-                        </div>
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Number of Installment:</div>
-                            <div class="col-md-7"> <?= $model->frequency;?></div>
-                        </div>
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Rate:</div>
-                            <div class="col-md-7"> <?= $model->main_component_rate;?>%</div>
-                        </div>
-                        <div class="row" style="margin-bottom: 5px">
-                            <div class="col-md-5">Status:</div>
-                            <div class="col-md-7"> <?= $model->contract_status;?></div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <b>Customer Details</b>
-                            </div>
-                        </div>
-                        <?php
-                        $customerdetails=$model->getCustomer($model->customer_number);
-                        ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="row" style="margin-bottom: 5px;margin-top: 5px">
-                                    <div class="col-md-12 text-primary"><i class="fa fa-user fa-2x"></i> <?= $customerdetails->customer_name;?></div>
-
-                                </div>
-                                <div class="row" style="margin-bottom: 5px">
-                                    <div class="col-md-12 text-primary"><i class="fa fa-credit-card fa-2x" aria-hidden="true"></i> <?= $model->customer_number;?></div>
-                                </div>
-                                <div class="row" style="margin-bottom: 5px">
-                                    <div class="col-md-12 text-primary"><i class="fa fa-home fa-2x" aria-hidden="true"></i> <?= $customerdetails->customer_address;?></div>
-                                </div>
-                                <div class="row" style="margin-bottom: 5px">
-                                    <div class="col-md-12 text-primary"><i class="fa fa-mobile-phone fa-2x" aria-hidden="true"></i> <?= $customerdetails->mobile_no_1;?></div>
-                                </div>
-                                <div class="row" style="margin-bottom: 5px">
-                                    <div class="col-md-12 text-primary"><i class="fa fa-envelope-o fa-2x" aria-hidden="true"></i> <?= $customerdetails->email;?></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <?php
-                                if($customerdetails->photo!="")
-                                {
-                                    ?>
-                                    <?= Html::img(Yii::$app->request->baseUrl.'/Uploads/'.$customerdetails->photo, ['alt'=>'some', 'class'=>'thing','style'=>'width:180px;height:150px;border:5px solid #bbb;']);?>
-
-                                    <?php
-                                }
-                                else
-                                {
-                                ?>
-                                <?= Html::img(Yii::$app->request->baseUrl.'/Uploads/avarta.png', ['alt'=>'some', 'class'=>'thing','style'=>'width:180px;height:150px;border:5px solid #bbb;']);?>
-                            </div>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr/>
-            <div class="text-primary"> <b>Payment Details</b></div>
-            <?php
-            $gridColumns = [
-                ['class' => 'kartik\grid\SerialColumn'],
-                'contract_ref_no',
-                'branch',
-                //'product',
-                //'product_type',
-               // 'module',
-                //'payment_method',
-                //'customer_number',
-                'amount',
-                'booking_date',
-                'value_date',
-                'maturity_date',
-                'main_component',
-                'settle_account',
-                'contract_status',
-                //'main_component_rate',
-                //'payment_date',
-                //'frequency',
-                //'maker_id',
-                //'maker_stamptime',
-                //'checker_id',
-                //'checker_stamptime',
-                //'seq_number',
-
-            ];
-            ?>
-
-            <?= GridView::widget([
-                'dataProvider' => $datadues,
-
-                //'filterModel' => $searchModel,
-                'columns' =>  $gridColumns,
-                'responsive'=>true,
-                'hover'=>true,
-
-
-
-                // ['class' => 'yii\grid\SerialColumn'],
-
-            ]); ?>
-            <hr/>
-
-
-
-
+            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> LOANS CONTRACTS LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
 
         </div>
+    </div>
+</div>
+<hr>
+<?php $form = ActiveForm::begin(); ?>
+
+    <div class="panel-body">
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
+
+            </div>
+
+            <div class="col-md-4">
+                <?= $form->field($model, 'contract_ref_no')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'amount')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'product_type')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <?= $form->field($model, 'customer_name')->textInput(['readonly'=>'readonly','value'=>Customer::getFullNameByCustomerNumber($model->customer_number)]) ?>
+
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'customer_number')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <?= $form->field($model, 'booking_date')->widget(
+                    DatePicker::className(), [
+                    // inline too, not bad
+                    'inline' => false,
+                    'options'=>['readonly'=>'readonly'],
+                    // modify template for custom rendering
+                    //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd',
+
+                    ]
+                ]);?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'value_date')->widget(
+                    DatePicker::className(), [
+                    // inline too, not bad
+                    'inline' => false,
+                    'options'=>['readonly'=>'readonly'],
+                    // modify template for custom rendering
+                    //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd',
+
+                    ]
+                ]);?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'maturity_date')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <?= $form->field($model, 'main_component_rate')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'payment_date')->widget(
+                    DatePicker::className(), [
+                    // inline too, not bad
+                    'inline' => false,
+                    'options'=>['readonly'=>'readonly'],
+                    // modify template for custom rendering
+                    //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd',
+
+                    ]
+                ]);?>
+            </div>
+            <div class="col-md-4">
+                <?= $form->field($model, 'frequency')->textInput(['maxlength' => 200,'readonly'=>'readonly','onblur'=>'jsDispalydate(this)','onkeyup'=>'jsDispalydate(this)']) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <legend class="scheduler-border" style="color:#005DAD">Guarantors List</legend>
+            <div class="col-md-12">
+            <?php
+            $searchModel = new \backend\models\GuarantorSearch();
+            $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
+            ?>
+            <?= \fedemotta\datatables\DataTables::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+
+                   // 'id',
+                    'name',
+                    'phone_number',
+                    [
+                        'attribute'=>'identification',
+                        'value'=>'identificationID.name',
+                    ],
+
+                    'identification_number',
+                    //'related_customer',
+                    // 'maker_id',
+                    // 'maker_time',
+
+                    ['class' => 'yii\grid\ActionColumn'],
+                ],
+            ]); ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-4 col-sm-4 col-xs-4 pull-right">
+                    <div class="btn-group btn-group-justified">
+                        <?php
+                      if($model->contract_status=='L'){
+                            echo Html::a(Yii::t('app', 'Reverse'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                            echo Html::a(Yii::t('app', 'View Schedule'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                        }
+                        elseif($model->contract_status=='A') {
+                            echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->contract_ref_no], [
+                                'class' => 'btn btn-danger btn-block',
+                                'data' => [
+                                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                                    'method' => 'post',
+                                ],
+                            ]);
+                            echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                        }
+                        ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
+
+
+

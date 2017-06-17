@@ -65,24 +65,23 @@ class ContractAmountDueSearch extends ContractAmountDue
 
         return $dataProvider;
     }
-     public function searchdue($params)
+     public function searchByReference($params)
     {
         $query = ContractAmountDue::find();
 
         $dataProvider = new ActiveDataProvider([
            'query' => $query,
+            'pagination' => [
+                'pageSize' => 150,
+            ]
         ]);
 
-       // if (!($this->load($params) && $this->validate())) {
-        //    return $dataProvider;
-        //}
+
          $query->andFilterWhere([
             'contract_ref_number' => $params,
-             //'amount_settled'=>$this->amount_due,
         ]);
 
 
-        //$query->andFilterWhere(['like', 'product_code', $this->product_code]);
 
         return $dataProvider;
     }

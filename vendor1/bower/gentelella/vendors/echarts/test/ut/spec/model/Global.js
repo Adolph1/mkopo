@@ -1,15 +1,46 @@
 describe('modelAndOptionMapping', function() {
 
     var utHelper = window.utHelper;
+    var el;
+    var chart;
 
-    var testCase = utHelper.prepare([
-        'echarts/component/grid',
-        'echarts/chart/line',
-        'echarts/chart/pie',
-        'echarts/chart/bar',
-        'echarts/component/toolbox',
-        'echarts/component/dataZoom'
-    ]);
+    beforeEach(function (done) {
+        window.jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
+        if (el) {
+            document.body.removeChild(el);
+        }
+        if (chart) {
+            chart.dispose();
+        }
+
+        el = document.createElement('div');
+        document.body.appendChild(el);
+
+        utHelper.resetPackageLoader(done);
+    });
+
+    function testCase(name, doTest) {
+        it(name, function (done) {
+            window.require(
+                [
+                    'echarts',
+                    'echarts/component/grid',
+                    'echarts/chart/line',
+                    'echarts/chart/pie',
+                    'echarts/chart/bar',
+                    'echarts/component/toolbox',
+                    'echarts/component/dataZoom'
+                ],
+                function (echarts) {
+                    chart = echarts.init(el, null, {renderer: 'canvas'});
+                    doTest(chart, echarts);
+                    done();
+                }
+            );
+        });
+    }
+    function xtestCase() {} // jshint ignore:line
 
     function getData0(chart, seriesIndex) {
         return getSeries(chart, seriesIndex).getData().get('y', 0);
@@ -54,14 +85,14 @@ describe('modelAndOptionMapping', function() {
         return origins;
     }
 
-    function modelEqualsToOrigin(chart, idxList, origins, boolResult) {
+    function modelEqualsToOrigin(idxList, origins, boolResult) {
         for (var i = 0; i < idxList.length; i++) {
             var idx = idxList[i];
             expect(origins[idx].model === getSeries(chart, idx)).toEqual(boolResult);
         }
     }
 
-    function viewEqualsToOrigin(chart, idxList, origins, boolResult) {
+    function viewEqualsToOrigin(idxList, origins, boolResult) {
         for (var i = 0; i < idxList.length; i++) {
             var idx = idxList[i];
             expect(
@@ -74,7 +105,7 @@ describe('modelAndOptionMapping', function() {
 
     describe('idNoNameNo', function () {
 
-        testCase.createChart()('sameTypeNotMerge', function () {
+        testCase('sameTypeNotMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -84,7 +115,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [33]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             // Not merge
@@ -92,11 +122,11 @@ describe('modelAndOptionMapping', function() {
             chart.setOption(option, true);
             expect(countChartViews(chart)).toEqual(3);
             expect(countSeries(chart)).toEqual(3);
-            modelEqualsToOrigin(chart, [0, 1, 2], origins, false);
-            viewEqualsToOrigin(chart, [0, 1, 2], origins, true);
+            modelEqualsToOrigin([0, 1, 2], origins, false);
+            viewEqualsToOrigin([0, 1, 2], origins, true);
         });
 
-        testCase.createChart()('sameTypeMergeFull', function () {
+        testCase('sameTypeMergeFull', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -106,7 +136,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [33]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             // Merge
@@ -124,11 +153,11 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 0)).toEqual(111);
             expect(getData0(chart, 1)).toEqual(222);
             expect(getData0(chart, 2)).toEqual(333);
-            viewEqualsToOrigin(chart, [0, 1, 2], origins, true);
-            modelEqualsToOrigin(chart, [0, 1, 2], origins, true);
+            viewEqualsToOrigin([0, 1, 2], origins, true);
+            modelEqualsToOrigin([0, 1, 2], origins, true);
         });
 
-        testCase.createChart()('sameTypeMergePartial', function () {
+        testCase('sameTypeMergePartial', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -138,7 +167,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [33]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             // Merge
@@ -154,11 +182,11 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 0)).toEqual(22222);
             expect(getData0(chart, 1)).toEqual(22);
             expect(getData0(chart, 2)).toEqual(33);
-            viewEqualsToOrigin(chart, [0, 1, 2], origins, true);
-            modelEqualsToOrigin(chart, [0, 1, 2], origins, true);
+            viewEqualsToOrigin([0, 1, 2], origins, true);
+            modelEqualsToOrigin([0, 1, 2], origins, true);
         });
 
-        testCase.createChart()('differentTypeMerge', function () {
+        testCase('differentTypeMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -168,7 +196,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [33]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             // Merge
@@ -187,10 +214,10 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 1)).toEqual(222);
             expect(getData0(chart, 2)).toEqual(333);
             expect(getSeries(chart, 1).type === 'series.bar').toEqual(true);
-            modelEqualsToOrigin(chart, [0, 2], origins, true);
-            modelEqualsToOrigin(chart, [1], origins, false);
-            viewEqualsToOrigin(chart, [0, 2], origins, true);
-            viewEqualsToOrigin(chart, [1], origins, false);
+            modelEqualsToOrigin([0, 2], origins, true);
+            modelEqualsToOrigin([1], origins, false);
+            viewEqualsToOrigin([0, 2], origins, true);
+            viewEqualsToOrigin([1], origins, false);
         });
 
     });
@@ -201,7 +228,7 @@ describe('modelAndOptionMapping', function() {
 
     describe('idSpecified', function () {
 
-        testCase.createChart()('sameTypeNotMerge', function () {
+        testCase('sameTypeNotMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -213,7 +240,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             expect(countSeries(chart)).toEqual(5);
@@ -229,11 +255,11 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, false);
-            viewEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, false);
+            viewEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
         });
 
-        testCase.createChart()('sameTypeMerge', function () {
+        testCase('sameTypeMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -245,7 +271,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -253,11 +278,11 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
-            viewEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
+            viewEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
         });
 
-        testCase.createChart()('differentTypeNotMerge', function () {
+        testCase('differentTypeNotMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -269,7 +294,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -288,12 +312,12 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, false);
-            viewEqualsToOrigin(chart, [0, 2, 4], origins, true);
-            viewEqualsToOrigin(chart, [1, 3], origins, false);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, false);
+            viewEqualsToOrigin([0, 2, 4], origins, true);
+            viewEqualsToOrigin([1, 3], origins, false);
         });
 
-        testCase.createChart()('differentTypeMergeFull', function () {
+        testCase('differentTypeMergeFull', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -305,7 +329,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -322,13 +345,13 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 2, 4], origins, true);
-            modelEqualsToOrigin(chart, [1, 3], origins, false);
-            viewEqualsToOrigin(chart, [0, 2, 4], origins, true);
-            viewEqualsToOrigin(chart, [1, 3], origins, false);
+            modelEqualsToOrigin([0, 2, 4], origins, true);
+            modelEqualsToOrigin([1, 3], origins, false);
+            viewEqualsToOrigin([0, 2, 4], origins, true);
+            viewEqualsToOrigin([1, 3], origins, false);
         });
 
-        testCase.createChart()('differentTypeMergePartial1', function () {
+        testCase('differentTypeMergePartial1', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -340,7 +363,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -360,13 +382,13 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 2)).toEqual(33);
             expect(getData0(chart, 3)).toEqual(444);
             expect(getData0(chart, 4)).toEqual(55);
-            modelEqualsToOrigin(chart, [0, 1, 2, 4], origins, true);
-            modelEqualsToOrigin(chart, [3], origins, false);
-            viewEqualsToOrigin(chart, [0, 1, 2, 4], origins, true);
-            viewEqualsToOrigin(chart, [3], origins, false);
+            modelEqualsToOrigin([0, 1, 2, 4], origins, true);
+            modelEqualsToOrigin([3], origins, false);
+            viewEqualsToOrigin([0, 1, 2, 4], origins, true);
+            viewEqualsToOrigin([3], origins, false);
         });
 
-        testCase.createChart()('differentTypeMergePartial2', function () {
+        testCase('differentTypeMergePartial2', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -375,7 +397,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22], id: 20}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var option2 = {
@@ -397,7 +418,7 @@ describe('modelAndOptionMapping', function() {
         });
 
 
-        testCase.createChart()('mergePartialDoNotMapToOtherId', function () {
+        testCase('mergePartialDoNotMapToOtherId', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -406,12 +427,11 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22], id: 20}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var option2 = {
                 series: [
-                    {type: 'bar', data: [444], id: 40}
+                    {type: 'bar', data: [444], id: 40},
                 ]
             };
             chart.setOption(option2);
@@ -424,7 +444,7 @@ describe('modelAndOptionMapping', function() {
         });
 
 
-        testCase.createChart()('idDuplicate', function () {
+        testCase('idDuplicate', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -433,8 +453,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22], id: 10}
                 ]
             };
-
-            var chart = this.chart;
 
             expect(function () {
                 chart.setOption(option);
@@ -455,7 +473,7 @@ describe('modelAndOptionMapping', function() {
 
     describe('noIdButNameExists', function () {
 
-        testCase.createChart()('sameTypeNotMerge', function () {
+        testCase('sameTypeNotMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -467,7 +485,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55], name: 'a'}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             expect(getSeries(chart, 1)).not.toEqual(getSeries(chart, 4));
@@ -486,11 +503,11 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, false);
-            viewEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, false);
+            viewEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
         });
 
-        testCase.createChart()('sameTypeMerge', function () {
+        testCase('sameTypeMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -502,7 +519,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55], name: 'a'}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -510,11 +526,11 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
-            viewEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, true);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
+            viewEqualsToOrigin([0, 1, 2, 3, 4], origins, true);
         });
 
-        testCase.createChart()('differentTypeNotMerge', function () {
+        testCase('differentTypeNotMerge', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -526,7 +542,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55], name: 'a'}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -545,12 +560,12 @@ describe('modelAndOptionMapping', function() {
             expect(countChartViews(chart)).toEqual(5);
             expect(countSeries(chart)).toEqual(5);
 
-            modelEqualsToOrigin(chart, [0, 1, 2, 3, 4], origins, false);
-            viewEqualsToOrigin(chart, [0, 2, 4], origins, true);
-            viewEqualsToOrigin(chart, [1, 3], origins, false);
+            modelEqualsToOrigin([0, 1, 2, 3, 4], origins, false);
+            viewEqualsToOrigin([0, 2, 4], origins, true);
+            viewEqualsToOrigin([1, 3], origins, false);
         });
 
-        testCase.createChart()('differentTypeMergePartialOneMapTwo', function () {
+        testCase('differentTypeMergePartialOneMapTwo', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -562,7 +577,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [55], name: 'a'}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var origins = saveOrigins(chart);
@@ -583,13 +597,13 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 3)).toEqual(44);
             expect(getData0(chart, 4)).toEqual(55);
             expect(getData0(chart, 5)).toEqual(444);
-            modelEqualsToOrigin(chart, [0, 2, 3, 4], origins, true);
-            modelEqualsToOrigin(chart, [1], origins, false);
-            viewEqualsToOrigin(chart, [0, 2, 3, 4], origins, true);
-            viewEqualsToOrigin(chart, [1], origins, false);
+            modelEqualsToOrigin([0, 2, 3, 4], origins, true);
+            modelEqualsToOrigin([1], origins, false);
+            viewEqualsToOrigin([0, 2, 3, 4], origins, true);
+            viewEqualsToOrigin([1], origins, false);
         });
 
-        testCase.createChart()('differentTypeMergePartialTwoMapOne', function () {
+        testCase('differentTypeMergePartialTwoMapOne', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -598,7 +612,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22], name: 'a'}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var option2 = {
@@ -619,7 +632,7 @@ describe('modelAndOptionMapping', function() {
             expect(getData0(chart, 3)).toEqual(111);
         });
 
-        testCase.createChart()('mergePartialCanMapToOtherName', function () {
+        testCase('mergePartialCanMapToOtherName', function (chart, echarts) {
             // Consider case: axis.name = 'some label', which can be overwritten.
             var option = {
                 xAxis: {data: ['a']},
@@ -629,7 +642,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22], name: 20}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             var option2 = {
@@ -657,7 +669,7 @@ describe('modelAndOptionMapping', function() {
 
     describe('ohters', function () {
 
-        testCase.createChart()('aBugCase', function () {
+        testCase('aBugCase', function (chart, echarts) {
             var option = {
                 series: [
                     {
@@ -686,7 +698,6 @@ describe('modelAndOptionMapping', function() {
                     }
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             chart.setOption({
@@ -740,7 +751,7 @@ describe('modelAndOptionMapping', function() {
             expect(countSeries(chart)).toEqual(2);
         });
 
-        testCase.createChart()('color', function () {
+        testCase('color', function (chart, echarts) {
             var option = {
                 backgroundColor: 'rgba(1,1,1,1)',
                 xAxis: {data: ['a']},
@@ -751,7 +762,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [33]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
             expect(chart._model.option.backgroundColor).toEqual('rgba(1,1,1,1)');
 
@@ -763,7 +773,7 @@ describe('modelAndOptionMapping', function() {
             expect(chart._model.option.backgroundColor).toEqual('#fff');
         });
 
-        testCase.createChart()('innerId', function () {
+        testCase('innerId', function (chart, echarts) {
             var option = {
                 xAxis: {data: ['a']},
                 yAxis: {},
@@ -781,7 +791,6 @@ describe('modelAndOptionMapping', function() {
                     {type: 'line', data: [22]}
                 ]
             };
-            var chart = this.chart;
             chart.setOption(option);
 
             expect(countModel(chart, 'dataZoom')).toEqual(4);

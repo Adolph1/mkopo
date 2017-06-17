@@ -4,6 +4,7 @@ namespace backend\models;
 
 use Yii;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "tbl_customer".
@@ -131,5 +132,38 @@ class Customer extends \yii\db\ActiveRecord
         $model=Customer::find()->where(['id'=>$id])->one();
         return Html::img('uploads/' . $model->photo,
             ['width' => '150px','height'=>'150px','class'=>'img-circle']);
+    }
+
+    public function getCustomer($id)
+    {
+        $customers = Customer::find()
+            ->where(['customer_no' => $id])
+            ->orderBy('customer_no DESC')
+            ->One();
+        return $customers;
+
+    }
+
+
+    public static function getFullNameByCustomerNumber($id)
+    {
+        $customer = Customer::find()
+            ->where(['customer_no' => $id])
+            ->orderBy('customer_no DESC')
+            ->One();
+        if($customer!=null) {
+            return $customer->first_name . ' ' . $customer->last_name;
+        }
+        else{
+            return "";
+        }
+
+    }
+
+    public static function getAll()
+    {
+        return ArrayHelper::map(Customer::find()->all(), 'customer_no', function($model, $defaultValue) {
+            return $model['first_name']. " " .$model['last_name'];
+        });
     }
 }

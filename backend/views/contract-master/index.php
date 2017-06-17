@@ -53,7 +53,7 @@ $this->title = 'Loans contracts';
                 'template'=>'{view}',
                 'buttons'=>[
                     'view' => function ($url, $model) {
-                        $url=['view','id' => $model->id];
+                        $url=['view','id' => $model->contract_ref_no];
                         return Html::a('<span class="fa fa-eye"></span>', $url, [
                             'title' => 'View',
                             'data-toggle'=>'tooltip','data-original-title'=>'Save',

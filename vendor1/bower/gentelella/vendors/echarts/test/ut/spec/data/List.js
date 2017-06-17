@@ -2,16 +2,27 @@ describe('List', function () {
 
     var utHelper = window.utHelper;
 
-    var testCase = utHelper.prepare(['echarts/data/List']);
+    beforeEach(function (done) {
+        utHelper.resetPackageLoader(done);
+    });
 
     describe('Data Manipulation', function () {
+
+        function testCase(name, doTest) {
+            it(name, function (done) {
+                window.require(['echarts/data/List'], function () {
+                    doTest.apply(null, arguments);
+                    done();
+                });
+            });
+        }
 
         testCase('initData 1d', function (List) {
             var list = new List(['x', 'y']);
             list.initData([10, 20, 30]);
-            expect(list.get('x', 0)).toEqual(10);
-            expect(list.get('x', 1)).toEqual(20);
-            expect(list.get('x', 2)).toEqual(30);
+            expect(list.get('x', 0)).toEqual(0);
+            expect(list.get('x', 1)).toEqual(1);
+            expect(list.get('x', 2)).toEqual(2);
             expect(list.get('y', 1)).toEqual(20);
         });
 
@@ -66,18 +77,17 @@ describe('List', function () {
 
         testCase('getRawValue', function (List) {
             var list = new List(['x', 'y']);
-
             list.initData([1, 2, 3]);
-            expect(list.getItemModel(1).option).toEqual(2);
+            expect(list.getRawValue(1)).toEqual(2);
 
             list.initData([[10, 15], [20, 25], [30, 35]]);
-            expect(list.getItemModel(1).option).toEqual([20, 25]);
+            expect(list.getRawValue(1)).toEqual([20, 25]);
         });
 
         testCase('getDataExtent', function (List) {
             var list = new List(['x', 'y']);
             list.initData([1, 2, 3]);
-            expect(list.getDataExtent('x')).toEqual([1, 3]);
+            expect(list.getDataExtent('x')).toEqual([0, 2]);
             expect(list.getDataExtent('y')).toEqual([1, 3]);
         });
 

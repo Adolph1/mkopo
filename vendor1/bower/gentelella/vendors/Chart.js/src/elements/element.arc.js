@@ -2,11 +2,10 @@
 
 module.exports = function(Chart, moment) {
 
-  var helpers = Chart.helpers,
-    globalOpts = Chart.defaults.global;
+  var helpers = Chart.helpers;
 
-  globalOpts.elements.arc = {
-    backgroundColor: globalOpts.defaultColor,
+  Chart.defaults.global.elements.arc = {
+    backgroundColor: Chart.defaults.global.defaultColor,
     borderColor: "#fff",
     borderWidth: 2
   };
@@ -22,15 +21,14 @@ module.exports = function(Chart, moment) {
       }
     },
     inRange: function(chartX, chartY) {
+
       var vm = this._view;
 
       if (vm) {
         var pointRelativePosition = helpers.getAngleFromPoint(vm, {
-            x: chartX,
-            y: chartY
-          }),
-          angle = pointRelativePosition.angle,
-          distance = pointRelativePosition.distance;
+          x: chartX,
+          y: chartY
+        });
 
         //Sanitise angle range
         var startAngle = vm.startAngle;
@@ -38,16 +36,16 @@ module.exports = function(Chart, moment) {
         while (endAngle < startAngle) {
           endAngle += 2.0 * Math.PI;
         }
-        while (angle > endAngle) {
-          angle -= 2.0 * Math.PI;
+        while (pointRelativePosition.angle > endAngle) {
+          pointRelativePosition.angle -= 2.0 * Math.PI;
         }
-        while (angle < startAngle) {
-          angle += 2.0 * Math.PI;
+        while (pointRelativePosition.angle < startAngle) {
+          pointRelativePosition.angle += 2.0 * Math.PI;
         }
 
         //Check if within the range of the open/close angle
-        var betweenAngles = (angle >= startAngle && angle <= endAngle),
-          withinRadius = (distance >= vm.innerRadius && distance <= vm.outerRadius);
+        var betweenAngles = (pointRelativePosition.angle >= startAngle && pointRelativePosition.angle <= endAngle),
+          withinRadius = (pointRelativePosition.distance >= vm.innerRadius && pointRelativePosition.distance <= vm.outerRadius);
 
         return (betweenAngles && withinRadius);
       } else {
@@ -66,15 +64,14 @@ module.exports = function(Chart, moment) {
     },
     draw: function() {
 
-      var ctx = this._chart.ctx,
-        vm = this._view,
-        sA = vm.startAngle,
-        eA = vm.endAngle;
+      var ctx = this._chart.ctx;
+      var vm = this._view;
 
       ctx.beginPath();
 
-      ctx.arc(vm.x, vm.y, vm.outerRadius, sA, eA);
-      ctx.arc(vm.x, vm.y, vm.innerRadius, eA, sA, true);
+      ctx.arc(vm.x, vm.y, vm.outerRadius, vm.startAngle, vm.endAngle);
+
+      ctx.arc(vm.x, vm.y, vm.innerRadius, vm.endAngle, vm.startAngle, true);
 
       ctx.closePath();
       ctx.strokeStyle = vm.borderColor;

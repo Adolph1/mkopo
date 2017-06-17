@@ -145,6 +145,8 @@ define(function(require) {
         doMergeOption: function (newOption, isInit) {
             var thisOption = this.option;
 
+            // Visual attributes merge is not supported, otherwise it
+            // brings overcomplicated merge logic. See #2853.
             !isInit && replaceVisualOption(thisOption, newOption);
 
             // FIXME
@@ -392,24 +394,9 @@ define(function(require) {
                 if (optExist && !optAbsent) {
                     optAbsent = base[stateAbsent] = {};
                     each(optExist, function (visualData, visualType) {
-                        if (!VisualMapping.isValidType(visualType)) {
-                            return;
-                        }
-
                         var defa = visualDefault.get(visualType, 'inactive', isCategory);
-
-                        if (defa != null) {
+                        if (VisualMapping.isValidType(visualType) && defa) {
                             optAbsent[visualType] = defa;
-
-                            // Compatibable with ec2:
-                            // Only inactive color to rgba(0,0,0,0) can not
-                            // make label transparent, so use opacity also.
-                            if (visualType === 'color'
-                                && !optAbsent.hasOwnProperty('opacity')
-                                && !optAbsent.hasOwnProperty('colorAlpha')
-                            ) {
-                                optAbsent.opacity = [0, 0];
-                            }
                         }
                     });
                 }
@@ -427,8 +414,7 @@ define(function(require) {
                     var itemSize = this.itemSize;
                     var visuals = controller[state];
 
-                    // Set inactive color for controller if no other color
-                    // attr (like colorAlpha) specified.
+                    // Set inactive color for controller if no other color attr (like colorAlpha) specified.
                     if (!visuals) {
                         visuals = controller[state] = {
                             color: isCategory ? inactiveColor : [inactiveColor]
@@ -436,12 +422,12 @@ define(function(require) {
                     }
 
                     // Consistent symbol and symbolSize if not specified.
-                    if (visuals.symbol == null) {
+                    if (!visuals.symbol) {
                         visuals.symbol = symbolExists
                             && zrUtil.clone(symbolExists)
                             || (isCategory ? 'roundRect' : ['roundRect']);
                     }
-                    if (visuals.symbolSize == null) {
+                    if (!visuals.symbolSize) {
                         visuals.symbolSize = symbolSizeExists
                             && zrUtil.clone(symbolSizeExists)
                             || (isCategory ? itemSize[0] : [itemSize[0], itemSize[0]]);
@@ -455,7 +441,7 @@ define(function(require) {
                     // Normalize symbolSize
                     var symbolSize = visuals.symbolSize;
 
-                    if (symbolSize != null) {
+                    if (symbolSize) {
                         var max = -Infinity;
                         // symbolSize can be object when categories defined.
                         eachVisual(symbolSize, function (value) {
@@ -510,28 +496,18 @@ define(function(require) {
 
     });
 
-    function replaceVisualOption(thisOption, newOption) {
-        // Visual attributes merge is not supported, otherwise it
-        // brings overcomplicated merge logic. See #2853. So if
-        // newOption has anyone of these keys, all of these keys
-        // will be reset. Otherwise, all keys remain.
-        var visualKeys = [
-            'inRange', 'outOfRange', 'target', 'controller', 'color'
-        ];
-        var has;
-        zrUtil.each(visualKeys, function (key) {
-            if (newOption.hasOwnProperty(key)) {
-                has = true;
+    function replaceVisualOption(targetOption, sourceOption) {
+        zrUtil.each(
+            ['inRange', 'outOfRange', 'target', 'controller', 'color'],
+            function (key) {
+                if (sourceOption.hasOwnProperty(key)) {
+                    targetOption[key] = zrUtil.clone(sourceOption[key]);
+                }
+                else {
+                    delete targetOption[key];
+                }
             }
-        });
-        has && zrUtil.each(visualKeys, function (key) {
-            if (newOption.hasOwnProperty(key)) {
-                thisOption[key] = zrUtil.clone(newOption[key]);
-            }
-            else {
-                delete thisOption[key];
-            }
-        });
+        );
     }
 
     return VisualMapModel;

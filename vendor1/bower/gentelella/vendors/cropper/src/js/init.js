@@ -77,10 +77,6 @@
         read(this.response);
       };
 
-      if (options.checkCrossOrigin && isCrossOriginURL(url) && $this.prop('crossOrigin')) {
-        url = addTimestamp(url);
-      }
-
       xhr.open('get', url);
       xhr.responseType = 'arraybuffer';
       xhr.send();

@@ -1,11 +1,11 @@
 /*!
- * Cropper v2.3.1
+ * Cropper v2.3.0
  * https://github.com/fengyuanchen/cropper
  *
  * Copyright (c) 2014-2016 Fengyuan Chen and contributors
  * Released under the MIT license
  *
- * Date: 2016-05-28T14:47:08.528Z
+ * Date: 2016-02-22T02:13:13.332Z
  */
 
 (function (factory) {
@@ -178,13 +178,12 @@
     var scaleX = options.scaleX;
     var scaleY = options.scaleY;
 
-    // Scale should come first before rotate (#633)
-    if (isNumber(scaleX) && isNumber(scaleY)) {
-      transforms.push('scale(' + scaleX + ',' + scaleY + ')');
-    }
-
     if (isNumber(rotate)) {
       transforms.push('rotate(' + rotate + 'deg)');
+    }
+
+    if (isNumber(scaleX) && isNumber(scaleY)) {
+      transforms.push('scale(' + scaleX + ',' + scaleY + ')');
     }
 
     return transforms.length ? transforms.join(' ') : 'none';
@@ -514,10 +513,6 @@
       xhr.onload = function () {
         read(this.response);
       };
-
-      if (options.checkCrossOrigin && isCrossOriginURL(url) && $this.prop('crossOrigin')) {
-        url = addTimestamp(url);
-      }
 
       xhr.open('get', url);
       xhr.responseType = 'arraybuffer';
@@ -2666,12 +2661,8 @@
       var context;
       var data;
 
-      if (!this.isBuilt || !SUPPORT_CANVAS) {
+      if (!this.isBuilt || !this.isCropped || !SUPPORT_CANVAS) {
         return;
-      }
-
-      if (!this.isCropped) {
-        return getSourceCanvas(this.$clone[0], this.image);
       }
 
       if (!$.isPlainObject(options)) {

@@ -2,9 +2,21 @@ describe('Component', function() {
 
     var utHelper = window.utHelper;
 
-    var testCase = utHelper.prepare(['echarts/model/Component']);
+    beforeEach(function (done) {
+        utHelper.resetPackageLoader(done);
+    });
 
     describe('topologicalTravel', function () {
+
+        function testCase(name, doTest) {
+            it(name, function (done) {
+                window.require(['echarts/model/Component'], function () {
+                    doTest.apply(null, arguments);
+                    done();
+                });
+            });
+        }
+        function xtestCase() {} // jshint ignore:line
 
         testCase('topologicalTravel_base', function (ComponentModel) {
             ComponentModel.extend({type: 'm1', dependencies: ['a1', 'a2']});
@@ -108,13 +120,13 @@ describe('Component', function() {
             ComponentModel.topologicalTravel(['a3', 'm1'], allList, function (componentType, dependencies) {
                 result.push([componentType, dependencies]);
             });
-            expect(result).toEqual([['a3', []], ['a2', ['a3']], ['m1', ['a1', 'a2']]]);
+            expect(result).toEqual([['a3', []], ['m1', ['a1', 'a2']]]);
             var result = [];
             var allList = ComponentModel.getAllClassMainTypes();
             ComponentModel.topologicalTravel(['m1', 'a3'], allList, function (componentType, dependencies) {
                 result.push([componentType, dependencies]);
             });
-            expect(result).toEqual([['a3', []], ['a2', ['a3']], ['m1', ['a1', 'a2']]]);
+            expect(result).toEqual([['a3', []], ['m1', ['a1', 'a2']]]);
         });
 
         testCase('topologicalTravel_subType', function (ComponentModel) {

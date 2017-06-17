@@ -83,12 +83,6 @@
                                 links: graph.links,
                                 categories: categories,
                                 roam: true,
-                                draggable: true,
-                                // edgeSymbol: ['none', 'arrow'],
-                                // scaleLimit: {
-                                //     min: 1.5,
-                                //     max: 2
-                                // },
                                 label: {
                                     normal: {
                                         position: 'right',
@@ -109,10 +103,6 @@
                     var config = {
                         layout: 'none'
                     };
-
-                    chart.on('click', function (params) {
-                        console.log(params, params.data);
-                    });
 
                     var gui = new dat.GUI();
                     gui.add(config, 'layout', ['none', 'circular'])
