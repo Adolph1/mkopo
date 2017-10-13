@@ -12,14 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'contract_ref_number')->textInput(['maxlength' => 200]) ?>
+    <?= $form->field($model, 'contract_ref_number')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contract_amount')->textInput() ?>
+    <?= $form->field($model, 'contract_amount')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'contract_outstanding')->textInput() ?>
+    <?= $form->field($model, 'contract_outstanding')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

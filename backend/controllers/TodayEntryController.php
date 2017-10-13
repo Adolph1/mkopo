@@ -33,9 +33,33 @@ class TodayEntryController extends Controller
     public function actionIndex()
     {
         $searchModel = new TodayEntrySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search();
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    //gets unauthorised transactions
+    public function actionUnauthorised()
+    {
+        $searchModel = new TodayEntrySearch();
+        $dataProvider = $searchModel->searchunauthorised();
+
+        return $this->render('unauthorised', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    //gets unauthorised reversed
+    public function actionReversed()
+    {
+        $searchModel = new TodayEntrySearch();
+        $dataProvider = $searchModel->searchreversed();
+
+        return $this->render('reversed', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

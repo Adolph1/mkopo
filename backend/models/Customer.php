@@ -40,6 +40,9 @@ class Customer extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $customer_photo;
+    public $current_balance;
+    const DELETED='D';
+    const ACTIVE='O';
 
     public static function tableName()
     {
@@ -103,6 +106,12 @@ class Customer extends \yii\db\ActiveRecord
         return $this->hasOne(Branch::className(), ['id' => 'branch_id']);
     }
 
+    public static function getBranchByCustomerNo($id)
+    {
+        $branch=Customer::find()->where(['customer_no'=>$id])->one();
+        return $branch->branch_id;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -162,8 +171,20 @@ class Customer extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        return ArrayHelper::map(Customer::find()->all(), 'customer_no', function($model, $defaultValue) {
+        return ArrayHelper::map(Customer::find()->where(['!=','record_stat','D'])->all(), 'customer_no', function($model, $defaultValue) {
             return $model['first_name']. " " .$model['last_name'];
         });
+    }
+
+    public static function getCustomerCount()
+    {
+        $count = Customer::find()
+            ->where(['record_stat'=>Customer::ACTIVE])
+            ->count();
+        if($count>0){
+            return $count;
+        }else{
+            return 0;
+        }
     }
 }

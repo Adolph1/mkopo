@@ -39,13 +39,20 @@ $this->title = 'Loans contracts';
             ['class' => 'yii\grid\SerialColumn'],
 
             'contract_ref_no',
-            'product',
+
+            [
+                'header'=>'Customer Name',
+                'value'=>function($model){
+        return \backend\models\Customer::getFullNameByCustomerNumber($model->customer_number);
+                }
+            ],
             'customer_number',
             'amount',
             'booking_date',
             'maturity_date',
-            'contract_status',
             'main_component_rate',
+            'loan_officer',
+            'auth_stat',
 
             [
                 'class'=>'yii\grid\ActionColumn',

@@ -103,6 +103,22 @@ class ProductEventEntryController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionOffset($id)
+    {
+        $offsetacc = ProductEventEntry::find()
+            ->where(['product_code' => $id])
+            ->one();
+
+        if ($offsetacc!=null) {
+            echo $offsetacc->mis_head;
+        }
+        else {
+            echo "";
+        }
+
+
+    }
+
     /**
      * Finds the ProductEventEntry model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

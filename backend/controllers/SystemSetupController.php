@@ -90,6 +90,13 @@ class SystemSetupController extends Controller
         }
     }
 
+
+    public function actionRunEod()
+    {
+        $check=Yii::$app->consoleRunner->run('eod/check-maturity');
+        return $this->redirect(['site/index']);
+    }
+
     /**
      * Deletes an existing SystemSetup model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

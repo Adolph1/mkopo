@@ -9,8 +9,11 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
 
@@ -21,6 +24,7 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'yiister\\adminlte\\' => 17,
             'yiidreamteam\\upload\\' => 20,
             'yii\\swiftmailer\\' => 16,
+            'yii\\redis\\' => 10,
             'yii\\jui\\' => 8,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
@@ -28,10 +32,19 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'yii\\composer\\' => 13,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
+            'yii2tech\\crontab\\' => 17,
         ),
         'w' => 
         array (
             'wbraganca\\dynamicform\\' => 22,
+        ),
+        'v' => 
+        array (
+            'vova07\\console\\' => 15,
+        ),
+        't' => 
+        array (
+            'toriphes\\console\\' => 17,
         ),
         's' => 
         array (
@@ -41,11 +54,14 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'r' => 
         array (
             'rmrevin\\yii\\fontawesome\\' => 24,
-            'reportico\\reportico\\' => 20,
         ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'o' => 
+        array (
+            'onmotion\\telegram\\' => 18,
         ),
         'm' => 
         array (
@@ -54,16 +70,11 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'k' => 
         array (
             'kartik\\spinner\\' => 15,
-            'kartik\\sortable\\' => 16,
-            'kartik\\select2\\' => 15,
+            'kartik\\social\\' => 14,
             'kartik\\popover\\' => 15,
             'kartik\\plugins\\popover\\' => 23,
-            'kartik\\mpdf\\' => 12,
             'kartik\\grid\\' => 12,
-            'kartik\\form\\' => 12,
-            'kartik\\export\\' => 14,
             'kartik\\editable\\' => 16,
-            'kartik\\dynagrid\\' => 16,
             'kartik\\dialog\\' => 14,
             'kartik\\date\\' => 12,
             'kartik\\base\\' => 12,
@@ -75,10 +86,15 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'd' => 
         array (
             'dosamigos\\datepicker\\' => 21,
+            'digitv\\yii2sockets\\' => 19,
         ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
+        ),
+        'b' => 
+        array (
+            'bubasuma\\simplechat\\' => 20,
         ),
         'a' => 
         array (
@@ -106,13 +122,24 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
         ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
+        'L' => 
+        array (
+            'Longman\\TelegramBot\\' => 20,
+        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'F' => 
         array (
             'Faker\\' => 6,
+            'Facebook\\' => 9,
         ),
         'D' => 
         array (
@@ -142,6 +169,10 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
         ),
+        'yii\\redis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-redis',
+        ),
         'yii\\jui\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-jui',
@@ -170,9 +201,21 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'yii2tech\\crontab\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yii2tech/crontab',
+        ),
         'wbraganca\\dynamicform\\' => 
         array (
             0 => __DIR__ . '/..' . '/wbraganca/yii2-dynamicform',
+        ),
+        'vova07\\console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vova07/yii2-console-runner-extension',
+        ),
+        'toriphes\\console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/toriphes/yii2-console-runner',
         ),
         'spanjeta\\modules\\backup\\' => 
         array (
@@ -186,15 +229,15 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/rmrevin/yii2-fontawesome',
         ),
-        'reportico\\reportico\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/reportico/yii2-reportico',
-        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
+        'onmotion\\telegram\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/onmotion/yii2-telegram',
         ),
         'microinginer\\dropDownActionColumn\\' => 
         array (
@@ -204,13 +247,9 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-spinner',
         ),
-        'kartik\\sortable\\' => 
+        'kartik\\social\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-sortable',
-        ),
-        'kartik\\select2\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-social',
         ),
         'kartik\\popover\\' => 
         array (
@@ -220,29 +259,13 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/kartik-v/bootstrap-popover-x',
         ),
-        'kartik\\mpdf\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-mpdf',
-        ),
         'kartik\\grid\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-grid',
         ),
-        'kartik\\form\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-activeform',
-        ),
-        'kartik\\export\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-export',
-        ),
         'kartik\\editable\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-editable',
-        ),
-        'kartik\\dynagrid\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-dynagrid',
         ),
         'kartik\\dialog\\' => 
         array (
@@ -264,9 +287,17 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/2amigos/yii2-date-picker-widget/src',
         ),
+        'digitv\\yii2sockets\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/digitv/yii2sockets',
+        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'bubasuma\\simplechat\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/bubasuma/yii2-simplechat',
         ),
         'abhimanyu\\sms\\' => 
         array (
@@ -324,13 +355,33 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Longman\\TelegramBot\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/longman/telegram-bot/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'Facebook\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -390,24 +441,9 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
     );
 
     public static $classMap = array (
-        'CGIF' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'CGIFCOLORTABLE' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'CGIFFILEHEADER' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'CGIFIMAGE' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'CGIFIMAGEHEADER' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'CGIFLZW' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
-        'FPDF_TPL' => __DIR__ . '/..' . '/setasign/fpdi/fpdf_tpl.php',
-        'FPDI' => __DIR__ . '/..' . '/setasign/fpdi/fpdi.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
-        'FilterASCII85' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCII85.php',
-        'FilterASCIIHexDecode' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
-        'FilterLZW' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterLZW.php',
-        'INDIC' => __DIR__ . '/..' . '/mpdf/mpdf/classes/indic.php',
-        'MYANMAR' => __DIR__ . '/..' . '/mpdf/mpdf/classes/myanmar.php',
-        'OTLdump' => __DIR__ . '/..' . '/mpdf/mpdf/classes/otl_dump.php',
-        'PDFBarcode' => __DIR__ . '/..' . '/mpdf/mpdf/classes/barcode.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
@@ -810,8 +846,6 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'PHP_Token_XOR_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
-        'SEA' => __DIR__ . '/..' . '/mpdf/mpdf/classes/sea.php',
-        'SVG' => __DIR__ . '/..' . '/mpdf/mpdf/classes/svg.php',
         'SebastianBergmann\\Comparator\\ArrayComparator' => __DIR__ . '/..' . '/sebastian/comparator/src/ArrayComparator.php',
         'SebastianBergmann\\Comparator\\Comparator' => __DIR__ . '/..' . '/sebastian/comparator/src/Comparator.php',
         'SebastianBergmann\\Comparator\\ComparisonFailure' => __DIR__ . '/..' . '/sebastian/comparator/src/ComparisonFailure.php',
@@ -848,22 +882,7 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'SebastianBergmann\\RecursionContext\\Exception' => __DIR__ . '/..' . '/sebastian/recursion-context/src/Exception.php',
         'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => __DIR__ . '/..' . '/sebastian/recursion-context/src/InvalidArgumentException.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
-        'TTFontFile' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ttfontsuni.php',
-        'TTFontFile_Analysis' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ttfontsuni_analysis.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
-        'UCDN' => __DIR__ . '/..' . '/mpdf/mpdf/classes/ucdn.php',
-        'bmp' => __DIR__ . '/..' . '/mpdf/mpdf/classes/bmp.php',
-        'cssmgr' => __DIR__ . '/..' . '/mpdf/mpdf/classes/cssmgr.php',
-        'directw' => __DIR__ . '/..' . '/mpdf/mpdf/classes/directw.php',
-        'fpdi_pdf_parser' => __DIR__ . '/..' . '/setasign/fpdi/fpdi_pdf_parser.php',
-        'grad' => __DIR__ . '/..' . '/mpdf/mpdf/classes/grad.php',
-        'mPDF' => __DIR__ . '/..' . '/mpdf/mpdf/mpdf.php',
-        'meter' => __DIR__ . '/..' . '/mpdf/mpdf/classes/meter.php',
-        'mpdfform' => __DIR__ . '/..' . '/mpdf/mpdf/classes/mpdfform.php',
-        'otl' => __DIR__ . '/..' . '/mpdf/mpdf/classes/otl.php',
-        'pdf_context' => __DIR__ . '/..' . '/setasign/fpdi/pdf_context.php',
-        'tocontents' => __DIR__ . '/..' . '/mpdf/mpdf/classes/tocontents.php',
-        'wmf' => __DIR__ . '/..' . '/mpdf/mpdf/classes/wmf.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

@@ -67,10 +67,16 @@ class ReferenceIndex extends \yii\db\ActiveRecord
     {
         $model=ReferenceIndex::find()->where(['id'=>$id])->one();
         if($model!=null){
+            $end_date = SystemDate::getCurrentDate();
+            $end_date=date('y-m-d',strtotime($end_date));
+            $thedate = explode("-", $end_date);
+            $year = $thedate[0];
+            $month = $thedate[1];
+            $day = $thedate[2];
             $newmodel=new ReferenceIndex();
             $newmodel->index_no = sprintf("%04d", $model->index_no + 1);
             $newmodel->product = $model->product;
-            $newmodel->full_reference =  $model->product . date('y').date('m').date('d').$newmodel->index_no;
+            $newmodel->full_reference =  $model->product .$year.$month.$day.$newmodel->index_no;
             $newmodel->status = 'N';
             $newmodel->save();
         }

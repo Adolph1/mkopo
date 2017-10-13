@@ -42,7 +42,7 @@ use backend\models\Account;
 
         <div class="row">
             <div class="col-md-8">
-                <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
+                <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAllLoans(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
 
             </div>
 
@@ -112,6 +112,9 @@ use backend\models\Account;
             </div>
         </div>
 
+
+
+
         <div class="row">
             <div class="col-md-4">
                 <?= $form->field($model, 'main_component_rate')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
@@ -137,7 +140,55 @@ use backend\models\Account;
         </div>
 
         <div class="row">
-            <legend class="scheduler-border" style="color:#005DAD">Guarantors List</legend>
+            <div class="col-md-6">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'contract_amount')->textInput(['maxlength' => 20,'readonly'=>'readonly','value'=>$model->amount]); ?>
+            </div>
+            <div class="col-md-6">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'outstanding_amount')->textInput(['maxlength' => 20,'readonly'=>'readonly','value'=>\backend\models\ContractBalance::getOutstanding($model->contract_ref_no)]); ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 text-right">
+                <legend class="scheduler-border" style="color:#005DAD">Contract Status:</legend>
+            </div>
+            <div class="col-md-6">
+                <legend class="scheduler-border" style="color:#31708f">
+                <?php if(!$model->isNewRecord) {
+                    if($model->contract_status=='D'){
+                        echo 'Deleted';
+                    }elseif($model->contract_status=='L'){
+                        echo 'Liquidated';
+                    }elseif ($model->contract_status=='A'){
+                        echo 'Active';
+                    }
+                } ?>
+                </legend>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_id')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            </div>
+            <div class="col-md-2">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_stamptime')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            </div>
+            <div class="col-md-4">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'auth_stat')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            </div>
+
+            <div class="col-md-2">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_id')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            </div>
+
+            <div class="col-md-2">
+                <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_stamptime')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <legend class="scheduler-border" style="color:#005DAD">Guarantors Details: </legend>
             <div class="col-md-12">
             <?php
             $searchModel = new \backend\models\GuarantorSearch();
@@ -162,7 +213,7 @@ use backend\models\Account;
                     // 'maker_id',
                     // 'maker_time',
 
-                    ['class' => 'yii\grid\ActionColumn'],
+                    //['class' => 'yii\grid\ActionColumn'],
                 ],
             ]); ?>
             </div>
@@ -176,17 +227,31 @@ use backend\models\Account;
                       if($model->contract_status=='L'){
                             echo Html::a(Yii::t('app', 'Reverse'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
                             echo Html::a(Yii::t('app', 'View Schedule'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                            echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
                         }
                         elseif($model->contract_status=='A') {
-                            echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->contract_ref_no], [
-                                'class' => 'btn btn-danger btn-block',
-                                'data' => [
-                                    'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                                    'method' => 'post',
-                                ],
-                            ]);
-                            echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                            if($model->auth_stat=='U') {
+                                echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->contract_ref_no], [
+                                    'class' => 'btn btn-danger btn-block',
+                                    'data' => [
+                                        'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                                echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Approve'), ['approve','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-warning enabled btn-block':'btn btn-warning disabled btn-block']);
+
+                            }
+                            elseif($model->auth_stat=='A'){
+                                echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                                echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                            }
+
+
                         }
+                      elseif($model->contract_status=='D') {
+                          echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                          echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+                      }
                         ?>
 
                     </div>

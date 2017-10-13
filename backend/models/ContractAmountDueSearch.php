@@ -50,6 +50,7 @@ class ContractAmountDueSearch extends ContractAmountDue
         $query->Where([
             'contract_ref_number' =>$params,
 
+
         ]);
 
 
@@ -62,6 +63,27 @@ class ContractAmountDueSearch extends ContractAmountDue
        // }
 
 
+
+        return $dataProvider;
+    }
+
+
+    public function searchToLiquidate()
+    {
+        $query = ContractAmountDue::find();
+        $query->Where(['between', 'due_date', date('Y-m-d',strtotime("-7 days")),  date('Y-m-d',strtotime("+7 days"))
+        ]);
+        $query->andFilterWhere([
+            'status' => 'A',
+        ]);
+        $query->orderBy('due_date asc');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
+        ]);
 
         return $dataProvider;
     }
@@ -79,6 +101,7 @@ class ContractAmountDueSearch extends ContractAmountDue
 
          $query->andFilterWhere([
             'contract_ref_number' => $params,
+             'status'=>'A'
         ]);
 
 

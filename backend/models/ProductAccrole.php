@@ -63,7 +63,16 @@ class ProductAccrole extends \yii\db\ActiveRecord
      */
     public function getAccountHead()
     {
-        return $this->hasOne(TblGeneralLedger::className(), ['gl_code' => 'account_head']);
+        return $this->hasOne(GeneralLedger::className(), ['gl_code' => 'account_head']);
+    }
+
+    public static function getGLByProduct($id)
+    {
+        $glcode=ProductAccrole::find()->where(['product_code'=>$id])->one();
+       if($glcode!=null){
+           return $glcode->account_head;
+       }
+
     }
 
     public static function getRoles($produtcode, $accrole)

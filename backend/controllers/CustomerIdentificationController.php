@@ -105,7 +105,14 @@ class CustomerIdentificationController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model=$this->findModel($id);
+        if($model->getErrors()){
+            Yii::$app->session->setFlash('danger', 'You dont have permition to update user.');
+            return $this->redirect(['index']);
+        }else {
+          $this->findModel($id)->delete();
+        }
+
 
         return $this->redirect(['index']);
     }

@@ -35,6 +35,7 @@ class ContractAmountDue extends \yii\db\ActiveRecord
     public $dueprincipal;
     public $settledinterest;
     public $settledprincipal;
+    public $liquate_time;
     public static function tableName()
     {
         return 'tbl_contract_amount_due';
@@ -47,7 +48,7 @@ class ContractAmountDue extends \yii\db\ActiveRecord
     {
         return [
             [['amount_due', 'amount_settled', 'adjusted_amount'], 'number'],
-            [['contract_ref_number', 'liquadation_type','component', 'due_date', 'currency_amt_due', 'account_due', 'customer_number', 'inflow_outflow', 'basis_amount_tag', 'scheduled_linkage', 'component_type', 'amount_prepaid', 'original_due_date'], 'string', 'max' => 200]
+            [['contract_ref_number', 'liquadation_type','status','component', 'due_date', 'currency_amt_due', 'account_due', 'customer_number', 'inflow_outflow', 'basis_amount_tag', 'scheduled_linkage', 'component_type', 'amount_prepaid', 'original_due_date'], 'string', 'max' => 200]
         ];
     }
 
@@ -79,6 +80,35 @@ class ContractAmountDue extends \yii\db\ActiveRecord
     public function getContract()
     {
         return $this->hasOne(ContractMaster::className(), ['contract_ref_no' => 'contract_ref_number']);
+    }
+
+
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['customer_no' => 'customer_number']);
+    }
+
+
+    public static function getIDByReference($id)
+    {
+        $dues = ContractAmountDue::find()
+            ->where(['contract_ref_number'=>$id,'status'=>'A'])
+            ->all();
+        if($dues>0){
+            return $dues;
+        }else{
+            return 0;
+        }
+    }
+
+    public static function getDueAmount($id)
+    {
+        $paid = ContractAmountDue::findOne($id);
+        if($paid!=null){
+            return $paid;
+        }else{
+            return 0;
+        }
     }
 
 }

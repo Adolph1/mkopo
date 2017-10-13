@@ -9,8 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $contract_ref_number
- * @property double $contract_amount
- * @property double $contract_outstanding
+ * @property string $contract_amount
+ * @property string $contract_outstanding
+ * @property string $last_updated
  */
 class ContractBalance extends \yii\db\ActiveRecord
 {
@@ -28,9 +29,10 @@ class ContractBalance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contract_ref_number', 'contract_amount', 'contract_outstanding'], 'required'],
             [['contract_amount', 'contract_outstanding'], 'number'],
-            [['contract_ref_number'], 'string', 'max' => 200]
+            [['last_updated'], 'safe'],
+            [['contract_ref_number'], 'string', 'max' => 200],
+            [['contract_ref_number'], 'unique'],
         ];
     }
 
@@ -40,10 +42,23 @@ class ContractBalance extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'contract_ref_number' => 'Contract Ref Number',
-            'contract_amount' => 'Contract Amount',
-            'contract_outstanding' => 'Contract Outstanding',
+            'id' => Yii::t('app', 'ID'),
+            'contract_ref_number' => Yii::t('app', 'Contract Ref Number'),
+            'contract_amount' => Yii::t('app', 'Contract Amount'),
+            'contract_outstanding' => Yii::t('app', 'Contract Outstanding'),
+            'last_updated' => Yii::t('app', 'Last Updated'),
         ];
+    }
+
+    public static function getOutstanding($id)
+    {
+        $outstanding = ContractBalance::find()
+            ->where(['contract_ref_number'=>$id])
+            ->one();
+        if($outstanding!=null){
+            return $outstanding->contract_outstanding;
+        }else{
+            return 0;
+        }
     }
 }

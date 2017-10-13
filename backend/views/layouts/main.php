@@ -23,6 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <!-- Tell the browser to be responsive to screen width -->
@@ -71,9 +72,9 @@ desired effect
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="/" class="logo">
+        <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>MK</b>M</span>
+            <span class="logo-mini"><b>MM</b>5.0</span>
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg"><b>Mkopo Manager</b></span>
         </a>
@@ -82,7 +83,13 @@ desired effect
         <nav class="navbar navbar-static-top" role="navigation">
             <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">Toggle navigation </span>
+                <?php
+                if (!Yii::$app->user->isGuest) {
+                    ?>
+
+                System Date:<?= \backend\models\SystemDate::getCurrentDate();?>
+                <?php }?>
             </a>
 
             <!-- Navbar Right Menu -->
@@ -118,12 +125,12 @@ desired effect
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="http://placehold.it/160x160" class="user-image" alt="User Image">
+
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs">
                                 <?php
                                 if (!Yii::$app->user->isGuest) {
-                                   echo Yii::$app->user->identity->username;
+                                    echo '<i>welcome:</i>'. Yii::$app->user->identity->username;
                                 }
                                 ?></span>
                         </a>
@@ -133,11 +140,11 @@ desired effect
                                 <img src="http://placehold.it/160x160" class="img-circle" alt="User Image">
                                 <p>
                                     <?php
-                                   if (!Yii::$app->user->isGuest) {
+                                    if (!Yii::$app->user->isGuest) {
 
-                                       echo Yii::$app->user->identity->username;
-                                         $user_id=Yii::$app->user->identity->id;
-                                   }
+                                        echo Yii::$app->user->identity->username;
+                                        $user_id=Yii::$app->user->identity->id;
+                                    }
 
                                     ?>
 
@@ -174,155 +181,323 @@ desired effect
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
 
-            <!-- Sidebar user panel (optional) -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="http://placehold.it/45x45" class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p><?php
-                        if (!Yii::$app->user->isGuest) {
-                            echo Yii::$app->user->identity->username;
-                        ?>
-
-                        <?php }?>
-                    </p>
-                    <!-- Status -->
-                    <?php
-                    if (!Yii::$app->user->isGuest) {?>
-                    <p style="color: green"><small>
-                <?php }?>
-                </div>
-            </div>
-
             <!-- Sidebar Menu -->
             <?php if (!Yii::$app->user->isGuest) {?>
-            <?=
+                <?=
 
-            \yiister\adminlte\widgets\Menu::widget(
-                [
-                    "items" => [
-                        ["label" =>Yii::t('app','Home'), "url" =>  Yii::$app->homeUrl, "icon" => "home"],
+                \yiister\adminlte\widgets\Menu::widget(
+                    [
+                        "items" => [
+                            ["label" =>Yii::t('app','Home'), "url" =>  Yii::$app->homeUrl, "icon" => "home"],
 
-
-                        [
-                            "label" =>Yii::t('app','Customer'),
-                            "url" =>  "#",
-                            "icon" => "fa fa-user",
-                            "items" => [
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Customers List'),
-                                    "url" =>["/customer/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Category'),
-                                    "url" =>["/customer-category/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Type'),
-                                    "url" =>["/customer-type/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Identification'),
-                                    "url" =>["/customer-identification/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-                            ],
-
-                        ],
-
-                        ["label" =>Yii::t('app','Loans'), "url" =>  ["/contract-master/index"], "icon" => "fa fa-building",],
-
-
-                       /* [
-                            "label" =>Yii::t('app','Branches'),
-                            "url" =>  "#",
-                            "icon" => "fa fa-sitemap",
-                            "items" => [
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Branches'),
-                                    "url" =>["/branch/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => Yii::t('app','Departments'),
-                                    "url" =>["/department/index"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],
-                                ],
-
-                        ],
-
-                        ["label" =>Yii::t('app','Locations'), "url" =>  ["/location/index"], "icon" => "fa fa-sitemap",],
-
-
-
-                        */
-                        [
-                            'visible' => (Yii::$app->user->identity->username == 'admin'),
-                            "label" =>Yii::t('app','Settings'),
-                            "url" => "#",
-                            "icon" => "fa fa-gears",
-                            "items" => [
-                                [
-                                    'label' =>'System Products',
-                                    'url' => ['/product/index'],
-                                    'icon' => 'fa fa-lock',
-                                ],
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    'label' => Yii::t('app', 'System Rates'),
-                                    'url' => ['/system-rates/index'],
-                                    'icon' => 'fa fa-lock',
-                                ],
-                                [
-                                    'label' => Yii::t('app', 'System Charges'),
-                                    'url' => ['/system-charges/index'],
-                                    'icon' => 'fa fa-lock',
-                                ],
-
-                                /*[
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => "Backup",
-                                    "url" => ["/backup"],
-                                    "icon" => "fa fa-angle-double-right",
-                                ],*/
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    "label" => "Users",
-                                    "url" => ["/user"],
-                                    "icon" => "fa fa-user",
-                                ],
-
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    'label' => Yii::t('app', 'Manager Permissions'),
-                                    'url' => ['/auth-item/index'],
-                                    'icon' => 'fa fa-lock',
-                                ],
-                                [
-                                    'visible' => (Yii::$app->user->identity->username == 'admin'),
-                                    'label' => Yii::t('app', 'Manage User Roles'),
-                                    'url' => ['/role/index'],
-                                    'icon' => 'fa fa-lock',
+                            [
+                                "label" =>Yii::t('app','Branches'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-sitemap",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Branches'),
+                                        "url" =>["/branch/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
                                 ],
 
                             ],
+
+
+                            [
+                                "label" =>Yii::t('app','Customer Account'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-bank",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Account List'),
+                                        "url" =>["/account/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Account Classes'),
+                                        "url" =>["/account-class/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+
+                                ],
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Customer Details'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-user",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Customers List'),
+                                        "url" =>["/customer/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Category'),
+                                        "url" =>["/customer-category/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Type'),
+                                        "url" =>["/customer-type/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Identification'),
+                                        "url" =>["/customer-identification/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Customer balances'),
+                                        "url" =>["/customer-balance/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+
+                                ],
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Loans & Deposits'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-money",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Loans'),
+                                        "url" =>["/contract-master/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Deposits'),
+                                        "url" =>["/contract-master/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Teller'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-lock",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Post'),
+                                        "url" =>["/teller/create"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Transactions'),
+                                        "url" =>["/teller/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+
+
+                            [
+                                "label" =>Yii::t('app','Today Transactions'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-clock-o",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Authorised'),
+                                        "url" =>["/today-entry/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Unauthorised'),
+                                        "url" =>["/today-entry/unauthorised"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Reversed'),
+                                        "url" =>["/today-entry/reversed"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+
+
+                            [
+                                "label" =>Yii::t('app','Accounting'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-clock-o",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','General Ledgers'),
+                                        "url" =>["/general-ledger/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Types'),
+                                        "url" =>["/gl-type/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Balances'),
+                                        "url" =>["/gl-balance/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Savings & Shares'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-lock",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Savings'),
+                                        "url" =>["/teller/create"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Shares'),
+                                        "url" =>["/teller/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Interests & Charges'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-lock",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Interests'),
+                                        "url" =>["/teller/create"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Charges'),
+                                        "url" =>["/teller/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
+
+                            ],
+
+                            //["label" =>Yii::t('app','Locations'), "url" =>  ["/location/index"], "icon" => "fa fa-sitemap",],
+
+
+
+
+                            [
+                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                "label" =>Yii::t('app','Settings'),
+                                "url" => "#",
+                                "icon" => "fa fa-gears",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        'label' =>'System Products',
+                                        'url' => ['/product/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        'label' =>'System Account roles',
+                                        'url' => ['/accrole/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        'label' => Yii::t('app', 'System Rates'),
+                                        'url' => ['/system-rate/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        'label' => Yii::t('app', 'System Dates'),
+                                        'url' => ['/system-date/index'],
+                                        'icon' => 'fa fa-calendar-o',
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanManager') || yii::$app->User->can('admin'),
+                                        'label' => Yii::t('app', 'EOD'),
+                                        'url' => ['/system-setup/run-eod'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+
+
+                                    /*[
+                                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                        "label" => "Backup",
+                                        "url" => ["/backup"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],*/
+                                    [
+                                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                        "label" => "Users",
+                                        "url" => ["/user"],
+                                        "icon" => "fa fa-user",
+                                    ],
+
+                                    [
+                                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                        'label' => Yii::t('app', 'Manager Permissions'),
+                                        'url' => ['/auth-item/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+                                    [
+                                        'visible' => (Yii::$app->user->identity->username == 'admin'),
+                                        'label' => Yii::t('app', 'Manage User Roles'),
+                                        'url' => ['/role/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+
+                                ],
+                            ],
                         ],
-                    ],
-                ]
-            )
-            ?>
+                    ]
+                )
+                ?>
             <?php }?>
         </section>
         <!-- /.sidebar -->
@@ -542,6 +717,69 @@ desired effect
 
 
     });
+</script>
+
+
+
+
+
+
+<?php //Teller javascripts ?>
+
+<script>
+    $("#teller-related_customer").change(function(){
+        var id =document.getElementById("teller-related_customer").value;
+        //alert(id);
+        $("#prodid").html('<i class="fa fa-spinner fa-spin"></i> Looding....');
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/list','id'=>'']);?>"+id,function(data){
+            //alert(data);
+            //$("#contractmaster-settle_account").html(data);
+            $("#prodid").html('');
+        });
+        document.getElementById("teller-customer_number").value=id
+
+
+    });
+
+    //load products and set product group
+    $("#teller-product").change(function(){
+        var id =document.getElementById("teller-product").value;
+        //alert(id);
+        $("#prodid").html('<i class="fa fa-spinner fa-spin"></i> Looding....');
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference','id'=>'']);?>"+id,function(data) {
+            //alert(data);
+            document.getElementById("teller-reference").value =data;
+            $("#prodid").html('');
+
+        });
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['product-event-entry/offset','id'=>'']);?>"+id,function(data) {
+            //alert(data);
+            document.getElementById("teller-offset_account").value =data;
+            $("#prodid").html('');
+
+        });
+
+
+    });
+</script>
+
+<script>
+
+    $("#datechange").change(function() {
+
+        var frequency = document.getElementById('contractmaster-frequency').value;
+        var paymentdate = document.getElementById('datechange').value;
+
+        //alert(paymentdate);
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/calcmaturitydate1', 'paymentdate' => '']);?>" + paymentdate, function (data) {
+            //alert(data);
+            document.getElementById("contractmaster-maturity_date").value = data;
+
+
+        });
+    });
+
 </script>
 
 

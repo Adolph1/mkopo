@@ -112,6 +112,12 @@ use kartik\date\DatePicker;
             <?php if(!$model->isNewRecord) echo $form->field($model, 'record_stat')->textInput(['readonly'=>'readonly']) ?>
         </div>
     </div>
+        <div class="row">
+            <div class="col-md-4">
+                <?php  if(!$model->isNewRecord) echo $form->field($model, 'current_balance')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>\backend\models\CustomerBalance::getBalance($model->customer_no)]) ?>
+            </div>
+
+        </div>
     <div class="row">
         <div class="form-group">
             <div class="col-md-4 col-sm-4 col-xs-4 pull-right">

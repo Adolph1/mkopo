@@ -23,7 +23,7 @@ Modules are attached to the Actor classes in the suite configuration.
 For example, in `tests/functional.suite.yml` we should see:
 
 ```yaml
-actor: FunctionalTester
+class_name: FunctionalTester
 modules:
     enabled:
         - PhpBrowser:
@@ -114,7 +114,7 @@ The REST module has parts for `Xml` and `Json` in the same way. If you are testi
 you can enable just the JSON part of this module:
 
 ```yaml
-actor: ApiTester
+class_name: ApiTester
 modules:
     enabled:
         - REST:
@@ -498,26 +498,12 @@ module:
 If you want to reconfigure a module at runtime, you can use the `_reconfigure` method of the module.
 You may call it from a helper class and pass in all the fields you want to change.
 
-In this case configuration will be changed instantly. In next example we change root URL for PhpBrowser to point to the admin area,
- so next `amOnPage('/')` will open `/admin/` page.
-
 ```php
 <?php
-$this->getModule('PhpBrowser')->_reconfigure(array('url' => 'http://localhost/admin'));
+$this->getModule('WebDriver')->_reconfigure(array('browser' => 'chrome'));
 ```
 
-However, in WebDriver configuration changes can't be applied that easily. For instance, if you change the browser you need to close the current browser session and start a new one.
-For that WebDriver module provides `_restart` method which takes an array with config and restarts the browser. 
-
-```php
-<?php
-// start chrome
-$this->getModule('WebDriver')->_restart(['browser' => 'chrome']);
-// or just restart browser
-$this->getModule('WebDriver')->_restart();
-```
-
-At the end of a test all configuration changes will be rolled back to the original configuration values.
+At the end of a test, all your changes will be rolled back to the original configuration values.
 
 ## Conclusion
 

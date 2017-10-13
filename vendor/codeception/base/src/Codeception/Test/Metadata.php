@@ -84,21 +84,17 @@ class Metadata
     }
 
     /**
-     * @param string|null $key
-     * @return mixed
+     * @param null $key
+     * @return array
      */
     public function getCurrent($key = null)
     {
+        if ($key && isset($this->current[$key])) {
+            return $this->current[$key];
+        }
         if ($key) {
-            if (isset($this->current[$key])) {
-                return $this->current[$key];
-            }
-            if ($key === 'name') {
-                return $this->getName();
-            }
             return null;
         }
-
         return $this->current;
     }
 

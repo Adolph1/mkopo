@@ -13,6 +13,12 @@ use kartik\grid\GridView;
     </div>
 
 </div>
+<div class="row">
+    <div class="col-md-11"></div>
+    <div class="col-md-1 text-right">
+<?= Html::a(Yii::t('app', '<i class="fa fa-reply"></i> '), ['view','id'=>$model->contract_ref_no], ['class' => 'btn btn-default','data-toggle'=>'tooltip','data-original-title'=>'Back']) ?>
+    </div>
+</div>
 <hr>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -68,6 +74,14 @@ $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
                                 'title' => 'Liquidate',
                                 'data-toggle' => 'tooltip', 'data-original-title' => 'Save',
                                 'class' => 'btn btn-warning',
+
+                            ]);
+                        }elseif($model->status=='A' && strtotime($model->due_date)>=strtotime(date('Y-m-d'))) {
+                            $url = ['contract-amount-due/pre-liquidate', 'id' => $model->id];
+                            return Html::a('<span class="fa fa-check"></span> Pre liquidate', $url, [
+                                'title' => 'Liquidate',
+                                'data-toggle' => 'tooltip', 'data-original-title' => 'Save',
+                                'class' => 'btn btn-info',
 
                             ]);
                         }

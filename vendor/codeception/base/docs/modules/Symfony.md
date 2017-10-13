@@ -64,7 +64,7 @@ This module uses Symfony Crawler and HttpKernel to emulate requests and test res
 Usage example:
 
 ```yaml
-actor: AcceptanceTester
+class_name: AcceptanceTester
 modules:
     enabled:
         - Symfony:
@@ -641,15 +641,6 @@ $aLinks = $I->grabMultiple('a', 'href');
  * `param` $cssOrXpath
  * `param` $attribute
  * `return` string[]
-
-
-### grabPageSource
- 
-Grabs current page source code.
-
-@throws ModuleException if no page was opened.
-
- * `return` string Current page source code.
 
 
 ### grabService
@@ -1433,4 +1424,4 @@ Remove service $serviceName from the lists of persistent services.
 
  * `param string` $serviceName
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Symfony.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/Symfony.php">Help us to improve documentation. Edit module reference</a></div>

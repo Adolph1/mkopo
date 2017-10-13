@@ -2,7 +2,7 @@
 //$lang=\backend\models\Language::getDefaultLang();
 return [
     'language' => 'en',
-    'timeZone' => 'Africa/Dar_eS_Salaam',
+    'timeZone' => 'Africa/Dar_es_Salaam',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'authManager' => [
@@ -12,6 +12,11 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'consoleRunner' => [
+            'class' => 'vova07\console\ConsoleRunner',
+            'file' => 'yii'
+        ],
+
 
         'i18n' => [
             'translations' => [
@@ -43,3 +48,4 @@ return [
     ],
 
 ];
+

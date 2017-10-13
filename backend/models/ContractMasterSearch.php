@@ -45,12 +45,12 @@ class ContractMasterSearch extends ContractMaster
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 150,
+            ]
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
-
+        $query->andWhere(['!=', 'contract_status', 'D']);
         $query->andFilterWhere([
             'amount' => $this->amount,
             'booking_date' => $this->booking_date,
@@ -60,6 +60,7 @@ class ContractMasterSearch extends ContractMaster
             'main_component_rate' => $this->main_component_rate,
         ]);
 
+
         $query->andFilterWhere(['like', 'contract_ref_no', $this->contract_ref_no])
             ->andFilterWhere(['like', 'branch', $this->branch])
             ->andFilterWhere(['like', 'product', $this->product])
@@ -68,13 +69,27 @@ class ContractMasterSearch extends ContractMaster
             ->andFilterWhere(['like', 'payment_method', $this->payment_method])
             ->andFilterWhere(['like', 'customer_number', $this->customer_number])
             ->andFilterWhere(['like', 'main_component', $this->main_component])
-            ->andFilterWhere(['like', 'contract_status', $this->contract_status])
             ->andFilterWhere(['like', 'maker_id', $this->maker_id])
             ->andFilterWhere(['like', 'maker_stamptime', $this->maker_stamptime])
             ->andFilterWhere(['like', 'checker_id', $this->checker_id])
             ->andFilterWhere(['like', 'checker_stamptime', $this->checker_stamptime])
             ->andFilterWhere(['like', 'seq_number', $this->seq_number]);
 
+        return $dataProvider;
+    }
+
+    public function lineChart()
+    {
+        $query=ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        $query->select(['count(*) as total','amount','booking_date','customer_number']);
+        $query->andWhere(['!=', 'contract_status', 'D']);
+        $query->andWhere(['between', 'booking_date', date('Y').'-'.date('m').'-'.'01',  date('Y').'-'.date('m').'-'.'31']);
+        $query->groupBy(['booking_date']);
         return $dataProvider;
     }
 }

@@ -67,6 +67,7 @@ class CustomerSearch extends Customer
             'branch_id' => $this->branch_id,
             'mod_no' => $this->mod_no,
             'maker_time' => $this->maker_time,
+            'record_stat'=> Customer::ACTIVE,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
@@ -78,7 +79,6 @@ class CustomerSearch extends Customer
             ->andFilterWhere(['like', 'mobile_no2', $this->mobile_no2])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'photo', $this->photo])
-            ->andFilterWhere(['like', 'record_stat', $this->record_stat])
             ->andFilterWhere(['like', 'maker_id', $this->maker_id]);
 
         return $dataProvider;

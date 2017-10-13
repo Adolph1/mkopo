@@ -8,12 +8,18 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Today Entries';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="today-entry-index">
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+<div class="row">
+    <div class="col-md-12">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-folder"></i><strong> TODAY TRANSACTIONS</strong></h3>
+    </div>
+
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+    <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
@@ -21,30 +27,52 @@ $this->params['breadcrumbs'][] = $this->title;
             'module',
             'trn_ref_no',
             'trn_dt',
-            'entry_sr_no',
              'ac_no',
-             'ac_branch',
-            //'event_sr_no',
-            'event',
              'amount',
-             //'amount_tag',
             'drcr_ind',
-            // 'trn_code',
-            // 'related_customer',
-            'batch_number',
+            [
+                'header'=>'Customer Name',
+                'value'=>function($model){
+                    return \backend\models\Customer::getFullNameByCustomerNumber($model->related_customer);
+                }
+            ],
+            'branch.branch_name',
             'product',
             'value_dt',
-            // 'finacial_year',
-            // 'period_code',
-            // 'maker_id',
-            // 'maker_stamptime',
-            // 'checker_id',
-            // 'auth_stat',
-            // 'delete_stat',
-            // 'instrument_code',
+            'period_code',
+            'finacial_year',
+            'maker_id',
+            'maker_stamptime',
+            'auth_stat',
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Actions',
+                'template'=>'{view}',
+                'buttons'=>[
+                    'view' => function ($url, $model) {
+                        if($model->module=='DE'){
+                            $path='teller';
+                            $id=\backend\models\Teller::getIDByReference($model->trn_ref_no);
+                        }elseif($model->module=='LD'){
+                            $path='contract-master';
+                            $id=$model->trn_ref_no;
+                        }
+                        $url=[$path.'/view','id' => $id];
+                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                            'title' => 'View',
+                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                            'class'=>'btn btn-info',
+
+                        ]);
+
+
+                    },
+
+                ]
+            ],
         ],
     ]); ?>
+    </div>
 
 </div>

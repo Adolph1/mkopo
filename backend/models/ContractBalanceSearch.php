@@ -19,7 +19,7 @@ class ContractBalanceSearch extends ContractBalance
     {
         return [
             [['id'], 'integer'],
-            [['contract_ref_number'], 'safe'],
+            [['contract_ref_number', 'last_updated'], 'safe'],
             [['contract_amount', 'contract_outstanding'], 'number'],
         ];
     }
@@ -44,18 +44,26 @@ class ContractBalanceSearch extends ContractBalance
     {
         $query = ContractBalance::find();
 
+        // add conditions that should always apply here
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'contract_amount' => $this->contract_amount,
             'contract_outstanding' => $this->contract_outstanding,
+            'last_updated' => $this->last_updated,
         ]);
 
         $query->andFilterWhere(['like', 'contract_ref_number', $this->contract_ref_number]);

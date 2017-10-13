@@ -40,7 +40,7 @@ class TodayEntrySearch extends TodayEntry
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search()
     {
         $query = TodayEntry::find();
 
@@ -48,42 +48,21 @@ class TodayEntrySearch extends TodayEntry
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
+        //if (!($this->load($params) && $this->validate())) {
+        //  return $dataProvider;
+        //}
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'amount' => $this->amount,
+            'auth_stat' => 'A',
+            'trn_dt'=>SystemDate::getCurrentDate(),
         ]);
 
-        $query->andFilterWhere(['like', 'module', $this->module])
-           // ->andFilterWhere(['like', 'trn_ref_no', $this->trn_ref_no])
-            ->andFilterWhere(['like', 'trn_dt', $this->trn_dt])
-            ->andFilterWhere(['like', 'entry_sr_no', $this->entry_sr_no])
-            ->andFilterWhere(['like', 'ac_no', $this->ac_no])
-            ->andFilterWhere(['like', 'ac_branch', $this->ac_branch])
-            ->andFilterWhere(['like', 'event_sr_no', $this->event_sr_no])
-            ->andFilterWhere(['like', 'event', $this->event])
-            ->andFilterWhere(['like', 'amount_tag', $this->amount_tag])
-            ->andFilterWhere(['like', 'drcr_ind', $this->drcr_ind])
-            ->andFilterWhere(['like', 'trn_code', $this->trn_code])
-            ->andFilterWhere(['like', 'related_customer', $this->related_customer])
-            ->andFilterWhere(['like', 'batch_no', $this->batch_no])
-            ->andFilterWhere(['like', 'product', $this->product])
-            ->andFilterWhere(['like', 'value_dt', $this->value_dt])
-            ->andFilterWhere(['like', 'finacial_year', $this->finacial_year])
-            ->andFilterWhere(['like', 'period_code', $this->period_code])
-            ->andFilterWhere(['like', 'maker_id', $this->maker_id])
-            ->andFilterWhere(['like', 'maker_stamptime', $this->maker_stamptime])
-            ->andFilterWhere(['like', 'checker_id', $this->checker_id])
-            ->andFilterWhere(['like', 'auth_stat', $this->auth_stat])
-            ->andFilterWhere(['like', 'delete_stat', $this->delete_stat])
-            ->andFilterWhere(['like', 'instrument_code', $this->instrument_code]);
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
 
         return $dataProvider;
     }
-    public function searchun($params)
+    public function searchunauthorised()
     {
         $query = TodayEntry::find();
 
@@ -95,12 +74,35 @@ class TodayEntrySearch extends TodayEntry
           //  return $dataProvider;
         //}
 
-       // $query->andFilterWhere([
-           // 'id' => $this->id,
-           // 'amount' => $this->amount,
-        //]);
+        $query->andFilterWhere([
+            'auth_stat' => 'U',
+            'trn_dt'=>SystemDate::getCurrentDate(),
+        ]);
 
-        $query->andFilterWhere(['like', 'auth_stat','U']);
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
+
+        return $dataProvider;
+    }
+
+    public function searchreversed()
+    {
+        $query = TodayEntry::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        //if (!($this->load($params) && $this->validate())) {
+        //  return $dataProvider;
+        //}
+
+        $query->andFilterWhere([
+            'auth_stat' => 'R',
+            'trn_dt'=>SystemDate::getCurrentDate(),
+        ]);
+
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
 
 
         return $dataProvider;

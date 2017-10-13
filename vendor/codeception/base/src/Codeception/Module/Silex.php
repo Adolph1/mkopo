@@ -33,7 +33,7 @@ use Symfony\Component\HttpKernel\Client;
  * <?
  * $app = require __DIR__.'/path/to/app.php';
  * $app['debug'] = true;
- * unset($app['exception_handler']);
+ * $app['exception_handler']->disable();
  *
  * return $app; // optionally
  * ?>

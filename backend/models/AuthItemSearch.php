@@ -47,12 +47,12 @@ class AuthItemSearch extends AuthItem
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
+        //if (!($this->load($params) && $this->validate())) {
+            //return $dataProvider;
+        //}
 
         $query->andFilterWhere([
-            'type' => $this->type,
+            'type' => 2,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

@@ -19,7 +19,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <legend class="scheduler-border" style="color:#005DAD">Loan Details</legend>
     <div class="row">
     <div class="col-md-8">
-        <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAllLoans(),['prompt'=>Yii::t('app','--Select--')]) ?>
 
     </div>
 
@@ -88,24 +88,28 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
          <div class="row">
     <div class="col-md-4">
-    <?= $form->field($model, 'main_component_rate')->textInput(['maxlength' => 200]) ?>
+    <?= $form->field($model, 'main_component_rate')->textInput(['maxlength' => 200,'value'=>\backend\models\SystemRate::getUserRate()]) ?>
     </div>
                     <div class="col-md-4">
                         <?= $form->field($model, 'payment_date')->widget(
                             DatePicker::className(), [
                             // inline too, not bad
                             'inline' => false,
+
                             // modify template for custom rendering
                             //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
                             'clientOptions' => [
                                 'autoclose' => true,
                                 'format' => 'yyyy-mm-dd',
 
-                            ]
+
+
+                            ],
+                            'options'=>['id'=>'datechange'],
                         ]);?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($model, 'frequency')->textInput(['maxlength' => 200,'onblur'=>'jsDispalydate(this)','onkeyup'=>'jsDispalydate(this)']) ?>
+                        <?= $form->field($model, 'frequency')->textInput(['maxlength' => 200,'readonly'=>'readonly','value'=>0]) ?>
                     </div>
                     </div>
 
@@ -213,21 +217,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 
 
-                <script>
-        function jsDispalydate(data)
-        {
-            var paymentdate=document.getElementById('contractmaster-payment_date').value;
-            var frequency=document.getElementById('contractmaster-frequency').value;
-            //alert(frequency);
-            $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/calcmaturitydate','frequency'=>'']);?>"+frequency + "&paymentdate=" +paymentdate,function(data) {
-                //alert(data);
-                document.getElementById("contractmaster-maturity_date").value = data;
-
-
-            });
-
-        }
-    </script>
 </div>
     <div id="prodid">
 

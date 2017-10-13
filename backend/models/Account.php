@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "tbl_account".
  *
  * @property string $branch_code
- * @property integer $cust_ac_no
+ * @property string $cust_ac_no
  * @property string $ac_desc
  * @property integer $cust_no
  * @property string $account_class
@@ -36,7 +36,6 @@ class Account extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public $acc;
     public static function tableName()
     {
         return 'tbl_account';
@@ -48,14 +47,15 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class','ac_opening_bal'], 'required'],
-            [['cust_ac_no', 'cust_no', 'dormancy_days', 'mod_no'], 'integer'],
+            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class', 'ac_stat_no_dr', 'ac_stat_no_cr', 'ac_stat_no_block', 'ac_stat_stop_pay', 'ac_stat_dormant', 'acc_open_date', 'ac_opening_bal', 'dormancy_date', 'dormancy_days', 'acc_status', 'maker_id', 'maker_stamptime', 'checker_id', 'check_stamptime', 'mod_no', 'auth_stat'], 'required'],
+            [['cust_no', 'dormancy_days', 'mod_no'], 'integer'],
             [['ac_opening_bal'], 'number'],
             [['dormancy_date'], 'safe'],
             [['branch_code', 'ac_stat_no_block', 'ac_stat_stop_pay'], 'string', 'max' => 5],
+            [['cust_ac_no', 'ac_stat_no_dr', 'ac_stat_dormant', 'auth_stat'], 'string', 'max' => 20],
             [['ac_desc', 'account_class', 'acc_open_date', 'acc_status', 'maker_id', 'maker_stamptime', 'checker_id', 'check_stamptime'], 'string', 'max' => 200],
-            [['ac_stat_no_dr', 'ac_stat_dormant', 'auth_stat'], 'string', 'max' => 20],
-            [['ac_stat_no_cr'], 'string', 'max' => 6]
+            [['ac_stat_no_cr'], 'string', 'max' => 6],
+            [['account_class'], 'exist', 'skipOnError' => true, 'targetClass' => AccountClass::className(), 'targetAttribute' => ['account_class' => 'acc_class']],
         ];
     }
 
@@ -65,27 +65,27 @@ class Account extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'branch_code' => 'Branch Code',
-            'cust_ac_no' => 'Customer Account No',
-            'ac_desc' => 'Customer Name',
-            'cust_no' => 'Customer Number',
-            'account_class' => 'Account Class',
-            'ac_stat_no_dr' => 'Ac Stat No Dr',
-            'ac_stat_no_cr' => 'Ac Stat No Cr',
-            'ac_stat_no_block' => 'Ac Stat No Block',
-            'ac_stat_stop_pay' => 'Ac Stat Stop Pay',
-            'ac_stat_dormant' => 'Ac Stat Dormant',
-            'acc_open_date' => 'Acc Open Date',
-            'ac_opening_bal' => 'Ac Opening Bal',
-            'dormancy_date' => 'Dormancy Date',
-            'dormancy_days' => 'Dormancy Days',
-            'acc_status' => 'Acc Status',
-            'maker_id' => 'Maker ID',
-            'maker_stamptime' => 'Maker Stamptime',
-            'checker_id' => 'Checker ID',
-            'check_stamptime' => 'Check Stamptime',
-            'mod_no' => 'Mod No',
-            'auth_stat' => 'Auth Stat',
+            'branch_code' => Yii::t('app', 'Branch Code'),
+            'cust_ac_no' => Yii::t('app', 'Cust Ac No'),
+            'ac_desc' => Yii::t('app', 'Ac Desc'),
+            'cust_no' => Yii::t('app', 'Cust No'),
+            'account_class' => Yii::t('app', 'Account Class'),
+            'ac_stat_no_dr' => Yii::t('app', 'Ac Stat No Dr'),
+            'ac_stat_no_cr' => Yii::t('app', 'Ac Stat No Cr'),
+            'ac_stat_no_block' => Yii::t('app', 'Ac Stat No Block'),
+            'ac_stat_stop_pay' => Yii::t('app', 'Ac Stat Stop Pay'),
+            'ac_stat_dormant' => Yii::t('app', 'Ac Stat Dormant'),
+            'acc_open_date' => Yii::t('app', 'Acc Open Date'),
+            'ac_opening_bal' => Yii::t('app', 'Ac Opening Bal'),
+            'dormancy_date' => Yii::t('app', 'Dormancy Date'),
+            'dormancy_days' => Yii::t('app', 'Dormancy Days'),
+            'acc_status' => Yii::t('app', 'Acc Status'),
+            'maker_id' => Yii::t('app', 'Maker ID'),
+            'maker_stamptime' => Yii::t('app', 'Maker Stamptime'),
+            'checker_id' => Yii::t('app', 'Checker ID'),
+            'check_stamptime' => Yii::t('app', 'Check Stamptime'),
+            'mod_no' => Yii::t('app', 'Mod No'),
+            'auth_stat' => Yii::t('app', 'Auth Stat'),
         ];
     }
 
@@ -94,6 +94,6 @@ class Account extends \yii\db\ActiveRecord
      */
     public function getAccountClass()
     {
-        return $this->hasOne(TblAccountClass::className(), ['acc_class' => 'account_class']);
+        return $this->hasOne(AccountClass::className(), ['acc_class' => 'account_class']);
     }
 }

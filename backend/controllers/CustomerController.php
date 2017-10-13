@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\CustomerBalance;
 use Yii;
 use backend\models\Customer;
 use backend\models\CustomerSearch;
@@ -9,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\models\LoginForm;
 
 /**
  * CustomerController implements the CRUD actions for Customer model.
@@ -36,13 +38,21 @@ class CustomerController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CustomerSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(!Yii::$app->user->isGuest) {
+            $searchModel = new CustomerSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+    else{
+        $model = new LoginForm();
+        return $this->redirect(['site/login',
+            'model' => $model,
         ]);
+        }
     }
 
     /**
@@ -52,9 +62,44 @@ class CustomerController extends Controller
      */
     public function actionView($id)
     {
+        if(!Yii::$app->user->isGuest) {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+
+    public function actionGetCustomer($id)
+
+    {
+
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+
+        $student = Customer::find()->where(['customer_no'=>$id])->one();
+
+        if(count($student) > 0 )
+
+        {
+
+            return array('status' => true, 'data'=> $student);
+
+        }
+
+        else
+
+        {
+
+            return array('status'=>false,'data'=> 'No Customer Found');
+
+        }
+
     }
 
     /**
@@ -64,6 +109,7 @@ class CustomerController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->isGuest) {
         $model = new Customer();
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_time=date('Y-m-d:H:i:s');
@@ -80,8 +126,17 @@ class CustomerController extends Controller
                 $date2=date('Y-m-d');
                 $diff = strtotime($date2) - strtotime($date1);
                 if($diff<0) {
-                    $model->save();
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    if($model->save()){
+                        $cust_balance=new CustomerBalance();
+                        $cust_balance->customer_number=$model->customer_no;
+                        $cust_balance->opening_balance=0;
+                        $cust_balance->current_balance=0;
+                        $cust_balance->last_updated=date('Y-m-d:H:i:s');
+                        $cust_balance->save();
+                        return $this->redirect(['view', 'id' => $model->id]);
+
+                    }
+
                 }  else{
                     Yii::$app->session->setFlash('danger', 'Your identification has expired. ');
                     return $this->render('create', [
@@ -94,8 +149,16 @@ class CustomerController extends Controller
                 $date2=date('Y-m-d');
                 $diff = strtotime($date2) - strtotime($date1);
                 if($diff<0) {
-                    $model->save();
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    if($model->save()){
+                        $cust_balance=new CustomerBalance();
+                        $cust_balance->customer_number=$model->customer_no;
+                        $cust_balance->opening_balance=0;
+                        $cust_balance->current_balance=0;
+                        $cust_balance->last_updated=date('Y-m-d:H:i:s');
+                        $cust_balance->save();
+                        return $this->redirect(['view', 'id' => $model->id]);
+
+                    }
                 }  else{
                     Yii::$app->session->setFlash('danger', 'Your identification has expired. ');
                     return $this->render('create', [
@@ -105,6 +168,13 @@ class CustomerController extends Controller
             }
         }else {
             return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
@@ -118,25 +188,38 @@ class CustomerController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->isGuest) {
         $model = $this->findModel($id);
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_time=date('Y-m-d:H:i:s');
         $model->mod_no=$model->mod_no+1;
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->photo = UploadedFile::getInstance($model, 'customer_photo');
-            if ($model->photo != null) {
-                $model->photo->saveAs('uploads/' . $model->customer_no . '.' . $model->photo->extension);
-                $model->photo = $model->customer_no . '.' . $model->photo->extension;
+            if(UploadedFile::getInstance($model, 'customer_photo')) {
+                $model->photo = UploadedFile::getInstance($model, 'customer_photo');
 
-                $model->save();
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
+                if ($model->photo != null) {
+                    $model->photo->saveAs('uploads/' . $model->customer_no . '.' . $model->photo->extension);
+                    $model->photo = $model->customer_no . '.' . $model->photo->extension;
+                    $model->save();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
+            else {
+
+
                 $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
@@ -150,6 +233,7 @@ class CustomerController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Yii::$app->user->isGuest) {
         $model=$this->findModel($id);
         $model->record_stat='D';
         $model->maker_id=Yii::$app->user->identity->username;
@@ -158,6 +242,13 @@ class CustomerController extends Controller
         $model->save();
 
         return $this->redirect(['view', 'id' => $model->id]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
     }
 
     /**

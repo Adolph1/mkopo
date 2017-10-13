@@ -2,12 +2,16 @@
 
 namespace backend\controllers;
 
+use backend\models\ContractBalance;
+use backend\models\CustomerBalance;
+use backend\models\Payment;
 use Yii;
 use backend\models\ContractAmountDue;
 use backend\models\ContractAmountDueSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\LoginForm;
 
 /**
  * ContractAmountDueController implements the CRUD actions for ContractAmountDue model.
@@ -109,11 +113,114 @@ class ContractAmountDueController extends Controller
     public function actionLiquidate($id)
     {
         $model= $this->findModel($id);
-        $model->amount_settled=$model->amount_due;
-        $model->status='L';
-        $model->save();
-        return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+        $balance=CustomerBalance::getBalance($model->customer_number);
+        $contract_balance=ContractBalance::getOutstanding($model->contract_ref_number);
+
+        if($balance>=$model->amount_due) {
+            $newbalance=$balance-$model->amount_due;
+            $model->amount_settled = $model->amount_due;
+            $model->status = 'L';
+            if ($model->save()) {
+                $payment = new Payment();
+                $payment->amount_paid = $model->amount_settled;
+                $payment->contract_ref_number = $model->contract_ref_number;
+                $payment->component = $model->component;
+                $payment->due_date = $model->due_date;
+                $payment->trn_dt = date('Y-m-d');
+                $payment->related_customer = $model->customer_number;
+                $payment->contract_amount_due_id=$model->id;
+                $payment->maker_id = Yii::$app->user->identity->username;
+                $payment->maker_time = date('Y-m-d:h:i:s');
+                if ($payment->save()) {
+                    $contract_balance=$contract_balance-$model->amount_due;
+                    ContractBalance::updateAll(['contract_outstanding'=>$contract_balance],['contract_ref_number'=>$model->contract_ref_number]);
+                    CustomerBalance::updateAll(['current_balance'=>$newbalance],['customer_number'=>$model->customer_number]);
+                    return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+                }
+            }
+        }
+        else{
+            Yii::$app->session->setFlash('danger', 'The customer has insufficient balance to make installment.');
+            return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+        }
+
     }
+
+
+    public function actionPreLiquidate($id)
+    {
+        $model= $this->findModel($id);
+        $balance=CustomerBalance::getBalance($model->customer_number);
+        $contract_balance=ContractBalance::getOutstanding($model->contract_ref_number);
+
+        if($balance>=$model->amount_due) {
+            $newbalance=$balance-$model->amount_due;
+            $model->amount_settled = $model->amount_due;
+            $model->status = 'L';
+            if ($model->save()) {
+                $payment = new Payment();
+                $payment->amount_paid = $model->amount_settled;
+                $payment->contract_ref_number = $model->contract_ref_number;
+                $payment->component = $model->component;
+                $payment->due_date = $model->due_date;
+                $payment->trn_dt = date('Y-m-d');
+                $payment->related_customer = $model->customer_number;
+                $payment->contract_amount_due_id=$model->id;
+                $payment->maker_id = Yii::$app->user->identity->username;
+                $payment->maker_time = date('Y-m-d:h:i:s');
+                if ($payment->save()) {
+                    $contract_balance=$contract_balance-$model->amount_due;
+                    ContractBalance::updateAll(['contract_outstanding'=>$contract_balance],['contract_ref_number'=>$model->contract_ref_number]);
+                    CustomerBalance::updateAll(['current_balance'=>$newbalance],['customer_number'=>$model->customer_number]);
+                    return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+                }
+            }
+        }
+        else{
+            Yii::$app->session->setFlash('danger', 'The customer has insufficient balance to make installment.');
+            return $this->redirect(['contract-master/schedule', 'id' => $model->contract_ref_number]);
+        }
+
+    }
+
+    public function actionQuickLiquidate($id)
+    {
+        $model= $this->findModel($id);
+        $balance=CustomerBalance::getBalance($model->customer_number);
+        $contract_balance=ContractBalance::getOutstanding($model->contract_ref_number);
+
+        if($balance>=$model->amount_due) {
+            $newbalance=$balance-$model->amount_due;
+            $model->amount_settled = $model->amount_due;
+            $model->status = 'L';
+            if ($model->save()) {
+                $payment = new Payment();
+                $payment->amount_paid = $model->amount_settled;
+                $payment->contract_ref_number = $model->contract_ref_number;
+                $payment->component = $model->component;
+                $payment->due_date = $model->due_date;
+                $payment->trn_dt = date('Y-m-d');
+                $payment->related_customer = $model->customer_number;
+                $payment->contract_amount_due_id=$model->id;
+                $payment->maker_id = Yii::$app->user->identity->username;
+                $payment->maker_time = date('Y-m-d:h:i:s');
+                if ($payment->save()) {
+                    $contract_balance=$contract_balance-$model->amount_due;
+                    ContractBalance::updateAll(['contract_outstanding'=>$contract_balance],['contract_ref_number'=>$model->contract_ref_number]);
+                    CustomerBalance::updateAll(['current_balance'=>$newbalance],['customer_number'=>$model->customer_number]);
+                    return $this->redirect(['site/index']);
+                }
+            }
+        }
+        else{
+            Yii::$app->session->setFlash('danger', 'The customer has insufficient balance to make installment.');
+            return $this->redirect(['site/index']);
+        }
+
+    }
+
+
+
 
     /**
      * Deletes an existing ContractAmountDue model.

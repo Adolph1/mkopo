@@ -54,7 +54,7 @@ class Yii1 extends Client
         }
 
         // Parse url parts
-        $uriPath = ltrim(parse_url($request->getUri(), PHP_URL_PATH), '/');
+        $uriPath = trim(parse_url($request->getUri(), PHP_URL_PATH), '/');
         $uriQuery = ltrim(parse_url($request->getUri(), PHP_URL_QUERY), '?');
         $scriptName = trim(parse_url($this->url, PHP_URL_PATH), '/');
         if (!empty($uriQuery)) {
@@ -67,7 +67,7 @@ class Yii1 extends Client
         }
 
         // Add script name to request if none
-        if ($scriptName and strpos($uriPath, $scriptName) === false) {
+        if (strpos($uriPath, $scriptName) === false) {
             $uriPath = "/{$scriptName}/{$uriPath}";
         }
 

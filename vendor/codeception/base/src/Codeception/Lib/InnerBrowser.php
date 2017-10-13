@@ -1050,21 +1050,17 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
     public function attachFile($field, $filename)
     {
         $form = $this->getFormFor($field = $this->getFieldByLabelOrCss($field));
-        $filePath = codecept_data_dir() . $filename;
-        if (!file_exists($filePath)) {
-            throw new \InvalidArgumentException("File does not exist: $filePath");
-        }
-        if (!is_readable($filePath)) {
-            throw new \InvalidArgumentException("File is not readable: $filePath");
-        }
-
+        $path = Configuration::dataDir() . $filename;
         $name = $field->attr('name');
+        if (!is_readable($path)) {
+            $this->fail("file $filename not found in Codeception data path. Only files stored in data path accepted");
+        }
         $formField = $this->matchFormField($name, $form, new FileFormField($field->getNode(0)));
         if (is_array($formField)) {
             $this->fail("Field $name is ignored on upload, field $name is treated as array.");
         }
 
-        $formField->upload($filePath);
+        $formField->upload($path);
     }
 
     /**
@@ -1330,18 +1326,6 @@ class InnerBrowser extends Module implements Web, PageSourceSaver, ElementLocato
             return null;
         }
         return $cookies->getValue();
-    }
-
-    /**
-     * Grabs current page source code.
-     *
-     * @throws ModuleException if no page was opened.
-     *
-     * @return string Current page source code.
-     */
-    public function grabPageSource()
-    {
-        return $this->_getResponseContent();
     }
 
     public function seeCookie($cookie, array $params = [])

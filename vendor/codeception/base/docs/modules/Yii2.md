@@ -14,7 +14,7 @@ It initializes Yii framework in test environment and provides actions for functi
 You can use this module by setting params in your functional.suite.yml:
 
 ```yaml
-actor: FunctionalTester
+class_name: FunctionalTester
 modules:
     enabled:
         - Yii2:
@@ -33,7 +33,7 @@ By default all available methods are loaded, but you can specify parts to select
 ### Example (`functional.suite.yml`)
 
 ```yaml
-actor: FunctionalTester
+class_name: FunctionalTester
 modules:
   enabled:
      - Yii2:
@@ -43,7 +43,7 @@ modules:
 ### Example (`unit.suite.yml`)
 
 ```yaml
-actor: UnitTester
+class_name: UnitTester
 modules:
   enabled:
      - Asserts
@@ -55,7 +55,7 @@ modules:
 ### Example (`acceptance.suite.yml`)
 
 ```yaml
-actor: AcceptanceTester
+class_name: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
@@ -772,15 +772,6 @@ $aLinks = $I->grabMultiple('a', 'href');
  * `return` string[]
 
 
-### grabPageSource
- 
-Grabs current page source code.
-
-@throws ModuleException if no page was opened.
-
- * `return` string Current page source code.
-
-
 ### grabRecord
  
 Retrieves record from database
@@ -852,22 +843,6 @@ $I->haveFixtures([
      ],
 ]);
 ```
-
-Note: if you need to load fixtures before the test (probably before the cleanup transaction is started;
-`cleanup` options is `true` by default), you can specify fixtures with _fixtures method of a testcase
-```php
-<?php
-// inside Cest file or Codeception\TestCase\Unit
-public function _fixtures(){
-    return [
-        'user' => [
-            'class' => UserFixture::className(),
-            'dataFile' => codecept_data_dir() . 'user.php'
-        ]
-    ];
-}
-```
-instead of defining `haveFixtures` in Cest `_before`
 
  * `param` $fixtures
  * `[Part]` fixtures
@@ -1567,4 +1542,4 @@ $I->uncheckOption('#notify');
 
  * `param` $option
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.3/src/Codeception/Module/Yii2.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/Codeception/tree/2.2/src/Codeception/Module/Yii2.php">Help us to improve documentation. Edit module reference</a></div>

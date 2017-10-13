@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\ContractBalanceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Contract Balances';
+$this->title = Yii::t('app', 'Contract Balances');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contract-balance-index">
@@ -16,9 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Contract Balance', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Contract Balance'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -29,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'contract_ref_number',
             'contract_amount',
             'contract_outstanding',
+            'last_updated',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
 </div>

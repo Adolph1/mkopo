@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ContractBalance */
 
-$this->title = 'Create Contract Balance';
-$this->params['breadcrumbs'][] = ['label' => 'Contract Balances', 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Contract Balance');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contract Balances'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contract-balance-create">
