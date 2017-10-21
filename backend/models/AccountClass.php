@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "tbl_account_class".
@@ -64,6 +65,15 @@ class AccountClass extends \yii\db\ActiveRecord
      */
     public function getTblAccounts()
     {
-        return $this->hasMany(TblAccount::className(), ['account_class' => 'acc_class']);
+        return $this->hasMany(Account::className(), ['account_class' => 'acc_class']);
     }
+
+
+    //gets all Account Classes
+
+    public static function getAll()
+    {
+        return ArrayHelper::map(AccountClass::find()->all(),'acc_class','acc_class');
+    }
+
 }

@@ -10,15 +10,19 @@ use yii\grid\GridView;
 $this->title = 'System Products';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="product-index">
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <?= Html::a(Yii::t('app', '<i class="fa fa-money text-yellow"></i> NEW PRODUCT'), ['create'], ['class' => 'btn btn-default text-green']) ?>
 
-    <p>
-        <?= Html::a('Add Product', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= Html::a(Yii::t('app', '<i class="fa fa-th text-yellow"></i> PRODUCT LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+    </div>
 
-    <?= GridView::widget([
+</div>
+<hr>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'columns' => [
@@ -30,18 +34,19 @@ $this->params['breadcrumbs'][] = $this->title;
             //'product_module',
             'product_group',
             'product_remarks',
-            // 'product_start_date',
-            // 'product_end_date',
+            //'product_start_date',
+            //'product_end_date',
 
             // 'maker_id',
             // 'maker_stamptime',
             // 'checker_id',
             // 'checker_stamptime',
-            // 'record_stat',
+            'record_stat',
             // 'mod_no',
 
             ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
         ],
     ]); ?>
+    </div>
 
 </div>

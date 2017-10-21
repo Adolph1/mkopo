@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //id',
+            'branch_code',
             'branch_name',
             'location',
             [

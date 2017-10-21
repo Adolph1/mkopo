@@ -2,16 +2,15 @@
 
 namespace backend\controllers;
 
+use backend\models\ProductEventEntry;
 use Yii;
 use backend\models\ProductAccrole;
 use backend\models\ProductAccroleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use dosamigos\grid\ToggleAction;
-use dosamigos\editable\EditableAction;
-use dosamigos\editable\Editable;
-
+use kartik\grid\EditableColumnAction;
+use yii\helpers\ArrayHelper;
 /**
  * ProductAccroleController implements the CRUD actions for ProductAccrole model.
  */
@@ -76,7 +75,7 @@ class ProductAccroleController extends Controller
             {
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['product/view', 'id' => $model->product_code]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -94,17 +93,7 @@ class ProductAccroleController extends Controller
      */
     public function actionUpdate($id)
     {
-       $model = new ProductAccrole();
-        $model->load(Yii::$app->request->post());
-
-            if($model->getRoles($model->product_code,$model->account_role))
-            {
-                echo 'Exists';
-
-            }
-            else
-            {
-            $model = $this->findModel($id);
+        $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -113,6 +102,17 @@ class ProductAccroleController extends Controller
             ]);
         }
     }
+
+    //fetches accounting role
+    public function actionFetchRole($id)
+    {
+        $role_code = ProductAccrole::getAccountRoleCodeByProductCode($id);
+        if($role_code!=null){
+            return $role_code;
+        }
+        else{
+            return '';
+        }
     }
 
     /**
@@ -144,17 +144,37 @@ class ProductAccroleController extends Controller
         }
     }
 
-    public function actionEditable()
+
+    public function actions()
     {
-        return [
-            // ...
-            'product-accrole/editable' => [
-                'class' => EditableAction::className(),
-                //'modelClass' => Lang::className(),
-               // 'forceCreate' => false
+        return ArrayHelper::merge(parent::actions(), [
+            'edit-gl' => [                                       // identifier for your editable action
+                'class' => EditableColumnAction::className(),     // action class name
+                'modelClass' => ProductAccrole::className(),             // the update model class
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                    //$fmt = Yii::$app->formatter;
+                    $value = $model->$attribute;                 // your attribute value
+                    if ($attribute === 'account_head') // selective validation by attribute
+                    {
+                        ProductEventEntry::updateAll(['mis_head'=>$value],['account_role_code'=>$model->account_role]);
+                        return $value;    // return formatted value if desired
+
+
+                    }
+                    return '';                                   // empty is same as $value
+                },
+                'outputMessage' => function($model, $attribute, $key, $index) {
+                    return '';                                  // any custom error after model save
+                },
+                // 'showModelErrors' => true,                     // show model errors after save
+                // 'errorOptions' => ['header' => '']             // error summary HTML options
+                // 'postOnly' => true,
+                // 'ajaxOnly' => true,
+                // 'findModel' => function($id, $action) {},
+                // 'checkAccess' => function($action, $model) {}
             ]
-            // ...
-        ];
+        ]);
+
     }
 
 

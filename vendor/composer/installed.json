@@ -4439,284 +4439,26 @@
         ]
     },
     {
-        "name": "sjaakp/yii2-gcharts",
-        "version": "v1.0.0",
-        "version_normalized": "1.0.0.0",
+        "name": "kartik-v/bootstrap-tabs-x",
+        "version": "v1.3.2",
+        "version_normalized": "1.3.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/sjaakp/yii2-gcharts.git",
-            "reference": "695335f4ac197ea40f0e399b29777468c0fe3829"
+            "url": "https://github.com/kartik-v/bootstrap-tabs-x.git",
+            "reference": "e85a731d79f030fb7f7742e3e2e0ac828c3233a1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sjaakp/yii2-gcharts/zipball/695335f4ac197ea40f0e399b29777468c0fe3829",
-            "reference": "695335f4ac197ea40f0e399b29777468c0fe3829",
+            "url": "https://api.github.com/repos/kartik-v/bootstrap-tabs-x/zipball/e85a731d79f030fb7f7742e3e2e0ac828c3233a1",
+            "reference": "e85a731d79f030fb7f7742e3e2e0ac828c3233a1",
             "shasum": ""
         },
-        "require": {
-            "yiisoft/yii2": "*"
-        },
-        "time": "2015-10-29T11:10:36+00:00",
-        "type": "yii2-extension",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "sjaakp\\gcharts\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Sjaak Priester",
-                "email": "sjaak@sjaakpriester.nl",
-                "homepage": "http://sjaakpriester.nl"
-            }
-        ],
-        "description": "Google Charts the Yii 2.0 way",
-        "keywords": [
-            "charts",
-            "extension",
-            "visualization",
-            "widget",
-            "yii",
-            "yii2"
-        ]
-    },
-    {
-        "name": "toriphes/yii2-console-runner",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/toriphes/yii2-console-runner.git",
-            "reference": "9bf9f22abdf84685b69bb990d30bc69244349b49"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/toriphes/yii2-console-runner/zipball/9bf9f22abdf84685b69bb990d30bc69244349b49",
-            "reference": "9bf9f22abdf84685b69bb990d30bc69244349b49",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": ">=2.0.0"
-        },
-        "time": "2015-06-13T09:30:59+00:00",
-        "type": "yii2-extension",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "toriphes\\console\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Giulio Ganci",
-                "email": "giulioganci@gmail.com"
-            }
-        ],
-        "description": "Runs console command in yii web application",
-        "keywords": [
-            "application",
-            "console",
-            "extension",
-            "runner",
-            "web",
-            "yii2"
-        ]
-    },
-    {
-        "name": "vova07/yii2-console-runner-extension",
-        "version": "0.1.0",
-        "version_normalized": "0.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/vova07/yii2-console-runner-extension.git",
-            "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/vova07/yii2-console-runner-extension/zipball/b67af1ff0a5de74ae06aece83d0273a92d9f657d",
-            "reference": "b67af1ff0a5de74ae06aece83d0273a92d9f657d",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "*"
-        },
-        "time": "2014-05-27T10:35:28+00:00",
-        "type": "yii2-extension",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "vova07\\console\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Crudu Vasile",
-                "email": "bazillio07@yandex.ru"
-            }
-        ],
-        "description": "An extension for running console commands on background in Yii framework.",
-        "homepage": "https://github.com/vova07/yii2-console-runner-extension",
-        "keywords": [
-            "background",
-            "commands",
-            "console",
-            "runner",
-            "yii 2",
-            "yii2"
-        ]
-    },
-    {
-        "name": "yii2tech/crontab",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/yii2tech/crontab.git",
-            "reference": "3ae48273adadb491facb514ef1ba596dcada0f85"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/yii2tech/crontab/zipball/3ae48273adadb491facb514ef1ba596dcada0f85",
-            "reference": "3ae48273adadb491facb514ef1ba596dcada0f85",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "*"
-        },
-        "time": "2016-04-25T07:47:27+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "yii2tech\\crontab\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Paul Klimov",
-                "email": "klimov.paul@gmail.com"
-            }
-        ],
-        "description": "Crontab support extension for the Yii2 framework",
-        "keywords": [
-            "cron",
-            "cronjob",
-            "crontab",
-            "yii2"
-        ]
-    },
-    {
-        "name": "facebook/graph-sdk",
-        "version": "5.5.0",
-        "version_normalized": "5.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/facebook/php-graph-sdk.git",
-            "reference": "93d7dc87e55a541d2e27d38f3aed40abbffdf6e1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/93d7dc87e55a541d2e27d38f3aed40abbffdf6e1",
-            "reference": "93d7dc87e55a541d2e27d38f3aed40abbffdf6e1",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.4|^7.0"
-        },
-        "require-dev": {
-            "guzzlehttp/guzzle": "~5.0",
-            "mockery/mockery": "~0.8",
-            "phpunit/phpunit": "~4.0"
-        },
-        "suggest": {
-            "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client",
-            "paragonie/random_compat": "Provides a better CSPRNG option in PHP 5"
-        },
-        "time": "2017-04-20T14:15:02+00:00",
+        "time": "2015-06-26T14:48:16+00:00",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "5.x-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Facebook\\": "src/Facebook/"
-            },
-            "files": [
-                "src/Facebook/polyfills.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Facebook Platform"
-        ],
-        "authors": [
-            {
-                "name": "Facebook",
-                "homepage": "https://github.com/facebook/php-graph-sdk/contributors"
-            }
-        ],
-        "description": "Facebook SDK for PHP",
-        "homepage": "https://github.com/facebook/php-graph-sdk",
-        "keywords": [
-            "facebook",
-            "sdk"
-        ]
-    },
-    {
-        "name": "kartik-v/yii2-social",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/kartik-v/yii2-social.git",
-            "reference": "7b0f259ae7cc853b5b08dc8edc5267297e2a8585"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-social/zipball/7b0f259ae7cc853b5b08dc8edc5267297e2a8585",
-            "reference": "7b0f259ae7cc853b5b08dc8edc5267297e2a8585",
-            "shasum": ""
-        },
-        "require": {
-            "facebook/graph-sdk": "~5.0",
-            "kartik-v/yii2-krajee-base": "~1.7"
-        },
-        "time": "2017-03-15T12:18:32+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.3.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-4": {
-                "kartik\\social\\": ""
+                "kartik\\plugins\\tabs\\": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -4730,48 +4472,48 @@
                 "homepage": "http://www.krajee.com/"
             }
         ],
-        "description": "Module containing useful widgets for Yii Framework 2.0 that integrates social functionalities from DISQUS, Facebook, Google etc.",
-        "homepage": "https://github.com/kartik-v/yii2-social",
+        "description": "Extended Bootstrap Tabs with ability to align tabs in multiple ways, add borders, rotated titles, and more.",
+        "homepage": "https://github.com/kartik-v/bootstrap-tabs-x",
         "keywords": [
-            "disqus",
-            "extension",
-            "facebook",
-            "social",
-            "twitter",
-            "widget",
-            "yii2"
+            "bootstrap",
+            "extended",
+            "jquery",
+            "modal",
+            "modal-tabs",
+            "tabs",
+            "tabs-x"
         ]
     },
     {
-        "name": "bubasuma/yii2-simplechat",
-        "version": "v2.0.0",
-        "version_normalized": "2.0.0.0",
+        "name": "kartik-v/yii2-tabs-x",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/bubasuma/yii2-simplechat.git",
-            "reference": "1d3c2c30df72d29ff1a0bf62832275f14893a1de"
+            "url": "https://github.com/kartik-v/yii2-tabs-x.git",
+            "reference": "685eef44354194b36f6892de2f8288bcf12bc321"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bubasuma/yii2-simplechat/zipball/1d3c2c30df72d29ff1a0bf62832275f14893a1de",
-            "reference": "1d3c2c30df72d29ff1a0bf62832275f14893a1de",
+            "url": "https://api.github.com/repos/kartik-v/yii2-tabs-x/zipball/685eef44354194b36f6892de2f8288bcf12bc321",
+            "reference": "685eef44354194b36f6892de2f8288bcf12bc321",
             "shasum": ""
         },
         "require": {
-            "yiisoft/yii2": "~2.0.0"
+            "kartik-v/bootstrap-tabs-x": "~1.3",
+            "kartik-v/yii2-krajee-base": "~1.7"
         },
-        "require-dev": {
-            "bower-asset/twig.js": "0.8.4@stable",
-            "yiisoft/yii2-bootstrap": "~2.0.0",
-            "yiisoft/yii2-faker": "*",
-            "yiisoft/yii2-twig": "dev-master"
-        },
-        "time": "2016-06-19T07:00:25+00:00",
+        "time": "2017-05-04T12:30:21+00:00",
         "type": "yii2-extension",
-        "installation-source": "dist",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.2.x-dev"
+            }
+        },
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
-                "bubasuma\\simplechat\\": ""
+                "kartik\\tabs\\": ""
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -4780,434 +4522,21 @@
         ],
         "authors": [
             {
-                "name": "Buba Suma",
-                "email": "bubasuma@gmail.com"
+                "name": "Kartik Visweswaran",
+                "email": "kartikv2@gmail.com",
+                "homepage": "http://www.krajee.com/"
             }
         ],
-        "description": "A simple chat for your yii2 application",
+        "description": "An extended bootstrap 3.0 tabs widget with ability to align tabs in multiple ways, add borders, rotated titles, and more.",
+        "homepage": "https://github.com/kartik-v/yii2-tabs-x",
         "keywords": [
-            "chat",
-            "conversation",
-            "extension",
-            "message",
-            "yii2"
-        ]
-    },
-    {
-        "name": "guzzlehttp/promises",
-        "version": "v1.3.1",
-        "version_normalized": "1.3.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/guzzle/promises.git",
-            "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/promises/zipball/a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-            "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.5.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.0"
-        },
-        "time": "2016-12-20T10:07:11+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "GuzzleHttp\\Promise\\": "src/"
-            },
-            "files": [
-                "src/functions_include.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "Guzzle promises library",
-        "keywords": [
-            "promise"
-        ]
-    },
-    {
-        "name": "guzzlehttp/guzzle",
-        "version": "6.3.0",
-        "version_normalized": "6.3.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/guzzle/guzzle.git",
-            "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699",
-            "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/promises": "^1.0",
-            "guzzlehttp/psr7": "^1.4",
-            "php": ">=5.5"
-        },
-        "require-dev": {
-            "ext-curl": "*",
-            "phpunit/phpunit": "^4.0 || ^5.0",
-            "psr/log": "^1.0"
-        },
-        "suggest": {
-            "psr/log": "Required for using the Log middleware"
-        },
-        "time": "2017-06-22T18:50:49+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "6.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/functions_include.php"
-            ],
-            "psr-4": {
-                "GuzzleHttp\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "Guzzle is a PHP HTTP client library",
-        "homepage": "http://guzzlephp.org/",
-        "keywords": [
-            "client",
-            "curl",
-            "framework",
-            "http",
-            "http client",
-            "rest",
-            "web service"
-        ]
-    },
-    {
-        "name": "monolog/monolog",
-        "version": "1.23.0",
-        "version_normalized": "1.23.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-            "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "psr/log": "~1.0"
-        },
-        "provide": {
-            "psr/log-implementation": "1.0.0"
-        },
-        "require-dev": {
-            "aws/aws-sdk-php": "^2.4.9 || ^3.0",
-            "doctrine/couchdb": "~1.0@dev",
-            "graylog2/gelf-php": "~1.0",
-            "jakub-onderka/php-parallel-lint": "0.9",
-            "php-amqplib/php-amqplib": "~2.4",
-            "php-console/php-console": "^3.1.3",
-            "phpunit/phpunit": "~4.5",
-            "phpunit/phpunit-mock-objects": "2.3.0",
-            "ruflin/elastica": ">=0.90 <3.0",
-            "sentry/sentry": "^0.13",
-            "swiftmailer/swiftmailer": "^5.3|^6.0"
-        },
-        "suggest": {
-            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
-            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-            "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
-            "php-console/php-console": "Allow sending log messages to Google Chrome",
-            "rollbar/rollbar": "Allow sending log messages to Rollbar",
-            "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-            "sentry/sentry": "Allow sending log messages to a Sentry server"
-        },
-        "time": "2017-06-19T01:22:40+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Monolog\\": "src/Monolog"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be"
-            }
-        ],
-        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "homepage": "http://github.com/Seldaek/monolog",
-        "keywords": [
-            "log",
-            "logging",
-            "psr-3"
-        ]
-    },
-    {
-        "name": "longman/telegram-bot",
-        "version": "0.35",
-        "version_normalized": "0.35.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-telegram-bot/core.git",
-            "reference": "d97f386209ccb5ab802ee55a20f8c7b5306a1595"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-telegram-bot/core/zipball/d97f386209ccb5ab802ee55a20f8c7b5306a1595",
-            "reference": "d97f386209ccb5ab802ee55a20f8c7b5306a1595",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "ext-pdo": "*",
-            "guzzlehttp/guzzle": "~6.0",
-            "monolog/monolog": "^1.19",
-            "php": ">=5.5.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8",
-            "squizlabs/php_codesniffer": "~2.5"
-        },
-        "time": "2016-07-30T08:36:15+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Longman\\TelegramBot\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Avtandil Kikabidze aka LONGMAN",
-                "email": "akalongman@gmail.com",
-                "homepage": "http://longman.me",
-                "role": "Developer"
-            }
-        ],
-        "description": "PHP telegram bot",
-        "homepage": "https://github.com/akalongman/php-telegram-bot",
-        "keywords": [
-            "api",
-            "bot",
-            "telegram"
-        ]
-    },
-    {
-        "name": "onmotion/yii2-telegram",
-        "version": "0.8.4",
-        "version_normalized": "0.8.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/onmotion/yii2-telegram.git",
-            "reference": "a22fd72ed4ad30fc5f64cde6e2283d8e0a7691d4"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/onmotion/yii2-telegram/zipball/a22fd72ed4ad30fc5f64cde6e2283d8e0a7691d4",
-            "reference": "a22fd72ed4ad30fc5f64cde6e2283d8e0a7691d4",
-            "shasum": ""
-        },
-        "require": {
-            "longman/telegram-bot": "^0.35.0",
-            "php": ">=5.5.0",
-            "yiisoft/yii2": ">=2.0.1"
-        },
-        "time": "2017-06-13T13:02:48+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "asset-installer-paths": {
-                "npm-asset-library": "vendor/npm",
-                "bower-asset-library": "vendor/bower"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "onmotion\\telegram\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Alexandr Kozhevnikov",
-                "email": "onmotion1@gmail.com",
-                "homepage": "http://kozhevnikov.me",
-                "role": "Developer"
-            }
-        ],
-        "description": "Support chat for site based on Telegram bot",
-        "keywords": [
-            "bot",
-            "chat",
-            "extension",
-            "module",
-            "telegram",
-            "yii2"
-        ]
-    },
-    {
-        "name": "yiisoft/yii2-redis",
-        "version": "2.0.6",
-        "version_normalized": "2.0.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/yiisoft/yii2-redis.git",
-            "reference": "5dc55d5187923219e9db86d149d56acf1f5a6ee8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/yiisoft/yii2-redis/zipball/5dc55d5187923219e9db86d149d56acf1f5a6ee8",
-            "reference": "5dc55d5187923219e9db86d149d56acf1f5a6ee8",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "~2.0.11"
-        },
-        "time": "2017-04-05T13:42:11+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "yii\\redis\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Carsten Brandt",
-                "email": "mail@cebe.cc"
-            }
-        ],
-        "description": "Redis Cache, Session and ActiveRecord for the Yii framework",
-        "keywords": [
-            "active-record",
-            "cache",
-            "redis",
-            "session",
-            "yii2"
-        ]
-    },
-    {
-        "name": "digitv/yii2sockets",
-        "version": "1.0.4",
-        "version_normalized": "1.0.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/digitv/yii2sockets.git",
-            "reference": "80147dc7b8c4deda686ac03b8d10b07061ac1857"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/digitv/yii2sockets/zipball/80147dc7b8c4deda686ac03b8d10b07061ac1857",
-            "reference": "80147dc7b8c4deda686ac03b8d10b07061ac1857",
-            "shasum": ""
-        },
-        "require": {
-            "yiisoft/yii2": "*",
-            "yiisoft/yii2-redis": "*"
-        },
-        "require-dev": {
-            "yiisoft/yii2-codeception": "~2.0"
-        },
-        "time": "2017-03-15T07:13:33+00:00",
-        "type": "yii2-extension",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.x-dev"
-            },
-            "asset-installer-paths": {
-                "npm-asset-library": "vendor/npm",
-                "bower-asset-library": "vendor/bower"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "digitv\\yii2sockets\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Digit",
-                "email": "digit.vova@gmail.com"
-            }
-        ],
-        "description": "Node.js web-sockets support",
-        "keywords": [
-            "node",
-            "nodejs",
-            "web-sockets",
-            "yii2"
+            "bootstrap",
+            "extended",
+            "jquery",
+            "modal",
+            "modal-tabs",
+            "tabs",
+            "tabs-x"
         ]
     }
 ]

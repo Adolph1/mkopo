@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\Audit;
+use backend\models\SystemDate;
 use Yii;
 use backend\models\Product;
 use backend\models\ProductSearch;
@@ -14,6 +16,7 @@ use backend\models\ProductEventEntry;
 use backend\models\ProductEventEntrySearch;
 use yii\helpers\ArrayHelper;
 use kartik\grid\EditableColumnAction;
+use common\models\LoginForm;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -83,7 +86,8 @@ class ProductController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {   $model = $this->findModel($id);
+    {   if(!Yii::$app->user->isGuest) {
+        $model = $this->findModel($id);
         $modelaccrole= new ProductAccrole();
         $modelevent= new ProductEventEntry();
         $searchroles = new ProductAccroleSearch();
@@ -97,6 +101,14 @@ class ProductController extends Controller
             'dataRoles' => $dataRoles,'searchevents' => $searchevents,'dataEvents' => $dataEvents,'modelevent' => $modelevent,
         ]);
     }
+    else{
+        $model = new LoginForm();
+        return $this->redirect(['site/login',
+            'model' => $model,
+        ]);
+    }
+
+    }
 
     /**
      * Creates a new Product model.
@@ -105,12 +117,24 @@ class ProductController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Product();
+        if(!Yii::$app->user->isGuest) {
+            $model = new Product();
+            $model->auth_stat = 'U';
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+            $model->record_stat = 'O';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->product_id]);
-        } else {
-            return $this->render('create', [
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->product_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
@@ -124,12 +148,22 @@ class ProductController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->isGuest) {
         $model = $this->findModel($id);
-
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+        $model->auth_stat='U';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->product_id]);
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
@@ -143,9 +177,91 @@ class ProductController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(!Yii::$app->user->isGuest) {
+            $model = $this->findModel($id);
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+            $model->record_stat = 'D';
+            $model->save();
+            return $this->redirect(['view','id'=>$model->product_id]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
 
-        return $this->redirect(['index']);
+    //search product
+
+    public function actionSearch($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            return $this->redirect(['view',
+                'id' => $id,
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    //enables product
+    public function actionEnable($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+            $model->record_stat='O';
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+            $model->auth_stat='U';
+            if($model->save()){
+                //saves logs
+                Audit::setActivity('Product maintenance','PD','Enable');
+
+            }
+
+
+            return $this->redirect(['view', 'id' => $model->product_id]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+
+    //approves product
+    public function actionApprove($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+            $model->record_stat='O';
+            $model->checker_id=Yii::$app->user->identity->username;
+            $model->checker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+            $model->auth_stat='A';
+            if($model->save()){
+                //saves logs
+                Audit::setActivity('Product maintenance','PD','Enable');
+
+            }
+
+
+            return $this->redirect(['view', 'id' => $model->product_id]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -163,58 +279,6 @@ class ProductController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function actions()
-    {
-        return ArrayHelper::merge(parent::actions(), [
-            'editcart' => [                                       // identifier for your editable action
-                'class' => EditableColumnAction::className(),     // action class name
-                'modelClass' => Product::className(),             // the update model class
-                'outputValue' => function ($model, $attribute, $key, $index) {
-                    $fmt = Yii::$app->formatter;
-                    $value = $model->$attribute;                 // your attribute value
-                    if ($attribute === 'price') // selective validation by attribute
-                    { $updateTotal=$this->findModel($model->id);
-                        $updateTotal->total=$updateTotal->qty*$updateTotal->price;
-                        $updateTotal->save();
-                        $this->redirect(['sales/create']);
-                        return $fmt->asDecimal($value, 2);       // return formatted value if desired
 
-
-                    } elseif ($attribute === 'qty') {   // selective validation by attribute
-                        $inventory=Inventory::find()->where(['product_id'=>$model->product_id])->one();
-                        if($inventory->qty<$model->qty)
-                        {
-                            $updateQty=$this->findModel($model->id);
-                            $updateQty->qty=$inventory->qty;
-                            $updateQty->total=$updateQty->qty*$updateQty->price;
-                            $updateQty->save();
-                        }
-                        else{
-                            $updateTotal=$this->findModel($model->id);
-                            $updateTotal->total=$updateTotal->qty*$updateTotal->price;
-                            $updateTotal->save();
-                            // $this->redirect(['sales/create']);
-                            return $fmt->asDecimal($value, 2); // return formatted value if desired
-
-                        }
-
-
-
-                    }
-                    return '';                                   // empty is same as $value
-                },
-                'outputMessage' => function($model, $attribute, $key, $index) {
-                    return '';                                  // any custom error after model save
-                },
-                // 'showModelErrors' => true,                     // show model errors after save
-                // 'errorOptions' => ['header' => '']             // error summary HTML options
-                // 'postOnly' => true,
-                // 'ajaxOnly' => true,
-                // 'findModel' => function($id, $action) {},
-                // 'checkAccess' => function($action, $model) {}
-            ]
-        ]);
-
-    }
 
 }

@@ -32,7 +32,7 @@ class ProductEventEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_code', 'transaction_code', 'dr_cr_indicator', 'event_code', 'account_role_code', 'role_type', 'mis_head'], 'required'],
+            [['product_code', 'dr_cr_indicator', 'event_code', 'account_role_code',], 'required'],
             [['product_code', 'transaction_code', 'dr_cr_indicator', 'event_code', 'account_role_code', 'role_type', 'mis_head'], 'string', 'max' => 200]
         ];
     }
@@ -46,11 +46,24 @@ class ProductEventEntry extends \yii\db\ActiveRecord
             'id' => 'ID',
             'product_code' => 'Product Code',
             'transaction_code' => 'Transaction Code',
-            'dr_cr_indicator' => 'Dr Cr Indicator',
+            'dr_cr_indicator' => 'Dr / Cr Indicator',
             'event_code' => 'Event Code',
             'account_role_code' => 'Account Role Code',
             'role_type' => 'Role Type',
             'mis_head' => 'Mis Head',
         ];
+    }
+
+    public static function getGLRole($id)
+    {
+        $gl=ProductAccrole::getGLByAccountRole($id);
+        if($gl!=null){
+            return $gl;
+        }
+    }
+
+    public function getEventCode()
+    {
+        return $this->hasOne(EventType::className(), ['id' => 'event_code']);
     }
 }

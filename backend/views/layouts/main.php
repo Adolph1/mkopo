@@ -65,6 +65,70 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-green sidebar-mini">
+<style>
+    /*SEARCH FORM*/
+    .search-form {
+        border-radius: 30px 30px 30px 30px;
+        /*border-radius:Top-left, Top-right, Bottom-right, Bottom-left;*/
+    }
+    /*to cange only one form and not all give unique class name like  class="search-form" */
+    .search-btn {
+        border-radius: 0px 30px 30px 0px;
+        cursor: pointer;
+
+    }
+
+    #loader1 {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        border-right: 16px solid #f3f3f3;
+        border-bottom: 16px solid #3498db;
+
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Add animation to "page content" */
+    .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s
+    }
+
+    @-webkit-keyframes animatebottom {
+        from { bottom:-100px; opacity:0 }
+        to { bottom:0px; opacity:1 }
+    }
+
+    @keyframes animatebottom {
+        from{ bottom:-100px; opacity:0 }
+        to{ bottom:0; opacity:1 }
+    }
+
+</style>
+
 <?php $this->beginBody() ?>
 <div class="wrapper">
 
@@ -189,6 +253,40 @@ desired effect
                     [
                         "items" => [
                             ["label" =>Yii::t('app','Home'), "url" =>  Yii::$app->homeUrl, "icon" => "home"],
+
+
+                            [
+                                "label" =>Yii::t('app','Saccoss'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-building",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Details'),
+                                        "url" =>["/saccoss/create"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Shareholders'),
+                                        "url" =>["/shareholder/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Investments'),
+                                        "url" =>["/branch/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Shares'),
+                                        "url" =>["/branch/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+                            ],
 
                             [
                                 "label" =>Yii::t('app','Branches'),
@@ -367,31 +465,20 @@ desired effect
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Balances'),
-                                        "url" =>["/gl-balance/index"],
-                                        "icon" => "fa fa-angle-double-right",
-                                    ],
-                                ],
-
-
-
-                            ],
-
-                            [
-                                "label" =>Yii::t('app','Savings & Shares'),
-                                "url" =>  "#",
-                                "icon" => "fa fa-lock",
-                                "items" => [
-                                    [
-                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Savings'),
-                                        "url" =>["/teller/create"],
+                                        "label" => Yii::t('app','Category'),
+                                        "url" =>["/gl-category/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Shares'),
-                                        "url" =>["/teller/index"],
+                                        "label" => Yii::t('app','Journals'),
+                                        "url" =>["/journal-entry/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Daily Balances'),
+                                        "url" =>["/gl-daily-balance/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                 ],
@@ -399,6 +486,7 @@ desired effect
 
 
                             ],
+
 
                             [
                                 "label" =>Yii::t('app','Interests & Charges'),
@@ -421,6 +509,18 @@ desired effect
 
 
 
+                            ],
+                            [
+                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')||yii::$app->User->can('admin'),
+                                "label" =>Yii::t('app','Employees'),
+                                "url" =>  ["/employee/index"], "icon" => "fa fa-users",
+                            ],
+
+
+                            [
+                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                "label" =>Yii::t('app','Departments'),
+                                "url" =>  ["/department/index"], "icon" => "fa fa-sitemap",
                             ],
 
                             //["label" =>Yii::t('app','Locations'), "url" =>  ["/location/index"], "icon" => "fa fa-sitemap",],
@@ -459,10 +559,23 @@ desired effect
                                         'icon' => 'fa fa-calendar-o',
                                     ],
                                     [
+                                        'visible' => yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Events'),
+                                        "url" =>["/event-type/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
                                         'visible' => yii::$app->User->can('LoanManager') || yii::$app->User->can('admin'),
                                         'label' => Yii::t('app', 'EOD'),
                                         'url' => ['/system-setup/run-eod'],
                                         'icon' => 'fa fa-lock',
+                                    ],
+
+                                    [
+                                        'visible' => yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Business Rules'),
+                                        "url" =>["/business-rule/index"],
+                                        "icon" => "fa fa-angle-double-right",
                                     ],
 
 
@@ -618,48 +731,68 @@ desired effect
 <?php $this->endPage() ?>
 
 <script>
-    $("#purchasemaster-country").change(function(){
-        var id =document.getElementById("purchasemaster-country").value;
-        if(id==1){
-            $( "#rates" ).hide( "slow", function() {
-                //alert( "Animation complete." );
+    $("#product-product_group").change(function(){
+        var id =document.getElementById("product-product_group").value;
+        //alert(id);
+        if(id=='Teller'){
+            $( "#interest-method" ).hide( "slow", function() {
             });
-        }
-        else if(id==2){
-            $( "#rates" ).show( "slow", function() {
+            $("#product-type" ).show( "slow", function() {
             });
+            $("#loan-method" ).hide( "slow", function() {
+            });
+
+            $("#fund-id" ).hide( "slow", function() {
+            });
+
+
+
+
         }
-        else if(id==0){
-            $( "#rates" ).show( "slow", function() {
+
+        else if(id=='Loans'){
+            $("#interest-method" ).show( "slow", function() {
+            });
+            $("#product-type" ).hide( "slow", function() {
+            });
+            $("#loan-method" ).show( "slow", function() {
+            });
+            $("#fund-id" ).show( "slow", function() {
+            });
+
+        }
+        else if(id=='Deposits'){
+            $("#interest-method" ).hide( "slow", function() {
+            });
+            $("#product-type" ).hide( "slow", function() {
+            });
+            $("#loan-method" ).show( "slow", function() {
+            });
+            $("#fund-id" ).hide( "slow", function() {
             });
         }
 
 
     });
 
-</script>
-
-<script>
     $(document).ready(function(){
-        var id =document.getElementById("purchasemaster-country").value;
-        if(id==1){
-            $( "#rates" ).hide( "slow", function() {
-                //alert( "Animation complete." );
-            });
-        }
-        else if(id==2){
-            $( "#rates" ).show( "slow", function() {
-            });
-        }
-        else if(id==0){
-            $( "#rates" ).show( "slow", function() {
-            });
-        }
 
+        //alert('yes bro');
+        var account_role=document.getElementById('productevententry-product_code').value;
+        //alert(account_role);
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['product-accrole/fetch-role','id'=>'']);?>"+account_role,function(data) {
+           // alert(data);
+            document.getElementById('productevententry-account_role_code').value=data;
+        });
+        $( "#loader1" ).hide( "slow", function(){
+
+        });
 
     });
 
 </script>
+
 
 
 
@@ -781,5 +914,24 @@ desired effect
     });
 
 </script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#account-branch_code').on('change', function () {
+            var cust_no = document.getElementById('account-cust_no').value;
+            if(cust_no==""){
+                alert('Kindly search customer first');
+                window.location.reload(true);
+            }
+            else{
+
+                document.getElementById("account-cust_ac_no").value=document.getElementById('account-branch_code').value+cust_no;
+            }
+
+        })
+    });
+</script>
+
 
 

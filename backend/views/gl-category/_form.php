@@ -16,14 +16,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'category_name')->textInput(['maxlength' => 200]) ?>
 
-    <?= $form->field($model, 'maker_id')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'maker_stamptime')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'checker_id')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'checker_stamptime')->textInput(['maxlength' => 200]) ?>
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

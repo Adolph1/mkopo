@@ -31,7 +31,7 @@ class GlCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_description', 'category_name', 'maker_id', 'maker_stamptime', 'checker_id', 'checker_stamptime'], 'required'],
+            [['category_description', 'category_name'], 'required'],
             [['category_description', 'category_name', 'maker_id', 'maker_stamptime', 'checker_id', 'checker_stamptime'], 'string', 'max' => 200]
         ];
     }

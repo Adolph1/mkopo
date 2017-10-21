@@ -9,11 +9,8 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        'c65d09b6820da036953a371c8c73a9b1' => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook/polyfills.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '180092cfc969a12e06f2132a203a3184' => __DIR__ . '/..' . '/codeception/verify/src/Codeception/function.php',
     );
 
@@ -24,7 +21,6 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'yiister\\adminlte\\' => 17,
             'yiidreamteam\\upload\\' => 20,
             'yii\\swiftmailer\\' => 16,
-            'yii\\redis\\' => 10,
             'yii\\jui\\' => 8,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
@@ -32,24 +28,14 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'yii\\composer\\' => 13,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
-            'yii2tech\\crontab\\' => 17,
         ),
         'w' => 
         array (
             'wbraganca\\dynamicform\\' => 22,
         ),
-        'v' => 
-        array (
-            'vova07\\console\\' => 15,
-        ),
-        't' => 
-        array (
-            'toriphes\\console\\' => 17,
-        ),
         's' => 
         array (
             'spanjeta\\modules\\backup\\' => 24,
-            'sjaakp\\gcharts\\' => 15,
         ),
         'r' => 
         array (
@@ -59,19 +45,16 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
-        'o' => 
-        array (
-            'onmotion\\telegram\\' => 18,
-        ),
         'm' => 
         array (
             'microinginer\\dropDownActionColumn\\' => 34,
         ),
         'k' => 
         array (
+            'kartik\\tabs\\' => 12,
             'kartik\\spinner\\' => 15,
-            'kartik\\social\\' => 14,
             'kartik\\popover\\' => 15,
+            'kartik\\plugins\\tabs\\' => 20,
             'kartik\\plugins\\popover\\' => 23,
             'kartik\\grid\\' => 12,
             'kartik\\editable\\' => 16,
@@ -86,15 +69,10 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'd' => 
         array (
             'dosamigos\\datepicker\\' => 21,
-            'digitv\\yii2sockets\\' => 19,
         ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
-        ),
-        'b' => 
-        array (
-            'bubasuma\\simplechat\\' => 20,
         ),
         'a' => 
         array (
@@ -122,24 +100,13 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
         ),
-        'M' => 
-        array (
-            'Monolog\\' => 8,
-        ),
-        'L' => 
-        array (
-            'Longman\\TelegramBot\\' => 20,
-        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
-            'GuzzleHttp\\Promise\\' => 19,
-            'GuzzleHttp\\' => 11,
         ),
         'F' => 
         array (
             'Faker\\' => 6,
-            'Facebook\\' => 9,
         ),
         'D' => 
         array (
@@ -169,10 +136,6 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
         ),
-        'yii\\redis\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/yiisoft/yii2-redis',
-        ),
         'yii\\jui\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-jui',
@@ -201,29 +164,13 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
-        'yii2tech\\crontab\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/yii2tech/crontab',
-        ),
         'wbraganca\\dynamicform\\' => 
         array (
             0 => __DIR__ . '/..' . '/wbraganca/yii2-dynamicform',
         ),
-        'vova07\\console\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/vova07/yii2-console-runner-extension',
-        ),
-        'toriphes\\console\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/toriphes/yii2-console-runner',
-        ),
         'spanjeta\\modules\\backup\\' => 
         array (
             0 => __DIR__ . '/..' . '/spanjeta/yii2-backup',
-        ),
-        'sjaakp\\gcharts\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sjaakp/yii2-gcharts',
         ),
         'rmrevin\\yii\\fontawesome\\' => 
         array (
@@ -235,25 +182,25 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
-        'onmotion\\telegram\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/onmotion/yii2-telegram',
-        ),
         'microinginer\\dropDownActionColumn\\' => 
         array (
             0 => __DIR__ . '/..' . '/microinginer/yii2-dropdown-action-column/src',
+        ),
+        'kartik\\tabs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-tabs-x',
         ),
         'kartik\\spinner\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-spinner',
         ),
-        'kartik\\social\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-social',
-        ),
         'kartik\\popover\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-popover-x',
+        ),
+        'kartik\\plugins\\tabs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/bootstrap-tabs-x',
         ),
         'kartik\\plugins\\popover\\' => 
         array (
@@ -287,17 +234,9 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/2amigos/yii2-date-picker-widget/src',
         ),
-        'digitv\\yii2sockets\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/digitv/yii2sockets',
-        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
-        ),
-        'bubasuma\\simplechat\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bubasuma/yii2-simplechat',
         ),
         'abhimanyu\\sms\\' => 
         array (
@@ -355,33 +294,13 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Monolog\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'Longman\\TelegramBot\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/longman/telegram-bot/src',
-        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
-        ),
-        'GuzzleHttp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
-        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
-        ),
-        'Facebook\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

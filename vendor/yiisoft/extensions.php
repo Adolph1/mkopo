@@ -219,85 +219,13 @@ return array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
     ),
   ),
-  'sjaakp/yii2-gcharts' => 
+  'kartik-v/yii2-tabs-x' => 
   array (
-    'name' => 'sjaakp/yii2-gcharts',
-    'version' => '1.0.0.0',
-    'alias' => 
-    array (
-      '@sjaakp/gcharts' => $vendorDir . '/sjaakp/yii2-gcharts',
-    ),
-  ),
-  'toriphes/yii2-console-runner' => 
-  array (
-    'name' => 'toriphes/yii2-console-runner',
-    'version' => '1.0.0.0',
-    'alias' => 
-    array (
-      '@toriphes/console' => $vendorDir . '/toriphes/yii2-console-runner',
-    ),
-  ),
-  'vova07/yii2-console-runner-extension' => 
-  array (
-    'name' => 'vova07/yii2-console-runner-extension',
-    'version' => '0.1.0.0',
-    'alias' => 
-    array (
-      '@vova07/console' => $vendorDir . '/vova07/yii2-console-runner-extension',
-    ),
-  ),
-  'yii2tech/crontab' => 
-  array (
-    'name' => 'yii2tech/crontab',
-    'version' => '1.0.2.0',
-    'alias' => 
-    array (
-      '@yii2tech/crontab' => $vendorDir . '/yii2tech/crontab',
-    ),
-  ),
-  'kartik-v/yii2-social' => 
-  array (
-    'name' => 'kartik-v/yii2-social',
+    'name' => 'kartik-v/yii2-tabs-x',
     'version' => '9999999-dev',
     'alias' => 
     array (
-      '@kartik/social' => $vendorDir . '/kartik-v/yii2-social',
-    ),
-  ),
-  'bubasuma/yii2-simplechat' => 
-  array (
-    'name' => 'bubasuma/yii2-simplechat',
-    'version' => '2.0.0.0',
-    'alias' => 
-    array (
-      '@bubasuma/simplechat' => $vendorDir . '/bubasuma/yii2-simplechat',
-    ),
-  ),
-  'onmotion/yii2-telegram' => 
-  array (
-    'name' => 'onmotion/yii2-telegram',
-    'version' => '0.8.4.0',
-    'alias' => 
-    array (
-      '@onmotion/telegram' => $vendorDir . '/onmotion/yii2-telegram',
-    ),
-  ),
-  'yiisoft/yii2-redis' => 
-  array (
-    'name' => 'yiisoft/yii2-redis',
-    'version' => '2.0.6.0',
-    'alias' => 
-    array (
-      '@yii/redis' => $vendorDir . '/yiisoft/yii2-redis',
-    ),
-  ),
-  'digitv/yii2sockets' => 
-  array (
-    'name' => 'digitv/yii2sockets',
-    'version' => '1.0.4.0',
-    'alias' => 
-    array (
-      '@digitv/yii2sockets' => $vendorDir . '/digitv/yii2sockets',
+      '@kartik/tabs' => $vendorDir . '/kartik-v/yii2-tabs-x',
     ),
   ),
 );

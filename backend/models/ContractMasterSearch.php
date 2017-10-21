@@ -92,4 +92,26 @@ class ContractMasterSearch extends ContractMaster
         $query->groupBy(['booking_date']);
         return $dataProvider;
     }
+
+    public function searchByCustomerNumber($params)
+    {
+        $query = ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        //if (!($this->load($params) && $this->validate())) {
+        //  return $dataProvider;
+        //}
+
+        $query->andFilterWhere([
+            'customer_number' => $params,
+        ]);
+
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
+
+        return $dataProvider;
+    }
 }

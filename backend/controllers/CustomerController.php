@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\Audit;
 use backend\models\CustomerBalance;
+use backend\models\Teller;
 use Yii;
 use backend\models\Customer;
 use backend\models\CustomerSearch;
@@ -63,8 +65,12 @@ class CustomerController extends Controller
     public function actionView($id)
     {
         if(!Yii::$app->user->isGuest) {
+
+         $customer=$this->findModel($id);
+         $transactions=Teller::getAllTransactions($customer->customer_no);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($id),'transactions'=>$transactions
         ]);
         }
         else{
@@ -239,7 +245,11 @@ class CustomerController extends Controller
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_time=date('Y-m-d:H:i:s');
         $model->mod_no=$model->mod_no+1;
-        $model->save();
+            if($model->save()){
+                //saves logs
+                Audit::setActivity('Customer maintenance','CD','Disable');
+
+            }
 
         return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -249,6 +259,75 @@ class CustomerController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    //enables customer
+    public function actionEnable($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+            $model->record_stat='O';
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_time=date('Y-m-d:H:i:s');
+            $model->mod_no=$model->mod_no+1;
+           if($model->save()){
+               //saves logs
+               Audit::setActivity('Customer maintenance','CD','Enable');
+
+           }
+
+
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+    //search customer
+
+    public function actionSearch($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            return $this->redirect(['view',
+                'id' => $id,
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    //Search customer for new account creation
+    public function actionSearchCustomer($id)
+    {
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+
+        $customer = Customer::find()->where(['id'=>$id])->one();
+
+        if(count($customer) > 0 )
+
+        {
+
+            return array('status' => true, 'data'=> $customer);
+
+        }
+
+        else
+
+        {
+
+            return array('status'=>false,'data'=> 'No Customer Found');
+
+        }
+
     }
 
     /**

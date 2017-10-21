@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "tbl_general_ledger".
@@ -76,4 +77,10 @@ class GeneralLedger extends \yii\db\ActiveRecord
     {
         return $this->hasOne(GlType::className(), ['id' => 'type']);
     }
+
+    public static function getAll()
+    {
+        return ArrayHelper::map(GeneralLedger::find()->all(),'gl_code','gl_description');
+    }
+
 }

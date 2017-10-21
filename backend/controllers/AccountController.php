@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\SystemDate;
 use Yii;
 use backend\models\Account;
 use backend\models\AccountSearch;
@@ -61,6 +62,10 @@ class AccountController extends Controller
     public function actionCreate()
     {
         $model = new Account();
+        $model->maker_id=Yii::$app->user->identity->username;
+        $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
+        $model->acc_open_date=SystemDate::getCurrentDate();
+        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->cust_ac_no]);

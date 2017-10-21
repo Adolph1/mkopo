@@ -9,6 +9,7 @@ use backend\models\ContractNormalRepayment;
 use backend\models\ContractNormalRepaymentSearch;
 use backend\models\Customer;
 use backend\models\CustomerBalance;
+use backend\models\GlDailyBalance;
 use backend\models\Guarantor;
 use backend\models\ProductAccrole;
 use backend\models\ProductEventEntry;
@@ -17,6 +18,8 @@ use backend\models\SystemDate;
 use backend\models\SystemSetup;
 use backend\models\Teller;
 use backend\models\TodayEntry;
+use backend\models\EventType;
+use backend\models\GeneralLedger;
 use Yii;
 use backend\models\ContractMaster;
 use backend\models\Product;
@@ -127,14 +130,55 @@ class ContractMasterController extends Controller
                 $model->auth_stat = 'U';
                 $model->maker_id = Yii::$app->user->identity->username;
                 $model->maker_stamptime =SystemDate::getCurrentDate().' '.date('H:i:s');
+                
                 $guarantors = [new Guarantor()];
 
 
                 //Calculating Flat rate
 
-                if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                if ($model->load(Yii::$app->request->post()) ) {
+                    $model->calculation_method=Product::getInterestMethod($_POST['ContractMaster']['product']);
 
-
+                        //saves to today's transactions
+                        //gets accounting roles and events
+                        $role_events=ProductAccrole::getRoleEvents($produtcode=$model->product,$event=EventType::INIT);
+                        if($role_events!=null){
+                        foreach($role_events as $role_event){
+                            if($role_event->dr_cr_indicator=='C'){
+                                TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), $model->customer_number, Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'C', $model->customer_number, $model->product,$model->value_date);
+                            }elseif($role_event->dr_cr_indicator=='D'){
+                                TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), $role_event->mis_head, Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'D', $model->customer_number, $model->product, $model->value_date);
+                                
+                                //saves gl entry
+                                $gl=$this->findGLBalance($role_event->mis_head);
+                                if($gl!=null){
+                                $gl_balance=new GlDailyBalance();
+                                $gl_balance->trn_date=SystemDate::getCurrentDate();
+                                $gl_balance->gl_code=$role_event->mis_head;
+                                $gl_balance->opening_balance=$model->amount;
+                                $gl_balance->dr_turn=$gl->dr_turn+$model->amount;
+                                $gl_balance->cr_turn=0.00;
+                                $gl_balance->closing_balance= $gl_balance->dr_turn-$gl_balance->cr_turn;
+                                $gl_balance->save();
+                                //updates Gl real Balance
+                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
+                                //updates Gl real Balance
+                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
+                                }else{
+                                $gl_balance=new GlDailyBalance();
+                                $gl_balance->trn_date=SystemDate::getCurrentDate();
+                                $gl_balance->gl_code=$role_event->mis_head;
+                                $gl_balance->opening_balance=$model->amount;
+                                $gl_balance->dr_turn=$model->amount;
+                                $gl_balance->cr_turn=0.00;
+                                $gl_balance->closing_balance= $gl_balance->dr_turn-$gl_balance->cr_turn;
+                                $gl_balance->save();
+                                //updates Gl real Balance
+                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
+                                }
+                            }
+                            }
+                     if($model->save()){
                     //saves gurantors
                     $guarantors = Model::createMultiple(Guarantor::classname());
                     Model::loadMultiple($guarantors, Yii::$app->request->post());
@@ -231,23 +275,13 @@ class ContractMasterController extends Controller
                         $duemodel1->amount_due = $totalRepay;
                         $duemodel1->status = 'A';
 
-
                         $duemodel1->save();
-
                         $contractBalance=new ContractBalance();
                         $contractBalance->contract_amount=$model->amount;
                         $contractBalance->contract_outstanding=$model->amount+$totalRepay;
                         $contractBalance->contract_ref_number=$model->contract_ref_no;
                         $contractBalance->last_updated=date('Y-m-d H:i:s');
                         $contractBalance->save();
-
-
-
-                        //saves to today's transactions
-                        TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), $model->customer_number, Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'C', $model->customer_number, $model->product,$model->value_date);
-                        TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), ProductAccrole::getGLByProduct($model->product), Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'D', $model->customer_number, $model->product, $model->value_date);
-
-
 
 
                     }else{
@@ -325,25 +359,24 @@ class ContractMasterController extends Controller
 
                     }
 
-
-
-
-
-
-
-
                     $modelrefid = ReferenceIndex::getIDByRef($model->contract_ref_no);
                     ReferenceIndex::updateReference($modelrefid);
 
                     return $this->redirect(['view', 'id' => $model->contract_ref_no]);
+                }
                 } else {
-
-
                     return $this->render('create', [
                         'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
                     ]);
                 }
             }
+              else{
+                   Yii::$app->session->setFlash('danger', 'No account roles events for this product,please contact administrator.');
+                  return $this->render('create', [
+                        'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
+                    ]);
+                        }
+        }          
             else{
                 Yii::$app->session->setFlash('danger', 'You dont have permission to create loan contract.');
                 return $this->redirect(['index']);
@@ -484,6 +517,17 @@ class ContractMasterController extends Controller
                 return $model;
             } else {
                 throw new NotFoundHttpException('The requested page does not exist.');
+            }
+
+    }
+
+      protected function findGLBalance($id)
+    {
+
+            if (($model = GlDailyBalance::find()->where(['gl_code'=>$id])->orderBy('id DESC')->one()) !== null) {
+                return $model;
+            } else {
+                return null;
             }
 
     }

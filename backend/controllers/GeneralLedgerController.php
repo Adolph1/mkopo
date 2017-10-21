@@ -8,6 +8,7 @@ use backend\models\GeneralLedgerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\GlDailyBalance;
 
 /**
  * GeneralLedgerController implements the CRUD actions for GeneralLedger model.
@@ -62,7 +63,7 @@ class GeneralLedgerController extends Controller
     {
         $model = new GeneralLedger();
         $model->record_status='O';
-        //$model->auth_stat='U';
+        $model->auth_stat='U';
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_stamptime=date('Y-m-d:h:i');
         $model->mod_no=1;

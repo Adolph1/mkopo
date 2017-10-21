@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row">
             <div class="col-md-8">
-                <?= $form->field($model, 'related_customer')->dropDownList(\backend\models\Customer::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+                <?= $form->field($model, 'txn_account')->dropDownList(\backend\models\Customer::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
 
             </div>
 

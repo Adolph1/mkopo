@@ -58,9 +58,9 @@ class ContractMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contract_ref_no','product','loan_officer', 'product_type','payment_date','frequency', 'payment_method', 'customer_number', 'amount', 'booking_date', 'value_date', 'maturity_date', 'main_component_rate'], 'required'],
+            [['contract_ref_no','product','loan_officer', 'product_type','payment_date','frequency', 'payment_method', 'customer_number', 'amount', 'booking_date', 'value_date', 'maturity_date', 'main_component_rate','calculation_method'], 'required'],
             [['amount'], 'number'],
-            [['frequency'], 'integer'],
+            [['frequency','calculation_method'], 'integer'],
             [['booking_date', 'value_date', 'maturity_date'], 'safe'],
             [['contract_ref_no', 'customer_number', 'main_component','settle_account', 'main_component_rate','maker_id', 'maker_stamptime','loan_officer', 'checker_id', 'checker_stamptime', 'seq_number'], 'string', 'max' => 200],
             [['branch', 'product', 'product_type', 'module', 'payment_method','payment_date', 'contract_status','auth_stat'], 'string', 'max' => 20]
@@ -96,7 +96,8 @@ class ContractMaster extends \yii\db\ActiveRecord
             'checker_id' => 'Checker ID',
             'checker_stamptime' => 'Checker Stamptime',
             'seq_number' => 'Seq Number',
-            'loan_officer'=>'Loan Officer'
+            'loan_officer'=>'Loan Officer',
+            'calculation_method'=>'Calculation Method',
         ];
     }
 

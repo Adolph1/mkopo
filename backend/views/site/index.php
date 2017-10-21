@@ -229,7 +229,7 @@ use kartik\grid\GridView;
                         $searchModel1 = new ContractMasterSearch();
                         $dataProvider1 = $searchModel1->lineChart();
                         ?>
-                        <?= \sjaakp\gcharts\LineChart::widget([
+                        <?php /*\sjaakp\gcharts\LineChart::widget([
                             'height' => '400px',
                             'dataProvider' => $dataProvider1,
                             'columns' => [
@@ -251,7 +251,7 @@ use kartik\grid\GridView;
                                 'title' => 'Loans booked from '.date('Y').'-'.date('m').'-'.'01'.' To '. date('Y').'-'.date('m').'-'.'31',
                                 //'class'=>'text-center'
                             ],
-                        ]) ?>
+                        ])*/ ?>
 
                     </div>
                     <div class="icon">

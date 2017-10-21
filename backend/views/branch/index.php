@@ -39,9 +39,10 @@ $this->title = Yii::t('app', 'Branches');
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
+            'branch_code',
             'branch_name',
             'location',
-            //'status',
+            'status',
             //'maker_id',
             // 'maker_time',
 

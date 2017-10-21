@@ -44,7 +44,7 @@ class Teller extends \yii\db\ActiveRecord
             [['reference','product','amount','related_customer'], 'required'],
             [['trn_dt', 'maker_time', 'checker_time'], 'safe'],
             [['amount', 'offset_amount'], 'number'],
-            [['reference', 'product', 'related_customer', 'offset_account', 'maker_id', 'checker_id'], 'string', 'max' => 200],
+            [['reference', 'product','txn_account', 'related_customer', 'offset_account', 'maker_id', 'checker_id'], 'string', 'max' => 200],
             [['status'], 'string', 'max' => 1],
             [['reference'], 'unique'],
         ];
@@ -61,6 +61,7 @@ class Teller extends \yii\db\ActiveRecord
             'product' => Yii::t('app', 'Product'),
             'trn_dt' => Yii::t('app', 'Trn Dt'),
             'amount' => Yii::t('app', 'Amount'),
+            'txn_account' => Yii::t('app', 'Transaction Account'),
             'related_customer' => Yii::t('app', 'Related Customer'),
             'offset_account' => Yii::t('app', 'Offset Account'),
             'offset_amount' => Yii::t('app', 'Offset Amount'),
@@ -77,6 +78,16 @@ class Teller extends \yii\db\ActiveRecord
         $teller=Teller::find()->where(['reference'=>$id])->one();
         if($teller!=null){
             return $teller->id;
+        }
+    }
+
+    public static function getAllTransactions($id)
+    {
+        $transactions=Teller::find()->where(['related_customer'=>$id])->all();
+        if($transactions!=null){
+            return $transactions;
+        }else{
+            return null;
         }
     }
 

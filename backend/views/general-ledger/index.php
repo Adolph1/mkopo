@@ -26,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'gl_code',
             'gl_description',
+            [
+                'attribute' => 'glCategory',
+                'value' => 'glCategory.category_name'
+            ],
             'parent_gl',
             [
                 'attribute' =>'posting_restriction',
@@ -56,10 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return 'Internal GL';
                     }
                 }],
-            [
-                'attribute' => 'glCategory',
-                'value' => 'glCategory.category_name'
-            ],
+
             [
             'attribute' =>'leaf',
             'value' => function ($searchModel) {

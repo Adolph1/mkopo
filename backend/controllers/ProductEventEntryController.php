@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use backend\models\ProductAccrole;
 use Yii;
 use backend\models\ProductEventEntry;
 use backend\models\ProductEventEntrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\grid\EditableColumnAction;
+use yii\helpers\ArrayHelper;
 
 /**
  * ProductEventEntryController implements the CRUD actions for ProductEventEntry model.
@@ -62,8 +65,11 @@ class ProductEventEntryController extends Controller
     {
         $model = new ProductEventEntry();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->product_code]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->mis_head=ProductAccrole::getGLByAccountRole($_POST['ProductEventEntry']['account_role_code']);
+            $model->save();
+            return $this->redirect(['product/view', 'id' => $model->product_code]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -98,9 +104,11 @@ class ProductEventEntryController extends Controller
      */
     public function actionDelete($id)
     {
+        $model=$this->findModel($id);
+
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['product/view', 'id' => $model->product_code]);
     }
 
     public function actionOffset($id)
@@ -133,5 +141,40 @@ class ProductEventEntryController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actions()
+    {
+        return ArrayHelper::merge(parent::actions(), [
+            'edit-gl' => [                                       // identifier for your editable action
+                'class' => EditableColumnAction::className(),     // action class name
+                'modelClass' => ProductEventEntry::className(),             // the update model class
+                'outputValue' => function ($model, $attribute, $key, $index) {
+                    //$fmt = Yii::$app->formatter;
+                    $value = $model->$attribute;                 // your attribute value
+                    if ($attribute === 'mis_head') // selective validation by attribute
+                    {
+                        return $value;    // return formatted value if desired
+
+
+                    } elseif ($attribute === 'dr_cr_indicator') {   // selective validation by attribute
+
+                        return $value;    // return formatted value if desired
+
+                    }
+                    return '';                                   // empty is same as $value
+                },
+                'outputMessage' => function($model, $attribute, $key, $index) {
+                    return '';                                  // any custom error after model save
+                },
+                // 'showModelErrors' => true,                     // show model errors after save
+                // 'errorOptions' => ['header' => '']             // error summary HTML options
+                // 'postOnly' => true,
+                // 'ajaxOnly' => true,
+                // 'findModel' => function($id, $action) {},
+                // 'checkAccess' => function($action, $model) {}
+            ]
+        ]);
+
     }
 }

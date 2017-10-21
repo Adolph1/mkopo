@@ -41,6 +41,7 @@ class Customer extends \yii\db\ActiveRecord
      */
     public $customer_photo;
     public $current_balance;
+    public $customer_detail;
     const DELETED='D';
     const ACTIVE='O';
 
@@ -55,12 +56,12 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'identification_id', 'identification_number', 'mobile_no1', 'customer_type_id'], 'required'],
+            [['first_name', 'last_name', 'identification_id', 'identification_number', 'mobile_no1', 'customer_type_id',], 'required'],
             [['identification_id', 'customer_type_id', 'customer_category_id', 'branch_id', 'mod_no'], 'integer'],
-            [['maker_time','expire_date'], 'safe'],
-            [['first_name', 'middle_name', 'last_name', 'identification_number', 'address', 'email', 'photo', 'maker_id'], 'string', 'max' => 200],
+            [['maker_time','expire_date','checker_time','date_of_birth'], 'safe'],
+            [['first_name', 'middle_name', 'last_name', 'identification_number', 'address', 'email', 'photo', 'maker_id','checker_id','gender'], 'string', 'max' => 200],
             [['mobile_no1', 'mobile_no2'], 'string', 'max' => 13],
-            [[ 'customer_no'], 'string', 'max' => 10],
+            [['customer_no'], 'string', 'max' => 10],
             [['customer_no'], 'unique'],
             [['branch_id'], 'exist', 'skipOnError' => true, 'targetClass' => Branch::className(), 'targetAttribute' => ['branch_id' => 'id']],
             [['customer_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CustomerCategory::className(), 'targetAttribute' => ['customer_category_id' => 'id']],
@@ -80,6 +81,8 @@ class Customer extends \yii\db\ActiveRecord
             'first_name' => Yii::t('app', 'First Name'),
             'middle_name' => Yii::t('app', 'Middle Name'),
             'last_name' => Yii::t('app', 'Last Name'),
+            'gender'=> Yii::t('app', 'Gender'),
+            'date_of_birth'=> Yii::t('app', 'Date of Birth'),
             'identification_id' => Yii::t('app', 'Identification'),
             'identification_number' => Yii::t('app', 'Identification Number'),
             'expire_date'=> Yii::t('app', 'Expire Date'),
@@ -87,14 +90,17 @@ class Customer extends \yii\db\ActiveRecord
             'mobile_no1' => Yii::t('app', 'Mobile No1'),
             'mobile_no2' => Yii::t('app', 'Mobile No2'),
             'email' => Yii::t('app', 'Email'),
-            'customer_type_id' => Yii::t('app', 'Customer Type'),
-            'customer_category_id' => Yii::t('app', 'Customer Category'),
+            'customer_type_id' => Yii::t('app', 'Type'),
+            'customer_category_id' => Yii::t('app', 'Category'),
             'branch_id' => Yii::t('app', 'Branch'),
             'photo' => Yii::t('app', 'Photo'),
             'mod_no' => Yii::t('app', 'Mod No'),
-            'record_stat' => Yii::t('app', 'Record Stat'),
-            'maker_id' => Yii::t('app', 'Maker ID'),
+            'record_stat' => Yii::t('app', 'Status'),
+            'maker_id' => Yii::t('app', 'Maker'),
             'maker_time' => Yii::t('app', 'Maker Time'),
+            'auth_stat'=> Yii::t('app', 'Authorization status'),
+            'checker_id' => Yii::t('app', 'Checker'),
+            'checker_time' => Yii::t('app', 'Checker Time'),
         ];
     }
 
@@ -169,12 +175,15 @@ class Customer extends \yii\db\ActiveRecord
 
     }
 
+    //gets all customers
     public static function getAll()
     {
         return ArrayHelper::map(Customer::find()->where(['!=','record_stat','D'])->all(), 'customer_no', function($model, $defaultValue) {
             return $model['first_name']. " " .$model['last_name'];
         });
     }
+
+
 
     public static function getCustomerCount()
     {

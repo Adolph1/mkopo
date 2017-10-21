@@ -28,6 +28,11 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    const FLAT_RATE = 0;
+    const REDUCING_BALANCE = 1;
+
+    public $product_detail;
+
     public static function tableName()
     {
         return 'tbl_product';
@@ -39,8 +44,9 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_id', 'product_descption', 'product_type', 'product_remarks', 'product_start_date', 'product_group'], 'required'],
-            [['mod_no'], 'integer'],
+            [['product_id', 'product_descption', 'product_remarks', 'product_start_date', 'product_group',], 'required'],
+            [['mod_no','interest_method',], 'integer'],
+            [['default_rate','min_rate','max_rate', 'fund','default_principal', 'min_principal', 'max_principal'], 'number'],
             [['product_id', 'product_descption', 'product_type', 'product_module', 'product_remarks', 'product_start_date', 'product_end_date', 'product_group', 'maker_id', 'maker_stamptime', 'checker_id', 'checker_stamptime'], 'string', 'max' => 200],
             [['record_stat'], 'string', 'max' => 20]
         ];
@@ -52,8 +58,8 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'product_id' => 'Product ID',
-            'product_descption' => 'Product Descption',
+            'product_id' => 'Product Code',
+            'product_descption' => 'Product Description',
             'product_type' => 'Product Type',
             'product_module' => 'Product Module',
             'product_remarks' => 'Product Remarks',
@@ -66,6 +72,16 @@ class Product extends \yii\db\ActiveRecord
             'checker_stamptime' => 'Checker Stamptime',
             'record_stat' => 'Record Stat',
             'mod_no' => 'Mod No',
+            'interest_method'=>'Interest Methodology',
+            'default_rate'=>'Default Rate',
+            'min_rate'=>'Minimum Rate',
+            'max_rate'=>'Maximum Rate',
+            'fund'=>'Fund',
+            'default_principal'=>'Default Principal',
+            'min_principal'=>'Minimum Principal',
+            'max_principal'=>'Maximum Principal',
+            'auth_stat'=>'Authorization status',
+
         ];
     }
 
@@ -82,4 +98,29 @@ class Product extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(Product::find()->where(['product_group'=>'Teller'])->all(),'product_id','product_id');
     }
+
+
+    public static function getArrayStatus()
+    {
+        return [
+            self::FLAT_RATE => Yii::t('app', 'FLAT RATE'),
+            self::REDUCING_BALANCE => Yii::t('app', 'REDUCING BALANCE'),
+        ];
+    }
+
+    public function getSponsor()
+    {
+        return $this->hasOne(Shareholder::className(), ['id' => 'fund']);
+    }
+
+    public static function getInterestMethod($pid)
+    {
+        $product=Product::findOne($pid);
+        if($product!=null){
+            return $product->interest_method;
+        }else{
+            return 3;
+        }
+    }
+
 }

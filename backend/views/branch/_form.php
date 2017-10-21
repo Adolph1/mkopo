@@ -14,6 +14,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+
+     <?= $form->field($model, 'branch_code')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>

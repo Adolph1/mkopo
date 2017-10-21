@@ -36,6 +36,9 @@ class Account extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public $customer_detail;
+
     public static function tableName()
     {
         return 'tbl_account';
@@ -47,12 +50,12 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class', 'ac_stat_no_dr', 'ac_stat_no_cr', 'ac_stat_no_block', 'ac_stat_stop_pay', 'ac_stat_dormant', 'acc_open_date', 'ac_opening_bal', 'dormancy_date', 'dormancy_days', 'acc_status', 'maker_id', 'maker_stamptime', 'checker_id', 'check_stamptime', 'mod_no', 'auth_stat'], 'required'],
-            [['cust_no', 'dormancy_days', 'mod_no'], 'integer'],
+            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class',], 'required'],
+            [['dormancy_days', 'mod_no'], 'integer'],
             [['ac_opening_bal'], 'number'],
             [['dormancy_date'], 'safe'],
             [['branch_code', 'ac_stat_no_block', 'ac_stat_stop_pay'], 'string', 'max' => 5],
-            [['cust_ac_no', 'ac_stat_no_dr', 'ac_stat_dormant', 'auth_stat'], 'string', 'max' => 20],
+            [['cust_ac_no','cust_no', 'ac_stat_no_dr', 'ac_stat_dormant', 'auth_stat'], 'string', 'max' => 20],
             [['ac_desc', 'account_class', 'acc_open_date', 'acc_status', 'maker_id', 'maker_stamptime', 'checker_id', 'check_stamptime'], 'string', 'max' => 200],
             [['ac_stat_no_cr'], 'string', 'max' => 6],
             [['account_class'], 'exist', 'skipOnError' => true, 'targetClass' => AccountClass::className(), 'targetAttribute' => ['account_class' => 'acc_class']],
@@ -95,5 +98,15 @@ class Account extends \yii\db\ActiveRecord
     public function getAccountClass()
     {
         return $this->hasOne(AccountClass::className(), ['acc_class' => 'account_class']);
+    }
+
+    public static function getAllAccounts($id)
+    {
+        $accounts=Account::find()->where(['cust_no'=>$id])->all();
+        if($accounts!=null){
+            return $accounts;
+        }else{
+            return null;
+        }
     }
 }

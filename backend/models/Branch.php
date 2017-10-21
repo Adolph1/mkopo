@@ -9,14 +9,14 @@ use yii\helpers\ArrayHelper;
  * This is the model class for table "tbl_branch".
  *
  * @property integer $id
+ * @property string $branch_code
  * @property string $branch_name
  * @property string $location
  * @property string $status
  * @property string $maker_id
  * @property string $maker_time
  *
- * @property TblDepartment[] $tblDepartments
- * @property TblShelve[] $tblShelves
+ * @property TblCustomer[] $tblCustomers
  */
 class Branch extends \yii\db\ActiveRecord
 {
@@ -34,10 +34,12 @@ class Branch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['branch_name'], 'required'],
+            [['branch_code', 'branch_name'], 'required'],
             [['maker_time'], 'safe'],
+            [['branch_code'], 'string', 'max' => 3],
             [['branch_name', 'location', 'maker_id'], 'string', 'max' => 200],
             [['status'], 'string', 'max' => 1],
+            [['branch_code'], 'unique'],
         ];
     }
 
@@ -48,6 +50,7 @@ class Branch extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'branch_code' => Yii::t('app', 'Branch Code'),
             'branch_name' => Yii::t('app', 'Branch Name'),
             'location' => Yii::t('app', 'Location'),
             'status' => Yii::t('app', 'Status'),
@@ -59,23 +62,24 @@ class Branch extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTblDepartments()
+    public function getTblCustomers()
     {
-        return $this->hasMany(Department::className(), ['branch_id' => 'id']);
+        return $this->hasMany(TblCustomer::className(), ['branch_id' => 'id']);
     }
 
-    //gets all branches
+
+    //gets all Branches
 
     public static function getAll()
     {
         return ArrayHelper::map(Branch::find()->all(),'id','branch_name');
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTblShelves()
+    //gets all Branches
+
+    public static function getBranchCodes()
     {
-        return $this->hasMany(Shelve::className(), ['branch_id' => 'id']);
+        return ArrayHelper::map(Branch::find()->all(),'branch_code','branch_name');
     }
+
 }

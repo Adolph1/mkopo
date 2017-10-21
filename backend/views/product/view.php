@@ -3,342 +3,196 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
-use yii\widgets\ActiveForm;
-use kartik\grid\GridView;
-use yii\helpers\ArrayHelper;
-use backend\models\Accrole;
-use backend\models\GeneralLedger;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
+
+use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Product */
 
 $this->title = $model->product_id;
-$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="product-view">
+<div class="row">
+    <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->product_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->product_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
+
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-money text-yellow"></i> ADD NEW PRODUCT'), ['create'], ['class' => 'btn btn-default text-green']) ?>
+
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-th text-yellow"></i> PRODUCTS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
+    </div>
+    <div class="col-lg-4 col-md-8 col-sm-8 col-xs-8">
+        <?php
+
+        $data = \backend\models\Product::find()
+            ->select(['product_descption as value', 'product_descption as  label','product_id as product_id'])
+            ->asArray()
+            ->all();
+
+        //echo 'Product Name' .'<br>';
+        echo AutoComplete::widget([
+            'options'=>[
+                'placeholder'=>'Search Product',
+                //'style'=>'width:300px;padding:8px',
+                'class'=>'form-control search-form'
             ],
-        ]) ?>
+            'clientOptions' => [
+                'source' => $data,
+                'minLength'=>'3',
+                'autoFill'=>true,
+                'select' => new JsExpression("function( event, ui ) {
+                    
+                    $('#memberssearch-family_name_id').val(ui.item.product_id);
+                    var id=ui.item.product_id;
+                    //alert(ui.item.product_id);
+                    $('#prod-id').html(id);
+                     $('#loader1' ).show( 'slow', function(){
+                      $.get('".Yii::$app->urlManager->createUrl(['product/search','id'=>''])."'+id,function(data) {
+                    
+                        setTimeout(refresh, 30000);
+                 
+                        });
 
-    </p>
+                     });
+     
+                 }")],
+        ]);
+        ?>
 
+        <?= Html::activeHiddenInput($model, 'product_detail',['id'=>'prd-id'])?>
+
+    </div>
+
+    <div id="loader1" style="display: none"></div>
+
+    <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
+
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <?php
+                if($model->record_stat=='O') {
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-pencil text-blue"></i> Edit'), ['update', 'id' => $model->product_id], ['class' => 'btn btn-default']) ;
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-times text-red"></i> Disable'), ['delete', 'id' => $model->product_id], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to delete this product?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                } elseif($model->record_stat=='D'){
+                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['enable', 'id' => $model->product_id], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to enable this product?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                }
+
+                ?>
+            </ul>
+        </div>
+
+    </div>
+
+
+</div>
+<hr>
+
+<div class="row">
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs=12">
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'product_id',
+            [
+                'attribute'=>'fund',
+                'value'=>function($model){
+                    if($model->product_group=='Loans') {
+                        return $model->sponsor->title;
+                    }else{
+                        return '';
+                    }
+                },
+            ],
             'product_descption',
-            //'product_type',
-            //'product_module',
-            'product_remarks',
-            'product_start_date',
-            'product_end_date',
             'product_group',
-            'maker_id',
-            'maker_stamptime',
-            'checker_id',
-            'checker_stamptime',
+            'default_rate',
+            'min_rate',
+            'max_rate',
+            'default_principal',
+            'min_principal',
+            'max_principal',
+            'auth_stat',
+            [
+                    'attribute'=>'interest_method',
+                    'value'=>function($model){
+                    if($model->interest_method==\backend\models\Product::FLAT_RATE && $model->product_group=='Loans'){
+                        return 'FLAT RATE';
+                    }elseif ($model->interest_method==\backend\models\Product::REDUCING_BALANCE && $model->product_group=='Loans'){
+                        return 'REDUCING BALANCE';
+                    }else{
+                        return '';
+                    }
+                    }
+            ],
             'record_stat',
-            'mod_no',
         ],
+
     ]) ?>
-
-    <?php
-    //create account of the customer
-    Modal::begin([
-        'header' => '<h2>Accounting Roles</h2>',
-        'toggleButton' => ['label' => 'Manage Roles','class' => 'btn btn-danger'],
-        'size' => Modal::SIZE_LARGE,
-        'options' => ['class'=>'slide'],
-    ]);
-    ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataRoles,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'account_role',
-            'role_type',
-            'status',
-            [
-                'class'=>'kartik\grid\EditableColumn',
-                'attribute' => 'role_type',
-                'refreshGrid' => true,
-                //'format'=>['decimal', 2],
-                'editableOptions'=> [
-                    'header'=>'Name',
-                    'size'=>'md',
-                    'formOptions' => ['action' => ['cart/editcart']],
-                    'asPopover' => false,
-                    // 'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
-                    'options'=>[
-                        'pluginOptions'=>['min'=>0, 'max'=>5000]
-                    ]
-                ],
-            ],
-            [
-                'class'=>'kartik\grid\EditableColumn',
-                'attribute' => 'account_head',
-                'refreshGrid' => true,
-                //'format'=>['decimal', 2],
-                'editableOptions'=> [
-                    'header'=>'Name',
-                    'size'=>'md',
-                    'formOptions' => ['action' => ['cart/editcart']],
-                    'asPopover' => true,
-                    // 'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
-                    'options'=>[
-                        'pluginOptions'=>['min'=>0, 'max'=>5000]
-                    ]
-                ],
-            ],
-
-
-
-
-            // 'description',
-
-            [
-                'class' => 'yii\grid\ActionColumn','header'=>'Actions',
-                'template' => '{view}{delete}{edit}',
-                'buttons' => [
-                    'delete' => function ($url, $dataRoles) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,[
-                            'title' => Yii::t('app', 'Delete'),
-                            'data' => [
-                                'confirm' => 'Are you sure you want to delete this item?',
-                                'method' => 'post',
-                            ],
-                        ]
-
-
-                        );
-                    },
-
-                ],
-                'urlCreator' => function ($action, $dataRoles, $key, $index) {
-                    if ($action === 'delete') {
-
-                        $url=Yii::$app->urlManager->createUrl(['product-accrole/delete', 'id' => $dataRoles->id]);
-                        return $url;
-
-                    }
-                    elseif ($action === 'view') {
-
-                        $url=Yii::$app->urlManager->createUrl(['product-accrole/view', 'id' => $dataRoles->id]);
-                        return $url;
-
-                    }
-                }
-
-            ],
-
-        ],
-
-    ]);
-    ?>
-    <?php
-
-    Modal::end();
-    ?>
-    <?php
-    Modal::begin([
-    'header' => '<h2>New Role Form</h2>',
-    'toggleButton' => ['label' => 'New Role','class' => 'btn btn-success'],
-    'size' => Modal::SIZE_LARGE,
-    'options' => ['class'=>'slide'],
-    ]);
-    ?>
-    <div class="product-accrole-form">
-
-        <?php $form = ActiveForm::begin([
-            'action' => ['product-accrole/create'],
-        ]); ?>
+    <p style="float: right">
         <?php
-        $accrole=Accrole::find()->all();
-
-        $listaccroles=ArrayHelper::map($accrole,'role_code','role_description');
-        $form->field($modelaccrole, 'account_role')->dropDownList(
-            $listaccroles,
-            ['prompt'=>'Select...']);
-        $gls=GeneralLedger::find()->all();
-
-        $listgls=ArrayHelper::map($gls,'gl_code','gl_description');
-        $form->field($modelaccrole, 'account_head')->dropDownList(
-            $listgls,
-            ['prompt'=>'Select...']);
-
+        if($model->record_stat!='D' && $model->auth_stat=='U') {
+            echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['approve', 'id' => $model->product_id], [
+                'class' => 'btn btn-default',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to approve this product?'),
+                    'method' => 'post',
+                ],
+            ]);
+        }
         ?>
+    </p>
+</div>
 
-        <?= $form->field($modelaccrole, 'account_role')->dropDownList($listaccroles, ['prompt'=>'--Select--']) ?>
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs=12">
+        <?php
 
-        <?= $form->field($modelaccrole, 'product_code')->textInput(['maxlength' => 200,'value'=>$model->product_id]) ?>
+        echo TabsX::widget([
+            'position' => TabsX::POS_ABOVE,
+            'align' => TabsX::ALIGN_LEFT,
+            'items' => [
+                [
+                    'label' => 'Accounting roles',
+                    'content' => $this->render('account_roles',['model'=>$model,'dataRoles'=>$dataRoles,'modelaccrole'=>$modelaccrole,]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'visible'=>$model->record_stat!='D',
+                    'options' => ['style' => 'background:#fff'],
 
-        <?= $form->field($modelaccrole, 'role_type')->textInput(['maxlength' => 200]) ?>
+                ],
+                [
+                    'label' => 'Accounting events',
+                    'content' => $this->render('account_events',['model'=>$model,'dataEvents'=>$dataEvents,'modelevent'=>$modelevent]),
+                    //'active' => $model->status==1,
+                    'visible'=>$model->record_stat!='D',
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
 
-        <?= $form->field($modelaccrole, 'status')->textInput(['maxlength' => 200]) ?>
-
-        <?= $form->field($modelaccrole, 'account_head')->dropDownList($listgls, ['prompt'=>'--Select--']) ?>
-
-        <?= $form->field($modelaccrole, 'description')->textInput(['maxlength' => 200]) ?>
-
-        <div class="form-group">
-            <?= Html::submitButton($modelaccrole->isNewRecord ? 'Create' : 'Update', ['class' => $modelaccrole->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
-
-        <?php ActiveForm::end(); ?>
-
+                ],
+                
+            ],
+        ]);
+        ?>
     </div>
-    <?php
 
-    Modal::end();
-    ?>
-<?php
-    //create account of the customer
-    Modal::begin([
-        'header' => '<h2>Product Entry Events</h2>',
-        'toggleButton' => ['label' => 'Manage Events','class' => 'btn btn-primary'],
-        'size' => Modal::SIZE_LARGE,
-        'options' => ['class'=>'slide'],
-    ]);
-    ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataEvents,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'account_role_code',
-            'transaction_code',
-            'dr_cr_indicator',
-            [
-                'class'=>'kartik\grid\EditableColumn',
-
-                'attribute' => 'role_type',
-                'refreshGrid' => true,
-                //'format'=>['decimal', 2],
-                'editableOptions'=> [
-                    'header'=>'Name',
-                    'size'=>'md',
-                    'formOptions' => ['action' => ['cart/editcart']],
-                    'asPopover' => true,
-                    // 'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
-                    'options'=>[
-                        'pluginOptions'=>['min'=>0, 'max'=>5000]
-                    ]
-                ],
-            ],
-            [
-                'class'=>'kartik\grid\EditableColumn',
-                'attribute' => 'mis_head',
-                'refreshGrid' => true,
-                //'format'=>['decimal', 2],
-                'editableOptions'=> [
-                    'header'=>'Name',
-                    'size'=>'md',
-                    'formOptions' => ['action' => ['cart/editcart']],
-                    'asPopover' => true,
-                    // 'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
-                    'options'=>[
-                        'pluginOptions'=>['min'=>0, 'max'=>5000]
-                    ]
-                ],
-            ],
-
-
-
-
-            // 'description',
-
-            [
-                'class' => 'yii\grid\ActionColumn','header'=>'Actions',
-                'template' => '{view}{delete}{edit}',
-                'buttons' => [
-                    'delete' => function ($url, $dataRoles) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,[
-                                'title' => Yii::t('app', 'Delete'),
-                                'data' => [
-                                    'confirm' => 'Are you sure you want to delete this item?',
-                                    'method' => 'post',
-                                ],
-                            ]
-
-
-                        );
-                    },
-
-                ],
-                'urlCreator' => function ($action, $dataRoles, $key, $index) {
-                    if ($action === 'delete') {
-
-                        $url=Yii::$app->urlManager->createUrl(['product-event-entry/delete', 'id' => $dataRoles->id]);
-                        return $url;
-
-                    }
-                    elseif ($action === 'view') {
-
-                        $url=Yii::$app->urlManager->createUrl(['product-event-entry/view', 'id' => $dataRoles->id]);
-                        return $url;
-
-                    }
-                }
-
-            ],
-        ],
-
-    ]);
-    ?>
-    <?php
-
-    Modal::end();
-    ?>
-
-    <?php
-    Modal::begin([
-    'header' => '<h2>New Event Form</h2>',
-    'toggleButton' => ['label' => 'New Event','class' => 'btn btn-warning'],
-    'size' => Modal::SIZE_LARGE,
-    'options' => ['class'=>'slide'],
-    ]);
-    ?>
-    <div class="product-accrole-form">
-
-        <?php $form = ActiveForm::begin([
-            'action' => ['product-event-entry/create'],
-        ]); ?>
-
-    <?= $form->field($modelevent, 'product_code')->textInput(['value' => $model->product_id]) ?>
-
-    <?= $form->field($modelevent, 'transaction_code')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($modelevent, 'dr_cr_indicator')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($modelevent, 'event_code')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($modelevent, 'account_role_code')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($modelevent, 'role_type')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($modelevent, 'mis_head')->textInput(['maxlength' => 200]) ?>
-
-        <div class="form-group">
-            <?= Html::submitButton($modelaccrole->isNewRecord ? 'Create' : 'Update', ['class' => $modelaccrole->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
-
-        <?php ActiveForm::end(); ?>
-
-    </div>
-    <?php
-
-    Modal::end();
-    ?>
 </div>

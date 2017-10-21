@@ -15,20 +15,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 
 
-            <div class="panel-body">
-                <legend class="scheduler-border" style="color:#005DAD">Loan Details</legend>
+ <div class="panel-body">
+     <legend class="scheduler-border" style="color:#005DAD">Loan Details</legend>
     <div class="row">
     <div class="col-md-8">
         <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAllLoans(),['prompt'=>Yii::t('app','--Select--')]) ?>
-
     </div>
-
     <div class="col-md-4">
     <?= $form->field($model, 'contract_ref_no')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
     </div>
       </div>
-
-
       <div class="row">
     <div class="col-md-4">
         <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
@@ -40,14 +36,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?= $form->field($model, 'product_type')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
     </div>
       </div>
-                <div class="row">
-                            <div class="col-md-8">
-                                <?= $form->field($model, 'customer_name')->dropDownList(\backend\models\Customer::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+     <div class="row">
+           <div class="col-md-8">
+                <?= $form->field($model, 'customer_name')->dropDownList(\backend\models\Customer::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
                     </div>
-                    <div class="col-md-4">
+              <div class="col-md-4">
                 <?= $form->field($model, 'customer_number')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
                         </div>
-        
                     </div>
 
 
@@ -109,10 +104,18 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         ]);?>
                     </div>
                     <div class="col-md-4">
-                        <?= $form->field($model, 'frequency')->textInput(['maxlength' => 200,'readonly'=>'readonly','value'=>0]) ?>
+                        <?= $form->field($model, 'frequency')->textInput(['maxlength' => 200]) ?>
                     </div>
                     </div>
 
+
+     <div class="row">
+         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+             <?= $form->field($model, 'main_component_rate')->textInput(['maxlength' => 200,'value'=>\backend\models\SystemRate::getUserRate()]) ?>
+
+         </div>
+     </div>
 
 <div class="row">
     <div class="col-md-12"><?= $form->field($model, 'loan_officer')->textInput(['maxlength' => 200,'placeholder'=>'Enter Loan officer']) ?></div>
@@ -218,8 +221,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 
 </div>
-    <div id="prodid">
 
-    </div>
 
 
