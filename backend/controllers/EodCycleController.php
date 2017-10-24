@@ -3,36 +3,39 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\SystemSetup;
-use backend\models\SystemSetupSearch;
+use backend\models\EodCycle;
+use backend\models\EodCycleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * SystemSetupController implements the CRUD actions for SystemSetup model.
+ * EodCycleController implements the CRUD actions for EodCycle model.
  */
-class SystemSetupController extends Controller
+class EodCycleController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['POST'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all SystemSetup models.
+     * Lists all EodCycle models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SystemSetupSearch();
+        $searchModel = new EodCycleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,7 +45,7 @@ class SystemSetupController extends Controller
     }
 
     /**
-     * Displays a single SystemSetup model.
+     * Displays a single EodCycle model.
      * @param integer $id
      * @return mixed
      */
@@ -54,13 +57,13 @@ class SystemSetupController extends Controller
     }
 
     /**
-     * Creates a new SystemSetup model.
+     * Creates a new EodCycle model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SystemSetup();
+        $model = new EodCycle();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +75,7 @@ class SystemSetupController extends Controller
     }
 
     /**
-     * Updates an existing SystemSetup model.
+     * Updates an existing EodCycle model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -90,34 +93,8 @@ class SystemSetupController extends Controller
         }
     }
 
-
-    public function actionRunTi()
-    {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
-        return $this->redirect(['eod-cycle/index']);
-    }
-
-    public function actionRunEoTi()
-    {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
-        return $this->redirect(['eod-cycle/index']);
-    }
-    public function actionRunEoFi()
-    {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
-        return $this->redirect(['eod-cycle/index']);
-    }
-
-    public function actionRunEoD()
-    {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
-        return $this->redirect(['eod-cycle/index']);
-    }
-
-
-
     /**
-     * Deletes an existing SystemSetup model.
+     * Deletes an existing EodCycle model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -130,15 +107,15 @@ class SystemSetupController extends Controller
     }
 
     /**
-     * Finds the SystemSetup model based on its primary key value.
+     * Finds the EodCycle model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SystemSetup the loaded model
+     * @return EodCycle the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SystemSetup::findOne($id)) !== null) {
+        if (($model = EodCycle::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -30,8 +30,8 @@ class SystemSetup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'system_name', 'system_date', 'system_rate', 'system_grace_period', 'system_version'], 'required'],
-            [['id','system_rate', 'system_grace_period'], 'integer'],
+            [['system_name', 'system_date', 'system_rate', 'system_grace_period', 'system_version'], 'required'],
+            [['id','system_rate', 'system_grace_period','system_stage'], 'integer'],
             [['system_date'], 'safe'],
             [['system_name', 'system_version'], 'string', 'max' => 200]
         ];
@@ -47,8 +47,19 @@ class SystemSetup extends \yii\db\ActiveRecord
             'system_name' => 'System Name',
             'system_date' => 'System Date',
             'system_rate' => 'System Rate',
+            'system_stage' => 'System Stage',
             'system_grace_period' => 'System Grace Period',
             'system_version' => 'System Version',
         ];
+    }
+
+    public static function getCurrentStage()
+    {
+        $current_stage=SystemSetup::findOne(1);
+        if($current_stage!=null){
+            return $current_stage->system_stage;
+        }else{
+            return 0;
+        }
     }
 }

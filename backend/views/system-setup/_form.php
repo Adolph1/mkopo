@@ -13,30 +13,20 @@ use backend\models\GracePeriod;
 ?>
 <?php
 $form = ActiveForm::begin();
-$sysrates=SystemRates::find()->all();
-
-$listrates=ArrayHelper::map($sysrates,'id','rate_name');
-$form->field($model, 'system_rate')->dropDownList(
-    $listrates,
-    ['prompt'=>'Select...']);
 ?>
 
 <div class="system-setup-form">
 
-
-
-    <?= $form->field($model, 'id')->textInput() ?>
-
     <?= $form->field($model, 'system_name')->textInput(['maxlength' => 200]) ?>
 
-    <?= $form->field($model, 'system_date')->textInput() ?>
+    <?= $form->field($model, 'system_date')->textInput(['value'=>\backend\models\SystemDate::getCurrentDate()]) ?>
 
-    <?= $form->field($model, 'system_rate')->dropDownList($listrates,
-        ['prompt'=>'--Select--']) ?>
+    <?= $form->field($model, 'system_rate')->textInput(['value'=>\backend\models\SystemRate::getSystemRate()]) ?>
 
     <?= $form->field($model, 'system_grace_period')->textInput() ?>
 
     <?= $form->field($model, 'system_version')->textInput(['maxlength' => 200]) ?>
+    <?= $form->field($model, 'system_stage')->dropDownList(\backend\models\SystemStage::getArrayStages(),['prompt' => '--select--']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

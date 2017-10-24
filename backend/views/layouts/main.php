@@ -152,7 +152,26 @@ desired effect
                 if (!Yii::$app->user->isGuest) {
                     ?>
 
-                System Date:<?= \backend\models\SystemDate::getCurrentDate();?>
+                System Date:<?= \backend\models\SystemDate::getCurrentDate();?> |
+                    System Stage:<?php
+                    $curren_stage=\backend\models\SystemSetup::getCurrentStage();
+                    if($curren_stage==\backend\models\SystemStage::TI){
+                        echo 'TRANSACTIONS INPUT';
+
+                    }elseif($curren_stage==\backend\models\SystemStage::EOTI) {
+                        echo 'END OF TRANSACTIONS INPUT';
+
+                    }elseif($curren_stage==\backend\models\SystemStage::EOTI){
+
+                        echo 'END OF FINANCIAL INPUT';
+
+                    }elseif($curren_stage==\backend\models\SystemStage::EOD){
+
+                        echo 'END OF DAY';
+
+                    }
+
+                    ?>
                 <?php }?>
             </a>
 
@@ -535,6 +554,12 @@ desired effect
                                 "icon" => "fa fa-gears",
                                 "items" => [
                                     [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        'label' => Yii::t('app', 'System Setup'),
+                                        'url' => ['/system-setup/index'],
+                                        'icon' => 'fa fa-lock',
+                                    ],
+                                    [
                                         'visible' => yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                         'label' =>'System Products',
                                         'url' => ['/product/index'],
@@ -729,6 +754,33 @@ desired effect
 </body>
 </html>
 <?php $this->endPage() ?>
+<script>
+    $("#run-ti").click(function(){
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-ti']);?>",function(data) {
+            //alert('yes bro');
+        });
+    });
+
+    $("#run-eoti").click(function(){
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eoti']);?>",function(data) {
+            //alert('yes bro');
+        });
+    });
+    $("#run-eofi").click(function(){
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eofi']);?>",function(data) {
+            //alert('yes bro');
+        });
+    });
+    $("#run-eod").click(function(){
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eod']);?>",function(data) {
+            //alert('yes bro');
+        });
+    });
+
+
+
+
+</script>
 
 <script>
     $("#product-product_group").change(function(){

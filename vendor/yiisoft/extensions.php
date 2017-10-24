@@ -228,4 +228,13 @@ return array (
       '@kartik/tabs' => $vendorDir . '/kartik-v/yii2-tabs-x',
     ),
   ),
+  'vova07/yii2-console-runner-extension' => 
+  array (
+    'name' => 'vova07/yii2-console-runner-extension',
+    'version' => '0.1.0.0',
+    'alias' => 
+    array (
+      '@vova07/console' => $vendorDir . '/vova07/yii2-console-runner-extension',
+    ),
+  ),
 );

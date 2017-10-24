@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'system_rate',
             'system_grace_period',
             'system_version',
+            'system_stage',
 
             ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
         ],

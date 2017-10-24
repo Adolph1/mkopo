@@ -33,6 +33,10 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         array (
             'wbraganca\\dynamicform\\' => 22,
         ),
+        'v' => 
+        array (
+            'vova07\\console\\' => 15,
+        ),
         's' => 
         array (
             'spanjeta\\modules\\backup\\' => 24,
@@ -167,6 +171,10 @@ class ComposerStaticInita76639f345e92c90ef793ee2927cfb33
         'wbraganca\\dynamicform\\' => 
         array (
             0 => __DIR__ . '/..' . '/wbraganca/yii2-dynamicform',
+        ),
+        'vova07\\console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/vova07/yii2-console-runner-extension',
         ),
         'spanjeta\\modules\\backup\\' => 
         array (
