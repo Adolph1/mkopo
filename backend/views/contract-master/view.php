@@ -9,59 +9,55 @@ use backend\models\Customer;
 use backend\models\Branch;
 use backend\models\PaymentMethod;
 use backend\models\Account;
+use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ContractMaster */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN DETAILS</strong></h3>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-right">
+
+
+            <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-default text-green']) ?>
+
+
+            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-green"></i> LOANS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
     </div>
 
 </div>
 <hr>
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-        <div class="btn-group btn-group-justified">
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-primary']) ?>
-
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> LOANS CONTRACTS LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
-
-        </div>
-    </div>
-</div>
-<hr>
+    <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
 <?php $form = ActiveForm::begin(); ?>
 
-    <div class="panel-body">
-
-
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
+                <?= $form->field($model, 'contract_ref_no')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <?= $form->field($model, 'product')->dropDownList(\backend\models\Product::getAllLoans(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
 
             </div>
 
-            <div class="col-md-4">
-                <?= $form->field($model, 'contract_ref_no')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
-            </div>
+
         </div>
 
 
         <div class="row">
-            <div class="col-md-4">
-                <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <?= $form->field($model, 'amount')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
             </div>
-            <div class="col-md-4">
-                <?= $form->field($model, 'product_type')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
+            <div class="col-md-6">
+                <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
             </div>
+
         </div>
         <div class="row">
             <div class="col-md-8">
@@ -168,56 +164,72 @@ use backend\models\Account;
         </div>
 
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_id')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_stamptime')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
-            <div class="col-md-4">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <?php if(!$model->isNewRecord) echo $form->field($model, 'auth_stat')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
-
-            <div class="col-md-2">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_id')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_stamptime')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
         </div>
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+        <?php
 
-        <div class="row">
-            <legend class="scheduler-border" style="color:#005DAD">Guarantors Details: </legend>
-            <div class="col-md-12">
-            <?php
-            $searchModel = new \backend\models\GuarantorSearch();
-            $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
-            ?>
-            <?= \fedemotta\datatables\DataTables::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+        echo TabsX::widget([
+            'position' => TabsX::POS_ABOVE,
+            'align' => TabsX::ALIGN_LEFT,
+            'items' => [
+                [
+                    'label' => 'Transactions',
+                    'content' => $this->render('transactions',['model'=>$model,]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
 
-                   // 'id',
-                    'name',
-                    'phone_number',
-                    [
-                        'attribute'=>'identification',
-                        'value'=>'identificationID.name',
-                    ],
-
-                    'identification_number',
-                    //'related_customer',
-                    // 'maker_id',
-                    // 'maker_time',
-
-                    //['class' => 'yii\grid\ActionColumn'],
                 ],
-            ]); ?>
-            </div>
-        </div>
+                [
+                    'label' => 'Schedule',
+                    'content' => $this->render('schedule',['model'=>$model,'loanSchedule'=>$loanSchedule]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
+
+                ],
+                [
+                    'label' => 'Guarantors',
+                    'content' => $this->render('guarantors',['model'=>$model]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
+
+                ],
+
+
+            ],
+        ]);
+        ?>
+
+    </div>
+</div>
+
+
+
+
+
 
         <div class="row">
             <div class="form-group">
@@ -226,8 +238,7 @@ use backend\models\Account;
                         <?php
                       if($model->contract_status=='L'){
                             echo Html::a(Yii::t('app', 'Reverse'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                            echo Html::a(Yii::t('app', 'View Schedule'), ['update', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                            echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
+
                         }
                         elseif($model->contract_status=='A') {
                             if($model->auth_stat=='U') {
@@ -241,17 +252,9 @@ use backend\models\Account;
                                 echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Approve'), ['approve','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-warning enabled btn-block':'btn btn-warning disabled btn-block']);
 
                             }
-                            elseif($model->auth_stat=='A'){
-                                echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                                echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                            }
 
 
                         }
-                      elseif($model->contract_status=='D') {
-                          echo Html::a(Yii::t('app', 'View Schedule'), ['schedule', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                          echo Html::a(Yii::t('app', 'View Payments'), ['payment', 'id' => $model->contract_ref_no], ['class' => 'btn btn-primary btn-block']);
-                      }
                         ?>
 
                     </div>

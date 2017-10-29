@@ -109,4 +109,14 @@ class Account extends \yii\db\ActiveRecord
             return null;
         }
     }
+
+    public static function getCustomerNumberByAccount($id){
+
+        $account=Account::find()->where(['cust_ac_no'=>$id])->andWhere(['!=','auth_stat','U'])->one();
+        if($account!=null){
+            return $account->cust_no;
+        }else{
+            return null;
+        }
+    }
 }

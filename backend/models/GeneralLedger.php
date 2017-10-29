@@ -83,4 +83,9 @@ class GeneralLedger extends \yii\db\ActiveRecord
         return ArrayHelper::map(GeneralLedger::find()->all(),'gl_code','gl_description');
     }
 
+    public function getParentID()
+    {
+        return $this->hasOne(GeneralLedger::className(), ['gl_code' => 'parent_gl']);
+    }
+
 }

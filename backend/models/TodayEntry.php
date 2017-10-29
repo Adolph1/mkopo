@@ -124,4 +124,6 @@ class TodayEntry extends \yii\db\ActiveRecord
          $count=TodayEntry::find()->where(['auth_stat'=>'U','trn_dt'=>SystemDate::getCurrentDate()])->count();
          return $count;
     }
+
+
 }

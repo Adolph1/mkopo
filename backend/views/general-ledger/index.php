@@ -7,18 +7,24 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\GeneralLedgerSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'General Ledgers';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Chart of Accounts';
 ?>
-<div class="general-ledger-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<div class="row">
+    <div class="col-md-10">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-bank"></i><strong> CHART OF ACCOUNTS</strong></h3>
+    </div>
+    <div class="col-md-2 text-center">
+        <?=  Html::a('Add Account', ['create'], ['class' => 'btn btn-default text-green']) ?>
+    </div>
+</div>
+<hr>
+<div class="row">
 
-    <p>
-        <?=  Html::a('Add GL', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="col-md-12">
 
-    <?= GridView::widget([
+
+    <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
 
         'columns' => [
@@ -30,8 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'glCategory',
                 'value' => 'glCategory.category_name'
             ],
-            'parent_gl',
             [
+                'attribute' => 'parent_gl',
+                'value' => function ($model){
+
+                    if($model->parent_gl==""){
+
+                        return "";
+                    }else{
+                        return $model->parentID->gl_description;
+                    }
+                }
+            ],
+            /*[
                 'attribute' =>'posting_restriction',
                 'value' => function ($searchModel) {
                     if ($searchModel->posting_restriction=='1')
@@ -72,20 +89,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     return 'Node GL';
                 }
-            }],
-            //'record_status',
+            }],*/
+
             //'maker_id',
             //'maker_stamptime',
             // 'checker_id',
             // 'checker_stamptime',
             // 'mod_no',
+            'balance',
+            //'record_status',
 
             [
-                'class' => 'yii\grid\ActionColumn',
-                'header'=>'Actions'
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Actions',
+                'template'=>'{view}',
+                'buttons'=>[
+                    'view' => function ($url, $model) {
+                        $url=['view','id' => $model->gl_code];
+                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                            'title' => 'View',
+                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                            'class'=>'btn btn-info',
+
+                        ]);
+
+
+                    },
+
+                ]
             ],
 
         ],
     ]); ?>
-
+    </div>
 </div>

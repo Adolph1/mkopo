@@ -39,6 +39,7 @@ class ContractMaster extends \yii\db\ActiveRecord
      */
 
     public $customer_name;
+    public $officer_detail;
     public $contract_amount;
     public $contract_outstanding;
     public $gridColumns;
@@ -46,7 +47,7 @@ class ContractMaster extends \yii\db\ActiveRecord
     public $id;
     const FLAT_RATE = 1;
     const REDUCING_BALANCE = 2;
-    const REDUCING_BALANCE_EXCESS = 3;
+
     public static function tableName()
     {
         return 'tbl_contract_master';
@@ -138,6 +139,18 @@ class ContractMaster extends \yii\db\ActiveRecord
             return 0;
         }
     }
+    public static function getPendingCount()
+    {
+        $count = ContractMaster::find()
+            ->where(['!=','contract_status','D'])
+            ->andWhere(['auth_stat'=>'U'])
+            ->count();
+        if($count>0){
+            return $count;
+        }else{
+            return 0;
+        }
+    }
     public static function getActiveLoanCount()
     {
         $count = ContractMaster::find()
@@ -221,6 +234,16 @@ class ContractMaster extends \yii\db\ActiveRecord
 
         $Interest = ($p * $r * $t);
         return $Interest;
+    }
+
+    public static function getContract($id)
+    {
+        if (($model = ContractMaster::findOne($id)) !== null) {
+            return $model;
+        } else {
+            return '';
+        }
+
     }
 
 

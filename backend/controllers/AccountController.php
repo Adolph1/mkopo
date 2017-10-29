@@ -9,7 +9,7 @@ use backend\models\AccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use common\models\LoginForm;
 /**
  * AccountController implements the CRUD actions for Account model.
  */
@@ -65,6 +65,8 @@ class AccountController extends Controller
         $model->maker_id=Yii::$app->user->identity->username;
         $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
         $model->acc_open_date=SystemDate::getCurrentDate();
+        $model->acc_status='O';
+        $model->auth_stat='U';
         
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -85,6 +87,7 @@ class AccountController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->auth_stat='U';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->cust_ac_no]);
@@ -108,6 +111,48 @@ class AccountController extends Controller
         return $this->redirect(['index']);
     }
 
+    //search customer Account
+
+    public function actionSearch($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            return $this->redirect(['view',
+                'id' => $id,
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    //Authorize Account
+
+    public function actionApprove($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+
+            $model->checker_id=Yii::$app->user->identity->username;
+            $model->check_stamptime = SystemDate::getCurrentDate().' '.date('H:i:s');
+            $model->auth_stat='A';
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+
+
+
     /**
      * Finds the Account model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -123,4 +168,5 @@ class AccountController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

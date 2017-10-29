@@ -57,7 +57,7 @@ use yii\widgets\ActiveForm;
 
         <div class="row">
             <div class="col-md-4">
-                <?= $form->field($model, 'customer_number')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>$model->related_customer]) ?>
+                <?= $form->field($model, 'txn_account')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
             </div>
             <div class="col-md-4">
                 <?= $form->field($model, 'offset_account')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>

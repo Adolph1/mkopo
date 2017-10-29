@@ -4,15 +4,11 @@ namespace backend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-
 /**
- * This is the model class for table "tbl_contract_payment_method".
+ * This is the model class for table "tbl_payment_method".
  *
  * @property integer $id
- * @property string $method
- * @property string $method_abbreviation
- * @property string $maker_id
- * @property string $maker_stamptime
+ * @property string $method_name
  */
 class PaymentMethod extends \yii\db\ActiveRecord
 {
@@ -21,7 +17,7 @@ class PaymentMethod extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tbl_contract_payment_method';
+        return 'tbl_payment_method';
     }
 
     /**
@@ -30,8 +26,8 @@ class PaymentMethod extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['method', 'method_abbreviation', 'maker_id', 'maker_stamptime'], 'required'],
-            [['method', 'method_abbreviation', 'maker_id', 'maker_stamptime'], 'string', 'max' => 200]
+            [['method_name'], 'required'],
+            [['method_name'], 'string', 'max' => 200],
         ];
     }
 
@@ -41,18 +37,16 @@ class PaymentMethod extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'method' => 'Method',
-            'method_abbreviation' => 'Method Abbreviation',
-            'maker_id' => 'Maker ID',
-            'maker_stamptime' => 'Maker Stamptime',
+            'id' => Yii::t('app', 'ID'),
+            'method_name' => Yii::t('app', 'Method Name'),
         ];
     }
-    //gets all payment methods
+
+
+    //gets all methods
 
     public static function getAll()
     {
-        return ArrayHelper::map(PaymentMethod::find()->all(),'id','method');
+        return ArrayHelper::map(PaymentMethod::find()->all(),'id','method_name');
     }
-
 }

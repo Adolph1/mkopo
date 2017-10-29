@@ -2,12 +2,12 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PaymentMethodSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Payment Methods';
+$this->title = Yii::t('app', 'Payment Methods');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payment-method-index">
@@ -16,22 +16,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Add Method', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'New Method'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?= GridView::widget([
+<?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'method',
-            'method_abbreviation',
-            'maker_id',
-            'maker_stamptime',
+            //'id',
+            'method_name',
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
-</div>
+<?php Pjax::end(); ?></div>

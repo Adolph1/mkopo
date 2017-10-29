@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\tabs\TabsX;
+use yii\jui\AutoComplete;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Account */
@@ -10,14 +12,88 @@ use kartik\tabs\TabsX;
 $this->title = $model->cust_ac_no;
 ?>
 <div class="row">
-<div class="col-lg-4 col-md-4 col-sm-8 col-xs-8">
+    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-money text-green"></i><strong> ACCOUNT DETAILS</strong></h3>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 text-right">
+        <?php
 
+        $data = \backend\models\Account::find()
+            ->select(['ac_desc as value', 'ac_desc as  label','cust_ac_no as cust_ac_no'])
+            ->asArray()
+            ->all();
 
+        //echo 'Product Name' .'<br>';
+        echo AutoComplete::widget([
+            'options'=>[
+                'placeholder'=>'Search Account',
+                //'style'=>'width:300px;padding:8px',
+                'class'=>'form-control search-form'
+            ],
+            'clientOptions' => [
+                'source' => $data,
+                'minLength'=>'3',
+                'autoFill'=>true,
+                'select' => new JsExpression("function( event, ui ) {
+                    
+                    $('#memberssearch-family_name_id').val(ui.item.ac_desc);
+                    var id=ui.item.cust_ac_no;
+                    alert(ui.item.cust_ac_no);
+                        $('#loader1' ).show( 'slow', function(){
+                      $.get('".Yii::$app->urlManager->createUrl(['account/search','id'=>''])."'+id,function(data) {
+                    
+                        setTimeout(refresh, 30000);
+                 
+                        });
+
+                     });
+                  
+                 }")],
+        ]);
+        ?>
+
+        <?= Html::activeHiddenInput($model, 'customer_detail',['id'=>'prd1-id'])?>
+
+    </div>
+<div class="col-lg-4 col-md-4 col-sm-8 col-xs-8 text-center">
 
     <?= Html::a(Yii::t('app', '<i class="fa fa-money text-yellow"></i> NEW ACCOUNT'), ['create'], ['class' => 'btn btn-default text-green']) ?>
 
 
     <?= Html::a(Yii::t('app', '<i class="fa fa-th text-yellow"></i> ACCOUNTS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
+
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <?php
+                if($model->acc_status=='O') {
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-pencil text-blue"></i> Edit'), ['update', 'id' => $model->cust_ac_no], ['class' => 'btn btn-default']) ;
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-times text-red"></i> Disable'), ['delete', 'id' => $model->cust_ac_no], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to delete this customer?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                } elseif($model->acc_status=='D'){
+                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['enable', 'id' => $model->check_stamptime], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to enable this customer?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                }
+
+                ?>
+            </ul>
+
+    </div>
 
 </div>
 
@@ -43,16 +119,30 @@ $this->title = $model->cust_ac_no;
             'ac_opening_bal',
             'dormancy_date',
             'dormancy_days',
-            'acc_status',
             'maker_id',
             'maker_stamptime',
             'checker_id',
             'check_stamptime',
-            'mod_no',
+            'acc_status',
             'auth_stat',
         ],
     ]) ?>
+
+        <p style="float: right">
+            <?php
+            if($model->acc_status!='D' && $model->auth_stat=='U') {
+                echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Authorize'), ['approve', 'id' => $model->cust_ac_no], [
+                    'class' => 'btn btn-warning',
+                    'data' => [
+                        'confirm' => Yii::t('app', 'Are you sure you want to approve this Account?'),
+                        'method' => 'post',
+                    ],
+                ]);
+            }
+            ?>
+        </p>
     </div>
+    <div id="loader1" style="display: none"></div>
     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <?php
 
@@ -61,7 +151,7 @@ $this->title = $model->cust_ac_no;
             'align' => TabsX::ALIGN_LEFT,
             'items' => [
                 [
-                    'label' => 'Accounts',
+                    'label' => 'Statements',
                     //'content' => $this->render('_member_form',['model'=>$model,]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
@@ -69,76 +159,14 @@ $this->title = $model->cust_ac_no;
 
                 ],
                 [
-                    'label' => 'Savings',
+                    'label' => 'Linked Loans',
                     //'content' => $this->render('_member_form',['model'=>$model,]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
                     'options' => ['style' => 'background:#ccc'],
 
                 ],
-                [
-                    'label' => 'Loans',
-                    //'content' => $this->render('_partner_form',['model'=>$model,]),
-                    'visible'=>!$model->isNewRecord,
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    //'active' => $model->status==2,
-                    'options' => ['id' => 'partner',],
 
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Deposits',
-                    //'content' => $this->render('_student',['student'=>$student,'model'=>$model]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    //'active' => $model->status==3,
-                    'options' => ['id' => 'student','class'=>'disabled'],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Shares',
-                    //'content' => $this->render('_regfee',['regfee'=>$regfee,'model'=>$model]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    //'active' => $model->status==4,
-                    'options' => ['id' => 'regfee','class'=>'disabled'],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Collateral',
-                    //'active' => $model->status==5,
-                    //'content' => $this->render('_login',['model'=>$model,'user'=>$user,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'user',],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Contacts',
-                    //'active' => $model->status==6,
-                    //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'preview',],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Identifications',
-                    //'active' => $model->status==6,
-                    //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'preview',],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Business Details',
-                    //'active' => $model->status==6,
-                    //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'preview',],
-
-                ],
             ],
         ]);
         ?>

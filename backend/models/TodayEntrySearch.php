@@ -62,6 +62,29 @@ class TodayEntrySearch extends TodayEntry
 
         return $dataProvider;
     }
+
+    public function searchAllTransactions($gl_acc)
+    {
+        $query = TodayEntry::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        //if (!($this->load($params) && $this->validate())) {
+        //  return $dataProvider;
+        //}
+
+        $query->andFilterWhere([
+            'ac_no' => $gl_acc,
+            //'trn_dt'=>SystemDate::getCurrentDate(),
+        ]);
+
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
+
+        return $dataProvider;
+    }
     public function searchunauthorised()
     {
         $query = TodayEntry::find();
@@ -103,6 +126,28 @@ class TodayEntrySearch extends TodayEntry
         ]);
 
         //$query->andFilterWhere(['like', 'auth_stat','U']);
+
+
+        return $dataProvider;
+    }
+
+    public function searchByReference($params,$cust_no)
+    {
+        $query = TodayEntry::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 150,
+            ]
+        ]);
+
+
+        $query->andFilterWhere([
+            'trn_ref_no' => $params,
+            'ac_no'=>$cust_no
+        ]);
+
 
 
         return $dataProvider;

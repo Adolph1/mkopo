@@ -7,14 +7,21 @@ use yii\helpers\Html;
 /* @var $model backend\models\GeneralLedger */
 
 $this->title = 'General Ledger Form';
-$this->params['breadcrumbs'][] = ['label' => 'General Ledgers', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="general-ledger-create">
 
-
+<div class="row">
+    <div class="col-md-10">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> NEW ACCOUNT</strong></h3>
+    </div>
+    <div class="col-md-2 text-center">
+        <?=  Html::a('Accounts List', ['index'], ['class' => 'btn btn-default text-green']) ?>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
+    </div>
 </div>

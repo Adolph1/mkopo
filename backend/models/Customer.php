@@ -115,7 +115,11 @@ class Customer extends \yii\db\ActiveRecord
     public static function getBranchByCustomerNo($id)
     {
         $branch=Customer::find()->where(['customer_no'=>$id])->one();
-        return $branch->branch_id;
+        if($branch!=null) {
+            return $branch->branch_id;
+        }else{
+            return "";
+        }
     }
 
     /**

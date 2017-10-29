@@ -837,9 +837,6 @@ desired effect
            // alert(data);
             document.getElementById('productevententry-account_role_code').value=data;
         });
-        $( "#loader1" ).hide( "slow", function(){
-
-        });
 
     });
 
@@ -956,8 +953,7 @@ desired effect
         var frequency = document.getElementById('contractmaster-frequency').value;
         var paymentdate = document.getElementById('datechange').value;
 
-        //alert(paymentdate);
-        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/calcmaturitydate1', 'paymentdate' => '']);?>" + paymentdate, function (data) {
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/calcmaturitydate', 'paymentdate' => '']);?>" + paymentdate+'&frequency='+frequency, function (data) {
             //alert(data);
             document.getElementById("contractmaster-maturity_date").value = data;
 
@@ -969,7 +965,6 @@ desired effect
 
 
 <script>
-    $(document).ready(function () {
         $('#account-branch_code').on('change', function () {
             var cust_no = document.getElementById('account-cust_no').value;
             if(cust_no==""){
@@ -981,8 +976,13 @@ desired effect
                 document.getElementById("account-cust_ac_no").value=document.getElementById('account-branch_code').value+cust_no;
             }
 
-        })
-    });
+        });
+
+        $('.activity-view-link').click(function() {
+           // alert('yes bro');
+            var elementId = $(this).closest('tr').data('key');
+            alert(elementId);
+        }
 </script>
 
 

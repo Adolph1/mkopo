@@ -7,33 +7,6 @@ use kartik\grid\GridView;
 /* @var $model backend\models\ContractMaster */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="row">
-    <div class="col-md-12">
-        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN PAYMENTS</strong></h3>
-    </div>
-
-</div>
-<div class="row">
-    <div class="col-md-11"></div>
-    <div class="col-md-1 text-right">
-        <?= Html::a(Yii::t('app', '<i class="fa fa-reply"></i> '), ['view','id'=>$model->contract_ref_no], ['class' => 'btn btn-default','data-toggle'=>'tooltip','data-original-title'=>'Back']) ?>
-    </div>
-</div>
-<hr>
-<div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-        <div class="btn-group btn-group-justified">
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-primary']) ?>
-
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> LOANS CONTRACTS LIST'), ['index'], ['class' => 'btn btn-primary ']) ?>
-
-        </div>
-    </div>
-</div>
-<hr>
 
 <?php
 $searchModel = new \backend\models\PaymentSearch();
@@ -93,12 +66,6 @@ $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
         ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'panel' => [
-                //'heading'=>'Repayment Schedule',
-               // 'type'=>'default',
-                //'before'=>'  - ',
-                'after'=>''
-            ],
 
             'toolbar' => [
 

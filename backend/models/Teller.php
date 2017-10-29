@@ -29,6 +29,7 @@ class Teller extends \yii\db\ActiveRecord
 
     public $customer_number;
     public $current_balance;
+    public $customer_detail;
 
     public static function tableName()
     {
@@ -41,7 +42,7 @@ class Teller extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reference','product','amount','related_customer'], 'required'],
+            [['reference','product','amount','txn_account'], 'required'],
             [['trn_dt', 'maker_time', 'checker_time'], 'safe'],
             [['amount', 'offset_amount'], 'number'],
             [['reference', 'product','txn_account', 'related_customer', 'offset_account', 'maker_id', 'checker_id'], 'string', 'max' => 200],

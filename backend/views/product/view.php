@@ -152,7 +152,7 @@ $this->title = $model->product_id;
     <p style="float: right">
         <?php
         if($model->record_stat!='D' && $model->auth_stat=='U') {
-            echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['approve', 'id' => $model->product_id], [
+            echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Authorize'), ['approve', 'id' => $model->product_id], [
                 'class' => 'btn btn-default',
                 'data' => [
                     'confirm' => Yii::t('app', 'Are you sure you want to approve this product?'),

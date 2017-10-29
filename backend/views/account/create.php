@@ -81,6 +81,13 @@ $this->title = Yii::t('app', 'Create Account');
 
     </div>
 
+
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+
+            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-black"></i> ACCOUNTS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
+    </div>
+
 </div>
 <hr>
 <div class="row">

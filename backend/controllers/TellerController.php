@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Account;
 use backend\models\Branch;
 use backend\models\Customer;
 use backend\models\CustomerBalance;
@@ -95,17 +96,34 @@ class TellerController extends Controller
                 $model->maker_id = Yii::$app->user->identity->username;
                 $model->maker_time = SystemDate::getCurrentDate().' '.date('H:i:s');
 
-                if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-                    // saves today's transactions
-                    TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->related_customer, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'C', $model->related_customer, $model->product, $value = date('Y-m-d'));
-                    TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->offset_account, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'D', $model->related_customer, $model->product, $value = date('Y-m-d'));
+                if ($model->load(Yii::$app->request->post())) {
+                    $customer_no=Account::getCustomerNumberByAccount($_POST['Teller']['txn_account']);
+                    if($customer_no!=null) {
+                        $model->related_customer = $customer_no;
+                        // saves today's transactions
+                        if ($model->save()) {
+                            TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->txn_account, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'C', $model->related_customer, $model->product, $value = date('Y-m-d'));
+                            TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->offset_account, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'D', $model->related_customer, $model->product, $value = date('Y-m-d'));
 
-                    //fetches,updates and generate reference
-                    $modelrefid = ReferenceIndex::getIDByRef($model->reference);
-                    ReferenceIndex::updateReference($modelrefid);
+                            //fetches,updates and generate reference
+                            $modelrefid = ReferenceIndex::getIDByRef($model->reference);
+                            ReferenceIndex::updateReference($modelrefid);
 
-                    return $this->redirect(['view', 'id' => $model->id]);
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        } else {
+                            Yii::$app->session->setFlash('danger', 'Transaction not saved');
+                            return $this->render('create', [
+                                'model' => $model,
+                            ]);
+                        }
+                    }
+                    else{
+                        Yii::$app->session->setFlash('danger', 'Wrong account details');
+                        return $this->render('create', [
+                            'model' => $model,
+                        ]);
+                    }
                 } else {
                     return $this->render('create', [
                         'model' => $model,

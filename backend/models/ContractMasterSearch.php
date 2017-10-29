@@ -51,6 +51,7 @@ class ContractMasterSearch extends ContractMaster
         ]);
 
         $query->andWhere(['!=', 'contract_status', 'D']);
+        $query->andWhere(['!=', 'auth_stat', 'U']);
         $query->andFilterWhere([
             'amount' => $this->amount,
             'booking_date' => $this->booking_date,
@@ -114,4 +115,26 @@ class ContractMasterSearch extends ContractMaster
 
         return $dataProvider;
     }
+
+public function searchPending()
+{
+    $query = ContractMaster::find();
+
+    $dataProvider = new ActiveDataProvider([
+        'query' => $query,
+    ]);
+
+
+    $query->andFilterWhere([
+        'auth_stat' => 'U',
+
+    ]);
+    $query->andWhere(['!=', 'contract_status', 'D']);
+
+
+
+
+    return $dataProvider;
+
+}
 }

@@ -101,7 +101,7 @@ class ContractAmountDueSearch extends ContractAmountDue
 
          $query->andFilterWhere([
             'contract_ref_number' => $params,
-             'status'=>'A'
+             //'status'=>'A'
         ]);
 
 

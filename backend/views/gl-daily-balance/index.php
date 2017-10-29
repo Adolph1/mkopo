@@ -8,16 +8,17 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Gl Daily Balances');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="gl-daily-balance-index">
+<div class="row">
+    <div class="col-md-12">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-bank"></i><strong> GL DAILY BALANCES</strong></h3>
+    </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+</div>
+<hr>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Gl Daily Balance'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
        <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -32,7 +33,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'cr_turn',
             'closing_balance',
 
-            ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
+            //['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
         ],
+           'clientOptions' => [
+               "lengthMenu"=> [[20,-1], [20,Yii::t('app',"All")]],
+               "info"=>true,
+               "responsive"=>true,
+               "dom"=> 'lfTrtip',
+               "tableTools"=>[
+                   "aButtons"=> [
+                       /*[
+                           "sExtends"=> "copy",
+                           "sButtonText"=> Yii::t('app',"Copy to clipboard")
+                       ],[
+                           "sExtends"=> "csv",
+                           "sButtonText"=> Yii::t('app',"Save to CSV")
+                       ],*/
+                       [
+                           "sExtends"=> "xls",
+                           "oSelectorOpts"=> ["page"=> 'current']
+                       ],[
+                           "sExtends"=> "pdf",
+                           "sButtonText"=> Yii::t('app',"Save to PDF")
+                       ],[
+                           "sExtends"=> "print",
+                           "sButtonText"=> Yii::t('app',"Print")
+                       ],
+                   ]
+               ]
+           ],
     ]); ?>
+    </div>
 </div>

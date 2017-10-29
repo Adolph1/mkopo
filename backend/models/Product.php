@@ -28,8 +28,8 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    const FLAT_RATE = 0;
-    const REDUCING_BALANCE = 1;
+    const FLAT_RATE = 1;
+    const REDUCING_BALANCE = 2;
 
     public $product_detail;
 

@@ -43,6 +43,7 @@ $this->title = Yii::t('app', 'Transactions');
             'product',
             'trn_dt',
             'amount',
+            'txn_account',
             'related_customer',
             'offset_account',
             'offset_amount',

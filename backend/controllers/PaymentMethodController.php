@@ -8,19 +8,23 @@ use backend\models\PaymentMethodSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\LoginForm;
 
 /**
  * PaymentMethodController implements the CRUD actions for PaymentMethod model.
  */
 class PaymentMethodController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -32,6 +36,7 @@ class PaymentMethodController extends Controller
      */
     public function actionIndex()
     {
+        if(!Yii::$app->user->isGuest){
         $searchModel = new PaymentMethodSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -39,6 +44,13 @@ class PaymentMethodController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+        }
+        else {
+            $model = new LoginForm();
+            return $this->render('site/login', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -48,9 +60,17 @@ class PaymentMethodController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else {
+                $model = new LoginForm();
+                return $this->render('site/login', [
+                    'model' => $model,
+                ]);
+            }
     }
 
     /**
@@ -60,12 +80,20 @@ class PaymentMethodController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->isGuest) {
         $model = new PaymentMethod();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+        }
+        else {
+            $model = new LoginForm();
+            return $this->render('site/login', [
                 'model' => $model,
             ]);
         }
@@ -79,12 +107,20 @@ class PaymentMethodController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->isGuest) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+        }
+        else {
+            $model = new LoginForm();
+            return $this->render('site/login', [
                 'model' => $model,
             ]);
         }
@@ -98,9 +134,17 @@ class PaymentMethodController extends Controller
      */
     public function actionDelete($id)
     {
+        if(!Yii::$app->user->isGuest) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+        }
+        else {
+            $model = new LoginForm();
+            return $this->render('site/login', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**

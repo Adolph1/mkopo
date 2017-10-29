@@ -9,21 +9,18 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="payment-method-form">
-
+    <div class="panel panel-success">
+        <div class="panel-heading">Payment method Form</div>
+        <div class="panel-body">
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'method')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'method_abbreviation')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'maker_id')->textInput(['maxlength' => 200]) ?>
-
-    <?= $form->field($model, 'maker_stamptime')->textInput(['maxlength' => 200]) ?>
+    <?= $form->field($model, 'method_name')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Save') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
+        </div>
+    </div>
 </div>

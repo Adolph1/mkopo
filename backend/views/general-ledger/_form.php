@@ -38,17 +38,17 @@ $form->field($model, 'parent_gl')->dropDownList(
 
 ?>
 
-<div class="general-ledger-form">
-    <div class="col-lg-12">
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <?= Yii::t('app', 'Customer Form'); ?>
+                <?= Yii::t('app', 'General Ledger Form'); ?>
             </div>
             <div class="panel-body">
                 <div class="row">
 
                     <div class="col-md-3">
-                        <?= $form->field($model, 'gl_code')->textInput(['style' => 'width:300px']) ?>
+                        <?= $form->field($model, 'gl_code')->textInput() ?>
                     </div>
                     <div class="col-md-3">
                         <?= $form->field($model, 'parent_gl')->dropDownList($listgls, ['prompt'=>'--Select--'])?>
@@ -94,4 +94,4 @@ $form->field($model, 'parent_gl')->dropDownList(
         </div>
     </div>
 </div>
-</div>
+

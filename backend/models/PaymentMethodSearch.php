@@ -19,7 +19,7 @@ class PaymentMethodSearch extends PaymentMethod
     {
         return [
             [['id'], 'integer'],
-            [['method', 'method_abbreviation', 'maker_id', 'maker_stamptime'], 'safe'],
+            [['method_name'], 'safe'],
         ];
     }
 
@@ -43,22 +43,26 @@ class PaymentMethodSearch extends PaymentMethod
     {
         $query = PaymentMethod::find();
 
+        // add conditions that should always apply here
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        if (!($this->load($params) && $this->validate())) {
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'method', $this->method])
-            ->andFilterWhere(['like', 'method_abbreviation', $this->method_abbreviation])
-            ->andFilterWhere(['like', 'maker_id', $this->maker_id])
-            ->andFilterWhere(['like', 'maker_stamptime', $this->maker_stamptime]);
+        $query->andFilterWhere(['like', 'method_name', $this->method_name]);
 
         return $dataProvider;
     }
