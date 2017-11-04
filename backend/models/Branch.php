@@ -82,4 +82,6 @@ class Branch extends \yii\db\ActiveRecord
         return ArrayHelper::map(Branch::find()->all(),'branch_code','branch_name');
     }
 
+
+
 }

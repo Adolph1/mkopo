@@ -8,7 +8,7 @@ use backend\models\GlDailyBalanceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use common\models\LoginForm;
 /**
  * GlDailyBalanceController implements the CRUD actions for GlDailyBalance model.
  */
@@ -35,13 +35,21 @@ class GlDailyBalanceController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new GlDailyBalanceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(!Yii::$app->user->isGuest) {
+            $searchModel = new GlDailyBalanceSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -51,9 +59,17 @@ class GlDailyBalanceController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -63,12 +79,20 @@ class GlDailyBalanceController extends Controller
      */
     public function actionCreate()
     {
-        $model = new GlDailyBalance();
+        if(!Yii::$app->user->isGuest) {
+            $model = new GlDailyBalance();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }

@@ -89,7 +89,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row">
             <div class="col-md-4">
-                <?php  if(!$model->isNewRecord) echo $form->field($model, 'current_balance')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>\backend\models\CustomerBalance::getBalance($model->related_customer)]) ?>
+                <?php  if(!$model->isNewRecord) echo $form->field($model, 'current_balance')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>\backend\models\AccdailyBal::getCurrentBalance($model->txn_account)]) ?>
             </div>
 
         </div>

@@ -62,4 +62,5 @@ class SystemSetup extends \yii\db\ActiveRecord
             return 0;
         }
     }
+
 }

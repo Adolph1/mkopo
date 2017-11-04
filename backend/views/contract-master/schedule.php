@@ -227,7 +227,7 @@ use yii\widgets\Pjax;
 
                     'buttons' => [
                         'view' => function ($url, $model, $key) {
-                            if(strtotime($model->due_date) <= strtotime(date('Y-m-d'))) {
+                            if(strtotime($model->due_date) <= strtotime(date('Y-m-d')) && \backend\models\ContractMaster::getAwaitingStatus($model->contract_ref_number)!='N' && yii::$app->User->can('LoanOfficer') && $model->status!='L') {
                                 return Html::a('<span class="fa fa-pencil"></span>', '#', [
                                     'class' => 'activity-view-link',
                                     'title' => Yii::t('yii', 'View'),
@@ -285,30 +285,29 @@ use yii\widgets\Pjax;
         ]); ?>
 
         <?php $form = ActiveForm::begin(); ?>
+        <?= $form->field($payment, 'id')->hiddenInput(['maxlength' => true,'readonly'=>'readonly',])->label(false) ?>
+        <?= $form->field($payment, 'contract_ref_number')->hiddenInput(['maxlength' => true,'readonly'=>'readonly',])->label(false) ?>
+        <?= $form->field($payment, 'trn_dt')->textInput(['maxlength' => true,'readonly'=>'readonly',]) ?>
 
-        <?= $form->field($loanSchedule, 'due_date')->textInput(['maxlength' => true,'readonly'=>'readonly',]) ?>
+        <?= $form->field($payment, 'amount')->textInput(['maxlength' => true,]) ?>
 
-        <?= $form->field($loanSchedule, 'monthly_payment')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+        <?= $form->field($payment, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>'--Select--']) ?>
 
-        <?= $form->field($loanSchedule, 'amount')->textInput(['maxlength' => true,]) ?>
-
-        <?= $form->field($loanSchedule, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>'--Select--']) ?>
-        <?= $form->field($loanSchedule, 'receipt')->textInput() ?>
+        <?= $form->field($payment, 'receipt')->textInput() ?>
 
 
 
 
         <div class="form-group text-right">
-            <?= Html::submitButton($loanSchedule->isNewRecord ? Yii::t('app', 'Submit') : Yii::t('app', 'Update'), ['class' => $loanSchedule->isNewRecord ? 'btn btn-primary' : 'btn btn-primary']) ?>
             <?=
-            Html::a('Close', '#', [
-                'class' => 'btn btn-default',
-
-                'data-dismiss' => 'modal',
-
-
-            ]);
+            Html::Button(Yii::t('app', '<i class="fa fa-check"></i> Save'), [
+                'class' => 'btn btn-primary',
+                'value'=> 'Submit',
+                'id'=>'repay-id',
+                'name' => 'submit',
+                ]);
             ?>
+            <?= Html::Button(Yii::t('app', 'Cancel'), ['class' => 'btn btn-default']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
@@ -331,9 +330,10 @@ function (data) {
 //('#activity-modal').modal();
   var myObj = JSON.stringify(data); 
   var myObj = JSON.parse(myObj);
-  
-document.getElementById('contractamountreducedue-due_date').value=myObj.data['due_date'];
-document.getElementById('contractamountreducedue-monthly_payment').value=myObj.data['monthly_payment'];
+    document.getElementById('contractpayment-id').value=myObj.data['id'];
+    document.getElementById('contractpayment-contract_ref_number').value=myObj.data['contract_ref_number'];
+    document.getElementById('contractpayment-trn_dt').value=myObj.data['due_date'];
+    document.getElementById('contractpayment-amount').value=myObj.data['monthly_payment'];
 }
 );
 });

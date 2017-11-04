@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBal;
+use backend\models\Audit;
 use backend\models\SystemDate;
 use Yii;
 use backend\models\Account;
@@ -49,9 +51,17 @@ class AccountController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(!Yii::$app->user->isGuest) {
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
     }
 
     /**
@@ -61,18 +71,37 @@ class AccountController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Account();
-        $model->maker_id=Yii::$app->user->identity->username;
-        $model->maker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
-        $model->acc_open_date=SystemDate::getCurrentDate();
-        $model->acc_status='O';
-        $model->auth_stat='U';
-        
+        if(!Yii::$app->user->isGuest) {
+            $model = new Account();
+            $model->maker_id = Yii::$app->user->identity->username;
+            $model->maker_stamptime = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
+            $model->acc_open_date = SystemDate::getCurrentDate();
+            $model->acc_status = 'O';
+            $model->auth_stat = 'U';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->cust_ac_no]);
-        } else {
-            return $this->render('create', [
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+                $dailyBalance = new AccdailyBal();
+                $dailyBalance->branch_code = $model->branch_code;
+                $dailyBalance->account = $model->cust_ac_no;
+                $dailyBalance->available_balance = 0.00;
+                $dailyBalance->value_date = SystemDate::getCurrentDate();
+                $dailyBalance->Cedit_tur = 0.00;
+                $dailyBalance->Debit_tur = 0.00;
+                $dailyBalance->save();
+
+
+                return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
@@ -86,16 +115,28 @@ class AccountController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        $model->auth_stat='U';
+        if(!Yii::$app->user->isGuest) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->cust_ac_no]);
-        } else {
-            return $this->render('update', [
+            $model = $this->findModel($id);
+            $model->auth_stat = 'U';
+            $model->checker_id='';
+            $model->check_stamptime='';
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
                 'model' => $model,
             ]);
         }
+
     }
 
     /**
@@ -104,13 +145,6 @@ class AccountController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
     //search customer Account
 
     public function actionSearch($id)
@@ -129,6 +163,8 @@ class AccountController extends Controller
 
     }
 
+
+
     //Authorize Account
 
     public function actionApprove($id)
@@ -140,6 +176,58 @@ class AccountController extends Controller
             $model->check_stamptime = SystemDate::getCurrentDate().' '.date('H:i:s');
             $model->auth_stat='A';
             $model->save();
+            return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+    //disables customer account
+
+    public function actionDelete($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+            $model->acc_status='D';
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_stamptime=date('Y-m-d:H:i:s');
+            $model->mod_no=$model->mod_no+1;
+            if($model->save()){
+                //saves logs
+                Audit::setActivity('Customer maintenance','CD','Disable');
+
+            }
+
+            return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+    //enables customer account
+    public function actionEnable($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model=$this->findModel($id);
+            $model->acc_status='O';
+            $model->maker_id=Yii::$app->user->identity->username;
+            $model->maker_stamptime=date('Y-m-d:H:i:s');
+            $model->mod_no=$model->mod_no+1;
+            if($model->save()){
+                //saves logs
+                Audit::setActivity('Customer account maintenance','CA','Enable');
+
+            }
+
+
             return $this->redirect(['view', 'id' => $model->cust_ac_no]);
         }
         else{

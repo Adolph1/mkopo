@@ -153,13 +153,24 @@ class Customer extends \yii\db\ActiveRecord
             ['width' => '150px','height'=>'150px','class'=>'img-circle']);
     }
 
-    public function getCustomer($id)
+    public static function getCustomer($id)
     {
-        $customers = Customer::find()
+        $customer = Customer::find()
             ->where(['customer_no' => $id])
             ->orderBy('customer_no DESC')
             ->One();
-        return $customers;
+        return $customer;
+
+    }
+
+
+    public static function getCustomerAddress($id)
+    {
+        $customer = Customer::find()
+            ->where(['customer_no' => $id])
+            ->orderBy('customer_no DESC')
+            ->One();
+        return $customer->address.'<br/> '.$customer->mobile_no1;
 
     }
 

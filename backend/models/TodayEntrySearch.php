@@ -85,24 +85,21 @@ class TodayEntrySearch extends TodayEntry
 
         return $dataProvider;
     }
-    public function searchunauthorised()
+    public function searchUnauthorised()
     {
         $query = TodayEntry::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        //if (!($this->load($params) && $this->validate())) {
-          //  return $dataProvider;
-        //}
-
+        //$query->andWhere(['!=', 'delete_stat','D']);
         $query->andFilterWhere([
             'auth_stat' => 'U',
             'trn_dt'=>SystemDate::getCurrentDate(),
+            'delete_stat'=>null,
         ]);
 
-        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
 
 
         return $dataProvider;

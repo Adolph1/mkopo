@@ -119,4 +119,14 @@ class Account extends \yii\db\ActiveRecord
             return null;
         }
     }
+
+    public static function getBranchCode($id)
+    {
+        $branch=Account::find()->where(['cust_ac_no'=>$id])->one();
+        if($branch!=null) {
+            return $branch->branch_code;
+        }else{
+            return "";
+        }
+    }
 }

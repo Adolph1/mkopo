@@ -78,4 +78,26 @@ class ContractPaymentSearch extends ContractPayment
 
         return $dataProvider;
     }
+
+    public function searchByReference($params)
+    {
+        $query = ContractPayment::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 150,
+            ]
+        ]);
+
+
+        $query->andFilterWhere([
+            'contract_ref_number' => $params,
+            //'status'=>'A'
+        ]);
+
+
+
+        return $dataProvider;
+    }
 }

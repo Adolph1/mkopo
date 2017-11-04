@@ -91,26 +91,21 @@ class SystemSetupController extends Controller
     }
 
 
-    public function actionRunTi()
+    public function actionRunEofi()
     {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
+        Yii::$app->consoleRunner->run('eod/run-eofi');
         return $this->redirect(['eod-cycle/index']);
     }
 
-    public function actionRunEoTi()
+    public function actionRunEoti()
     {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
-        return $this->redirect(['eod-cycle/index']);
-    }
-    public function actionRunEoFi()
-    {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
+        Yii::$app->consoleRunner->run('eod/run-eoti');
         return $this->redirect(['eod-cycle/index']);
     }
 
-    public function actionRunEoD()
+    public function actionRunEod()
     {
-        Yii::$app->consoleRunner->run('eod/check-unauthorised');
+        Yii::$app->consoleRunner->run('eod/run-eod');
         return $this->redirect(['eod-cycle/index']);
     }
 

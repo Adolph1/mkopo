@@ -16,6 +16,37 @@ $this->title = $model->gl_description;
     <div class="col-md-4 text-center">
         <?=  Html::a('Add Account', ['create'], ['class' => 'btn btn-default text-green']) ?>
         <?=  Html::a('List Accounts', ['index'], ['class' => 'btn btn-default text-green']) ?>
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <?php
+                if($model->record_status=='O') {
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-pencil text-blue"></i> Edit'), ['update', 'id' => $model->gl_code], ['class' => 'btn btn-default']) ;
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-times text-red"></i> Disable'), ['delete', 'id' => $model->gl_code], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to Disable this customer?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                } elseif($model->record_status=='D'){
+                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['enable', 'id' => $model->gl_code], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to enable this customer?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                }
+
+                ?>
+            </ul>
+
+        </div>
     </div>
 </div>
 <hr>

@@ -2,10 +2,14 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBal;
 use backend\models\Account;
 use backend\models\Branch;
 use backend\models\Customer;
 use backend\models\CustomerBalance;
+use backend\models\EventType;
+use backend\models\GlDailyBalance;
+use backend\models\ProductAccrole;
 use backend\models\SystemDate;
 use backend\models\TodayEntry;
 use Yii;
@@ -103,9 +107,6 @@ class TellerController extends Controller
                         $model->related_customer = $customer_no;
                         // saves today's transactions
                         if ($model->save()) {
-                            TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->txn_account, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'C', $model->related_customer, $model->product, $value = date('Y-m-d'));
-                            TodayEntry::saveEntry($module = 'DE', $model->reference, $model->trn_dt, $model->offset_account, Customer::getBranchByCustomerNo($model->related_customer), $model->amount, $ind = 'D', $model->related_customer, $model->product, $value = date('Y-m-d'));
-
                             //fetches,updates and generate reference
                             $modelrefid = ReferenceIndex::getIDByRef($model->reference);
                             ReferenceIndex::updateReference($modelrefid);
@@ -154,7 +155,7 @@ class TellerController extends Controller
         if(!Yii::$app->user->isGuest) {
         $model = $this->findModel($id);
         $model->maker_id=Yii::$app->user->identity->username;
-       $model->status='U';
+        $model->status='U';
         $model->maker_time=date('Y-m-d:H:i:s');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -198,18 +199,62 @@ class TellerController extends Controller
     {
         if(!Yii::$app->user->isGuest) {
             $model=$this->findModel($id);
-            $custbalance=CustomerBalance::getBalance($model->related_customer);
-            $newbalance=$custbalance+$model->amount;
-            if(CustomerBalance::updateAll(['current_balance'=>$newbalance],['customer_number'=>$model->related_customer])) {
-                $model->status = 'R';
-                $model->maker_id = Yii::$app->user->identity->username;
-                $model->maker_time = SystemDate::getCurrentDate().' '.date('H:i:s');
 
-                if($model->save()){
-                    TodayEntry::updateAll(['auth_stat'=>'R'],['trn_ref_no'=>$model->reference]);
+                $role_events=ProductAccrole::getRoleEvents($model->product,$event=EventType::RVS);
+                if($role_events!=null) {
+                    foreach ($role_events as $role_event) {
+                        if ($role_event->dr_cr_indicator == 'D') {
+
+
+                            //saves customer leg
+                            TodayEntry::saveEntry(
+                                $module = 'DE',
+                                $model->reference,
+                                SystemDate::getCurrentDate(),
+                                $model->txn_account,
+                                Customer::getBranchByCustomerNo($model->related_customer),
+                                $model->amount,
+                                $ind = 'D',
+                                $model->related_customer,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+                            //updates customer account balance
+
+                            AccdailyBal::updateAccountBalance($model->txn_account, $model->amount, 'D');
+
+
+                        } elseif ($role_event->dr_cr_indicator == 'C') {
+
+                            //saves GL leg
+                            TodayEntry::saveEntry(
+                                $module = 'DE',
+                                $model->reference,
+                                SystemDate::getCurrentDate(),
+                                $role_event->mis_head,
+                                Customer::getBranchByCustomerNo($model->related_customer),
+                                $model->amount,
+                                $ind = 'C',
+                                $model->related_customer,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+
+                            //updates GL balance
+
+                            GlDailyBalance::updateGLBalance($role_event->mis_head, $model->offset_amount, 'C');
+
+
+                        }
+                    }
                 }
-            }
-            //$this->findModel($id)->delete();
+                TodayEntry::updateAll(['auth_stat'=>'A','checker_id'=>Yii::$app->user->identity->username,'checker_time'=>SystemDate::getCurrentDate().' '.date('H:i:s')],['trn_ref_no'=>$model->reference,'auth_stat'=>'U']);
+
+
 
             return $this->redirect(['teller/view','id'=>$id]);
         }
@@ -226,26 +271,64 @@ class TellerController extends Controller
         if(!Yii::$app->user->isGuest) {
         $model=$this->findModel($id);
 
-        //gets current balance
-        $balance=CustomerBalance::getBalance($model->related_customer);
-        if($balance!=null) {
-            $newbalance=$balance+$model->amount;
-            CustomerBalance::updateAll(['current_balance' => $newbalance], ['customer_number' => $model->related_customer]);
-        }
-        else{
-            $customerbalance=new CustomerBalance();
-            $customerbalance->customer_number=$model->related_customer;
-            $customerbalance->current_balance=$model->amount;
-            $customerbalance->opening_balance=$model->amount;
-            $customerbalance->last_updated=date('Y-m-d');
-            $customerbalance->save();
-        }
         $model->checker_id=Yii::$app->user->identity->username;
         $model->checker_time = SystemDate::getCurrentDate().' '.date('H:i:s');
         $model->status='A';
         //$model->save();
         if($model->save()){
-           TodayEntry::updateAll(['auth_stat'=>'A'],['trn_ref_no'=>$model->reference]);
+            $role_events=ProductAccrole::getRoleEvents($model->product,$event=EventType::INIT);
+            if($role_events!=null) {
+                foreach ($role_events as $role_event) {
+                    if ($role_event->dr_cr_indicator == 'C') {
+
+
+                        //saves customer leg
+                        TodayEntry::saveEntry(
+                            $module = 'DE',
+                            $model->reference,
+                            SystemDate::getCurrentDate(),
+                            $model->txn_account,
+                            Customer::getBranchByCustomerNo($model->related_customer),
+                            $model->amount,
+                            $ind = 'C',
+                            $model->related_customer,
+                            $model->product,
+                            SystemDate::getCurrentDate(),
+                            $event
+                        );
+
+                        //updates customer account balance
+
+                        AccdailyBal::updateAccountBalance($model->txn_account, $model->amount, 'C');
+
+
+                    } elseif ($role_event->dr_cr_indicator == 'D') {
+
+                        //saves GL leg
+                        TodayEntry::saveEntry(
+                            $module = 'DE',
+                            $model->reference,
+                            SystemDate::getCurrentDate(),
+                            $role_event->mis_head,
+                            Customer::getBranchByCustomerNo($model->related_customer),
+                            $model->amount,
+                            $ind = 'D',
+                            $model->related_customer,
+                            $model->product,
+                            SystemDate::getCurrentDate(),
+                            $event
+                        );
+
+
+                        //updates GL balance
+
+                        GlDailyBalance::updateGLBalance($role_event->mis_head, $model->offset_amount, 'D');
+
+
+                    }
+                }
+            }
+            TodayEntry::updateAll(['auth_stat'=>'A','checker_id'=>$model->checker_id,'checker_time'=>$model->checker_time],['trn_ref_no'=>$model->reference,'auth_stat'=>'U']);
         }
         return $this->redirect(['view', 'id' => $model->id]);
         }

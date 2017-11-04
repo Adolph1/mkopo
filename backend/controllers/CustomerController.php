@@ -132,8 +132,9 @@ class CustomerController extends Controller
                 $date2=date('Y-m-d');
                 $diff = strtotime($date2) - strtotime($date1);
                 if($diff<0) {
-                    if($model->save()){
-                        $cust_balance=new CustomerBalance();
+                    $model->save();
+                    /*if($model->save()){
+                        /$cust_balance=new CustomerBalance();
                         $cust_balance->customer_number=$model->customer_no;
                         $cust_balance->opening_balance=0;
                         $cust_balance->current_balance=0;
@@ -141,7 +142,7 @@ class CustomerController extends Controller
                         $cust_balance->save();
                         return $this->redirect(['view', 'id' => $model->id]);
 
-                    }
+                    }*/
 
                 }  else{
                     Yii::$app->session->setFlash('danger', 'Your identification has expired. ');
@@ -155,7 +156,8 @@ class CustomerController extends Controller
                 $date2=date('Y-m-d');
                 $diff = strtotime($date2) - strtotime($date1);
                 if($diff<0) {
-                    if($model->save()){
+                    $model->save();
+                    /*if($model->save()){
                         $cust_balance=new CustomerBalance();
                         $cust_balance->customer_number=$model->customer_no;
                         $cust_balance->opening_balance=0;
@@ -164,7 +166,7 @@ class CustomerController extends Controller
                         $cust_balance->save();
                         return $this->redirect(['view', 'id' => $model->id]);
 
-                    }
+                    }*/
                 }  else{
                     Yii::$app->session->setFlash('danger', 'Your identification has expired. ');
                     return $this->render('create', [

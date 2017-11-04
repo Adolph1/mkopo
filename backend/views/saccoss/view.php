@@ -11,7 +11,7 @@ $this->title = $model->title;
 ?>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-            <legend class="scheduler-border text-info">Saccoss Details</legend>
+            <legend class="scheduler-border text-info">About Saccoss</legend>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

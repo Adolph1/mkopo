@@ -2,6 +2,18 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBal;
+use backend\models\Account;
+use backend\models\ContractAmountReduceDue;
+use backend\models\ContractMaster;
+use backend\models\Customer;
+use backend\models\EventType;
+use backend\models\GeneralLedger;
+use backend\models\GlDailyBalance;
+use backend\models\ProductAccrole;
+use backend\models\ReferenceIndex;
+use backend\models\SystemDate;
+use backend\models\TodayEntry;
 use Yii;
 use backend\models\ContractPayment;
 use backend\models\ContractPaymentSearch;
@@ -74,6 +86,129 @@ class ContractPaymentController extends Controller
         }
     }
 
+
+    public function actionCreatePayment($id,$amount)
+    {
+        //fetches details from the schedule by id
+        $schedule=$this->findSchedule($id);
+
+
+        //fetches settlement account of the loan to update its balance
+        $settleAccount=ContractMaster::getSettleAccount($schedule->contract_ref_number);
+        if($settleAccount!=null) {
+
+
+            //updates account balance
+            TodayEntry::saveEntry(
+                $module = 'DE',
+                'CSHD'.SystemDate::getSystemReference(),
+                SystemDate::getCurrentDate(),
+                $schedule->account_due,
+                Customer::getBranchByCustomerNo($schedule->customer_number),
+                $amount,
+                $ind = 'C',
+                $schedule->customer_number,
+                ContractMaster::getLoanProduct($schedule->contract_ref_number),
+                SystemDate::getCurrentDate(),
+                EventType::INIT
+            );
+            AccdailyBal::updateAccountBalance($settleAccount,$amount,'C');
+
+
+
+            if ($schedule->monthly_payment == $amount) {
+
+                $loanProduct=ContractMaster::getLoanProduct($schedule->contract_ref_number);
+                if($loanProduct!=null) {
+
+
+
+                    //saves to today's transactions
+                    //gets accounting roles and events
+                    $role_events=ProductAccrole::getRoleEvents($loanProduct,$event=EventType::LQD);
+                    if($role_events!=null){
+                        foreach($role_events as $role_event){
+                            if($role_event->dr_cr_indicator=='D'){
+
+
+                                //saves customer leg
+                                TodayEntry::saveEntry(
+                                    $module = 'LD',
+                                    $schedule->contract_ref_number,
+                                    SystemDate::getCurrentDate(),
+                                    $schedule->account_due,
+                                    Customer::getBranchByCustomerNo($schedule->customer_number),
+                                    $amount,
+                                    $ind = 'D',
+                                    $schedule->customer_number,
+                                    $loanProduct,
+                                    SystemDate::getCurrentDate(),
+                                    $event
+                                );
+
+                                //updates customer account balance
+
+                                AccdailyBal::updateAccountBalance($settleAccount,$amount,'D');
+
+
+
+                            }elseif($role_event->dr_cr_indicator=='C'){
+
+                                //saves GL leg
+                                TodayEntry::saveEntry(
+                                    $module = 'LD',
+                                    $schedule->contract_ref_number,
+                                    SystemDate::getCurrentDate(),
+                                    $role_event->mis_head,
+                                    Customer::getBranchByCustomerNo($schedule->customer_number),
+                                    $amount,
+                                    $ind = 'C',
+                                    $schedule->customer_number,
+                                    $loanProduct,
+                                    SystemDate::getCurrentDate(),
+                                    $event
+                                );
+
+
+
+
+                                //updates GL balance
+
+                                GlDailyBalance::updateGLBalance($role_event->mis_head,$amount,'C');
+
+
+                            }
+                        }
+
+                    $model = new ContractPayment();
+                    $model->credit = $amount;
+                    $model->trn_dt = $schedule->due_date;
+                    $model->contract_ref_number = $schedule->contract_ref_number;
+                    $model->auth_stat = 'U';
+                    $model->maker_id = Yii::$app->user->identity->username;
+                    $model->maker_time = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
+                    $model->balance = ContractPayment::getLastBalance($schedule->contract_ref_number) - $amount;
+                    $model->transaction_type = ContractPayment::REPAYMENT;
+                    $model->debit = 0.00;
+                    if ($model->save()) {
+                        $schedule->interest_amount_settled = $schedule->interest_amount_due;
+                        $schedule->principal_amount_settled = $schedule->principal_amount_due;
+                        $schedule->status = 'L';
+                        $schedule->save();
+
+                    }
+                }
+                else{
+                    echo 'Loan has no product';
+                }
+            }
+        }else{
+            echo 'No settlement Account maintained';
+        }
+        }
+
+    }
+
     /**
      * Updates an existing ContractPayment model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -121,4 +256,16 @@ class ContractPaymentController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    protected function findSchedule($id)
+    {
+        if (($model = ContractAmountReduceDue::findOne($id)) !== null) {
+            return $model;
+        } else {
+           return '';
+        }
+    }
+
+
+
 }

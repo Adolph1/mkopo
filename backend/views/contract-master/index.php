@@ -46,24 +46,24 @@ $this->title = 'Loans contracts';
 
                 ],
                 [
-                    'label' => 'Awaiting Disbursement',
-                   // 'content' => $this->render('guarantors',['model'=>$model]),
+                    'label' => 'Awaiting Disbursement ('.\backend\models\ContractMaster::getAwaitingDisbursementCount().')',
+                    'content' => $this->render('awaiting_disbursement'),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
                     'options' => ['style' => 'background:#fff'],
 
                 ],
                 [
-                    'label' => 'Written Off Loans',
-                    // 'content' => $this->render('guarantors',['model'=>$model]),
+                    'label' => 'Written Off ('.\backend\models\ContractMaster::getWrittenOff().')',
+                    'content' => $this->render('written_off'),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
                     'options' => ['style' => 'background:#fff'],
 
                 ],
                 [
-                    'label' => 'Closed Loans',
-                    // 'content' => $this->render('guarantors',['model'=>$model]),
+                    'label' => 'Closed Loans ('.\backend\models\ContractMaster::getLiquidatedLoanCount().')',
+                     'content' => $this->render('closed'),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
                     'options' => ['style' => 'background:#fff'],

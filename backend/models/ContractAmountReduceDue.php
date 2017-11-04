@@ -31,9 +31,7 @@ class ContractAmountReduceDue extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public $amount;
-    public $payment_method;
-    public $receipt;
+
 
     public static function tableName()
     {
@@ -46,7 +44,6 @@ class ContractAmountReduceDue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contract_ref_number', 'due_date', 'monthly_payment', 'interest_amount_due', 'principal_amount_due', 'balance', 'interest_amount_settled', 'principal_amount_settled', 'account_due', 'customer_number', 'inflow_outflow', 'basis_amount_tag', 'adjusted_amount', 'scheduled_linkage', 'amount_prepaid', 'original_due_date', 'status'], 'required'],
             [['monthly_payment', 'interest_amount_due', 'principal_amount_due', 'balance', 'interest_amount_settled', 'principal_amount_settled', 'adjusted_amount'], 'number'],
             [['contract_ref_number', 'due_date', 'account_due', 'customer_number', 'inflow_outflow', 'basis_amount_tag', 'scheduled_linkage', 'amount_prepaid', 'original_due_date'], 'string', 'max' => 200],
             [['status'], 'string', 'max' => 1],
@@ -78,5 +75,19 @@ class ContractAmountReduceDue extends \yii\db\ActiveRecord
             'original_due_date' => Yii::t('app', 'Original Due Date'),
             'status' => Yii::t('app', 'Status'),
         ];
+    }
+
+    public static function getSettled($id)
+    {
+        $model = ContractAmountReduceDue::find()->where(['contract_ref_number'=>$id])->all();
+        if($model!=null){
+            $paid=0.00;
+            foreach ($model as $item){
+                $paid=$paid+$item->interest_amount_settled+$item->principal_amount_settled;
+           }
+           return $paid;
+        }else{
+            return 0;
+        }
     }
 }

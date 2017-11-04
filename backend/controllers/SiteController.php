@@ -1,6 +1,9 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\EodCycle;
+use backend\models\SystemSetup;
+use backend\models\SystemStage;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -73,14 +76,33 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        else {
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                if(SystemSetup::getCurrentStage()!=SystemStage::TI && yii::$app->User->can('LoanOfficer')){
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
+                    Yii::$app->session->setFlash('danger', 'System closes its batches,please contact administrator.');
+
+                    Yii::$app->user->logout();
+                    return $this->goHome();
+
+                }elseif(SystemSetup::getCurrentStage()!=SystemStage::TI && yii::$app->User->can('LoanManager')){
+                    $model = new LoginForm();
+                    if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                        return $this->redirect(['eod-cycle/index']);
+                    } else {
+                        return $this->render('login', [
+                            'model' => $model,
+                        ]);
+                    }
+                }else{
+                    return $this->goHome();
+                }
+            } else {
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
+            }
         }
     }
 

@@ -29,20 +29,9 @@ use kartik\tabs\TabsX;
         ]
     ); ?>
 
-
-
-    <div class="col-lg-6 col-md-8 col-sm-8 col-xs-8">
-
-
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-user-plus text-yellow"></i> ADD NEW CUSTOMER'), ['create'], ['class' => 'btn btn-default text-green']) ?>
-
-
-            <?= Html::a(Yii::t('app', '<i class="fa fa-th text-yellow"></i> CUSTOMERS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
-
+    <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8">
+        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-user text-green"></i><strong> CUSTOMER DETAILS</strong></h3>
     </div>
-
-
 
     <div class="col-lg-4 col-md-8 col-sm-8 col-xs-8">
         <?php
@@ -85,8 +74,18 @@ use kartik\tabs\TabsX;
         <?= Html::activeHiddenInput($model, 'customer_detail',['id'=>'prd-id'])?>
 
     </div>
+    <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8">
 
-    <div class="col-lg-2 col-md-8 col-sm-8 col-xs-8">
+
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-user-plus text-yellow"></i> ADD NEW CUSTOMER'), ['create'], ['class' => 'btn btn-default text-green']) ?>
+
+
+        <?= Html::a(Yii::t('app', '<i class="fa fa-th text-yellow"></i> CUSTOMERS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
 
         <div class="btn-group">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -208,7 +207,7 @@ use kartik\tabs\TabsX;
                     'content' => $this->render('_accounts',['model'=>$model,]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['style' => 'background:#ccc'],
+                    'options' => ['style' => 'background:#fff'],
 
                 ],
                 [
@@ -216,7 +215,7 @@ use kartik\tabs\TabsX;
                     'content' => $this->render('_savings',['model'=>$model]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['style' => 'background:#ccc'],
+                    'options' => ['style' => 'background:#fff'],
 
                 ],
                 [

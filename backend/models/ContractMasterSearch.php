@@ -116,6 +116,31 @@ class ContractMasterSearch extends ContractMaster
         return $dataProvider;
     }
 
+    public function searchByCustomerAccount($params)
+    {
+        $query = ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        //if (!($this->load($params) && $this->validate())) {
+        //  return $dataProvider;
+        //}
+
+        $query->andFilterWhere([
+            'settle_account' => $params,
+        ]);
+
+        //$query->andFilterWhere(['like', 'auth_stat','U']);
+
+
+        return $dataProvider;
+    }
+
+
+
+
 public function searchPending()
 {
     $query = ContractMaster::find();
@@ -137,4 +162,65 @@ public function searchPending()
     return $dataProvider;
 
 }
+
+    public function searchClosed()
+    {
+        $query = ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+
+        $query->andFilterWhere([
+            'auth_stat' => 'A','contract_status'=>'L'
+
+        ]);
+       
+
+
+
+
+        return $dataProvider;
+
+    }
+
+    public function searchWrittenOff()
+    {
+        $query = ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+
+        $query->andFilterWhere([
+            'auth_stat' => 'A',
+            'contract_status'=>'WF',
+
+        ]);
+
+        return $dataProvider;
+
+    }
+
+    public function searchAwaitingDisbursement()
+    {
+        $query = ContractMaster::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+
+        $query->andFilterWhere([
+            'auth_stat' => 'A',
+            'is_disbursed'=>'N'
+
+        ]);
+
+
+        return $dataProvider;
+
+    }
 }

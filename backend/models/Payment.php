@@ -57,4 +57,15 @@ class Payment extends \yii\db\ActiveRecord
             'maker_time' => Yii::t('app', 'Maker Time'),
         ];
     }
+
+    public static function getSettled($id)
+    {
+        $model = Payment::find()->where(['contract_ref_number'=>$id])->sum('amount_paid');
+        if($model!=null){
+
+            return $model;
+        }else{
+            return 0;
+        }
+    }
 }

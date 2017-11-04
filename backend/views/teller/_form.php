@@ -11,7 +11,7 @@ use yii\web\JsExpression;
 ?>
 
     <?php $form = ActiveForm::begin(); ?>
-
+<div id="loader1" style="display: none"></div>
     <div class="panel">
         <div class="panel panel-success">
         <div class="panel-heading">
@@ -21,6 +21,7 @@ use yii\web\JsExpression;
 
                     $data = \backend\models\Account::find()
                         ->select(['ac_desc as value', 'ac_desc as  label','cust_ac_no as cust_ac_no'])
+                        //->where(['acc_status'=>'O'])
                         ->asArray()
                         ->all();
 
@@ -39,10 +40,18 @@ use yii\web\JsExpression;
                     
                     $('#memberssearch-family_name_id').val(ui.item.ac_desc);
                     var id=ui.item.cust_ac_no;
-                    alert(ui.item.cust_ac_no);
+                    //alert(ui.item.cust_ac_no);
                     $('#prod-id').html(id);
-           
+                     $('#loader1' ).show( 'slow', function(){
+                 
                         document.getElementById('teller-txn_account').value=id;
+                         //setTimeout(close(), 30000);
+                         $('#loader1' ).hide( 'slow', function(){
+                          
+                         });
+                        });
+                       
+                        
                   
                  }")],
                     ]);

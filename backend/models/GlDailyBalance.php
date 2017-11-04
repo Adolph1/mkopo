@@ -52,4 +52,81 @@ class GlDailyBalance extends \yii\db\ActiveRecord
             'closing_balance' => Yii::t('app', 'Closing Balance'),
         ];
     }
+
+
+    public static function updateGLBalance($glcode,$amount,$drcr)
+    {
+        //saves gl entry
+        $gl=GlDailyBalance::findGLBalance($glcode);
+
+        if($drcr=='C') {
+            if ($gl != null) {
+                if($gl->trn_date==SystemDate::getCurrentDate()) {
+                    $gl->cr_turn = $gl->cr_turn + $amount;
+                    $gl->closing_balance = $gl->opening_balance + $gl->cr_turn - $gl->dr_turn;
+                    $gl->save();
+
+                }else{
+                    $gl_balance = new GlDailyBalance();
+                    $gl_balance->trn_date = SystemDate::getCurrentDate();
+                    $gl_balance->gl_code = $glcode;
+                    $gl_balance->opening_balance = $gl->closing_balance;
+                    $gl_balance->dr_turn = 0.00;
+                    $gl_balance->cr_turn = $amount;
+                    $gl_balance->closing_balance = $gl_balance->opening_balance + $gl_balance->cr_turn-$gl_balance->dr_turn;
+                    $gl_balance->save();
+
+                }
+            } else {
+                $gl_balance = new GlDailyBalance();
+                $gl_balance->trn_date = SystemDate::getCurrentDate();
+                $gl_balance->gl_code = $glcode;
+                $gl_balance->opening_balance = 0.00;
+                $gl_balance->dr_turn = 0.00;
+                $gl_balance->cr_turn = $amount;
+                $gl_balance->closing_balance = $gl_balance->opening_balance + $gl_balance->cr_turn-$gl_balance->dr_turn;
+                $gl_balance->save();
+            }
+        }elseif($drcr=='D'){
+            if ($gl != null) {
+                if($gl->trn_date==SystemDate::getCurrentDate()) {
+                    $gl->dr_turn = $gl->dr_turn + $amount;
+                    $gl->closing_balance = $gl->opening_balance + $gl->cr_turn - $gl->dr_turn;
+                    $gl->save();
+
+                }else{
+                    $gl_balance = new GlDailyBalance();
+                    $gl_balance->trn_date = SystemDate::getCurrentDate();
+                    $gl_balance->gl_code = $glcode;
+                    $gl_balance->opening_balance = $gl->closing_balance;
+                    $gl_balance->dr_turn = $amount;
+                    $gl_balance->cr_turn = 0.00;
+                    $gl_balance->closing_balance =   $gl_balance->opening_balance  - $amount;
+                    $gl_balance->save();
+
+                }
+            } else {
+                $gl_balance = new GlDailyBalance();
+                $gl_balance->trn_date = SystemDate::getCurrentDate();
+                $gl_balance->gl_code = $glcode;
+                $gl_balance->opening_balance = 0.00;
+                $gl_balance->dr_turn = $amount;
+                $gl_balance->cr_turn = 0.00;
+                $gl_balance->closing_balance = $gl_balance->opening_balance + $gl_balance->cr_turn-$gl_balance->dr_turn;
+                $gl_balance->save();
+            }
+        }
+    }
+
+
+    protected function findGLBalance($id)
+    {
+
+        if (($model = GlDailyBalance::find()->where(['gl_code'=>$id])->orderBy(['id'=>SORT_DESC])->one()) !== null) {
+            return $model;
+        } else {
+            return null;
+        }
+
+    }
 }

@@ -54,4 +54,9 @@ class SystemDate extends \yii\db\ActiveRecord
             return 0;
         }
     }
+
+    public static function getSystemReference()
+    {
+      return date('YmdHis');
+    }
 }

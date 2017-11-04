@@ -47,6 +47,12 @@ class ContractMaster extends \yii\db\ActiveRecord
     public $id;
     const FLAT_RATE = 1;
     const REDUCING_BALANCE = 2;
+    const ACTION_YES=1;
+    const ACTION_NO=0;
+    const MONTHLY=1;
+    const WEEKLY=2;
+    const DAILY=3;
+
 
     public static function tableName()
     {
@@ -59,12 +65,12 @@ class ContractMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contract_ref_no','product','loan_officer', 'product_type','payment_date','frequency', 'payment_method', 'customer_number', 'amount', 'booking_date', 'value_date', 'maturity_date', 'main_component_rate','calculation_method'], 'required'],
+            [['contract_ref_no','product','loan_officer', 'product_type','payment_date','frequency','settle_account', 'payment_method', 'customer_number', 'amount', 'booking_date', 'value_date', 'maturity_date', 'main_component_rate','calculation_method'], 'required'],
             [['amount'], 'number'],
             [['frequency','calculation_method'], 'integer'],
             [['booking_date', 'value_date', 'maturity_date'], 'safe'],
             [['contract_ref_no', 'customer_number', 'main_component','settle_account', 'main_component_rate','maker_id', 'maker_stamptime','loan_officer', 'checker_id', 'checker_stamptime', 'seq_number'], 'string', 'max' => 200],
-            [['branch', 'product', 'product_type', 'module', 'payment_method','payment_date', 'contract_status','auth_stat'], 'string', 'max' => 20]
+            [['branch', 'product', 'product_type', 'module', 'payment_method','payment_date', 'contract_status','auth_stat','is_disbursed'], 'string', 'max' => 20]
         ];
     }
 
@@ -99,6 +105,16 @@ class ContractMaster extends \yii\db\ActiveRecord
             'seq_number' => 'Seq Number',
             'loan_officer'=>'Loan Officer',
             'calculation_method'=>'Calculation Method',
+            'is_disbursed'=>'Is Disbursed',
+        ];
+    }
+
+    public static function getArrayMethods()
+    {
+        return [
+            self::MONTHLY => Yii::t('app', 'Monthly'),
+            self::WEEKLY => Yii::t('app', 'Weekly'),
+            self::DAILY => Yii::t('app', 'Daily'),
         ];
     }
 
@@ -127,6 +143,64 @@ class ContractMaster extends \yii\db\ActiveRecord
             return 0;
         }
     }
+
+    public static function getAwaitingDisbursementCount()
+    {
+        $awaintingcount = ContractMaster::find()
+            ->where(['is_disbursed'=>'N'])
+            ->andWhere(['auth_stat'=>'A'])
+            ->count();
+        if($awaintingcount>0){
+            return $awaintingcount;
+        }else{
+            return 0;
+        }
+    }
+
+    public static function getWrittenOff()
+    {
+        $writenoff = ContractMaster::find()
+            ->andWhere(['auth_stat'=>'A','contract_status'=>'WF'])
+            ->count();
+        if($writenoff>0){
+            return $writenoff;
+        }else{
+            return 0;
+        }
+    }
+
+    public static function getAwaitingStatus($id)
+    {
+        if (($model = ContractMaster::findOne($id)) !== null) {
+            return $model->is_disbursed;
+        } else {
+            return '';
+        }
+    }
+
+
+    public static function getSettleAccount($id)
+    {
+        if (($model = ContractMaster::findOne($id)) !== null) {
+            return $model->settle_account;
+        } else {
+            return '';
+        }
+    }
+
+    public static function getLoanProduct($id)
+    {
+        if (($model = ContractMaster::findOne($id)) !== null) {
+            return $model->product;
+        } else {
+            return '';
+        }
+    }
+
+
+
+
+
 
     public static function getLoanCount()
     {

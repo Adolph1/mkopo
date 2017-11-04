@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBal;
+use backend\models\Branch;
 use backend\models\ContractAmountDue;
 use backend\models\ContractAmountDueSearch;
 use backend\models\ContractAmountRDDue;
@@ -9,6 +11,7 @@ use backend\models\ContractAmountReduceDue;
 use backend\models\ContractAmountSearch;
 use backend\models\ContractNormalRepayment;
 use backend\models\ContractNormalRepaymentSearch;
+use backend\models\ContractPayment;
 use backend\models\Customer;
 use backend\models\CustomerBalance;
 use backend\models\GlDailyBalance;
@@ -88,9 +91,9 @@ class ContractMasterController extends Controller
     public function actionView($id)
     {
         if (!Yii::$app->user->isGuest) {
-            $loanSchedule=new ContractAmountReduceDue();
+            $payment=new ContractPayment();
             return $this->render('view', [
-                'model' => $this->findModel($id),'loanSchedule'=>$loanSchedule
+                'model' => $this->findModel($id),'payment'=>$payment
             ]);
         }
         else{
@@ -130,6 +133,7 @@ class ContractMasterController extends Controller
                 $model = new ContractMaster();
                 $model->module = 'LD';
                 $model->contract_status = 'A';
+                $model->is_disbursed='N';
                 $model->auth_stat = 'U';
                 $model->maker_id = Yii::$app->user->identity->username;
                 $model->maker_stamptime =SystemDate::getCurrentDate().' '.date('H:i:s');
@@ -144,43 +148,48 @@ class ContractMasterController extends Controller
 
                         //saves to today's transactions
                         //gets accounting roles and events
-                        $role_events=ProductAccrole::getRoleEvents($produtcode=$model->product,$event=EventType::INIT);
+                       /* $role_events=ProductAccrole::getRoleEvents($produtcode=$model->product,$event=EventType::INIT);
                         if($role_events!=null){
                         foreach($role_events as $role_event){
                             if($role_event->dr_cr_indicator=='C'){
-                                TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), $model->customer_number, Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'C', $model->customer_number, $model->product,$model->value_date);
+                                TodayEntry::saveEntry(
+                                    $module = 'LD',
+                                    $model->contract_ref_no,
+                                    SystemDate::getCurrentDate(),
+                                    $model->settle_account,
+                                    Customer::getBranchByCustomerNo($model->customer_number),
+                                    $model->amount,
+                                    $ind = 'C',
+                                    $model->customer_number,
+                                    $model->product,
+                                    $model->value_date
+                                );
+
+
+                                //update Account balance
+
+                                //AccdailyBal::updateAccountBalance($model->settle_account,$model->amount,'C');
+
                             }elseif($role_event->dr_cr_indicator=='D'){
-                                TodayEntry::saveEntry($module = 'LD', $model->contract_ref_no, SystemDate::getCurrentDate(), $role_event->mis_head, Customer::getBranchByCustomerNo($model->customer_number), $model->amount, $ind = 'D', $model->customer_number, $model->product, $model->value_date);
+                                TodayEntry::saveEntry(
+                                    $module = 'LD',
+                                    $model->contract_ref_no,
+                                    SystemDate::getCurrentDate(),
+                                    $role_event->mis_head,
+                                    Customer::getBranchByCustomerNo($model->customer_number),
+                                    $model->amount,
+                                    $ind = 'D',
+                                    $model->customer_number,
+                                    $model->product,
+                                    $model->value_date
+                                );
                                 
-                                //saves gl entry
-                                $gl=$this->findGLBalance($role_event->mis_head);
-                                if($gl!=null){
-                                $gl_balance=new GlDailyBalance();
-                                $gl_balance->trn_date=SystemDate::getCurrentDate();
-                                $gl_balance->gl_code=$role_event->mis_head;
-                                $gl_balance->opening_balance=$model->amount;
-                                $gl_balance->dr_turn=$gl->dr_turn+$model->amount;
-                                $gl_balance->cr_turn=0.00;
-                                $gl_balance->closing_balance= $gl_balance->dr_turn-$gl_balance->cr_turn;
-                                $gl_balance->save();
-                                //updates Gl real Balance
-                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
-                                //updates Gl real Balance
-                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
-                                }else{
-                                $gl_balance=new GlDailyBalance();
-                                $gl_balance->trn_date=SystemDate::getCurrentDate();
-                                $gl_balance->gl_code=$role_event->mis_head;
-                                $gl_balance->opening_balance=$model->amount;
-                                $gl_balance->dr_turn=$model->amount;
-                                $gl_balance->cr_turn=0.00;
-                                $gl_balance->closing_balance= $gl_balance->dr_turn-$gl_balance->cr_turn;
-                                $gl_balance->save();
-                                //updates Gl real Balance
-                                GeneralLedger::updateAll(['balance'=>$gl_balance->closing_balance],['gl_code'=>$role_event->mis_head]);
-                                }
+                                //update GL balance
+
+                               // GlDailyBalance::updateGLBalance($role_event->mis_head,$model->amount,'D');
+
                             }
-                            }
+                            }*/
                      if($model->save()){
                     //saves gurantors
                     $guarantors = Model::createMultiple(Guarantor::classname());
@@ -381,7 +390,7 @@ class ContractMasterController extends Controller
                           $duemodel->balance=$balance;
                           $duemodel->interest_amount_settled = '0.00';
                           $duemodel->principal_amount_settled = '0.00';
-                          $duemodel->account_due = $model->customer_number;
+                          $duemodel->account_due = $model->settle_account;
 
                           $duemodel->customer_number = $model->customer_number;
                           $duemodel->inflow_outflow = 'O';
@@ -421,11 +430,6 @@ class ContractMasterController extends Controller
 
                     return $this->redirect(['view', 'id' => $model->contract_ref_no]);
                 }
-                } else {
-                    return $this->render('create', [
-                        'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
-                    ]);
-                }
             }
               else{
 
@@ -454,27 +458,152 @@ class ContractMasterController extends Controller
     {
         if(!Yii::$app->user->isGuest) {
             $model=$this->findModel($id);
-            $balance=CustomerBalance::getBalance($model->customer_number);
-            if($balance!=0.00) {
-                $newbalance=$balance+$model->amount;
-                CustomerBalance::updateAll(['current_balance' => $newbalance], ['customer_number' => $model->customer_number]);
-            }
-            else{
-                $customerbalance=new CustomerBalance();
-                $customerbalance->customer_number=$model->customer_number;
-                $customerbalance->current_balance=$model->amount;
-                $customerbalance->opening_balance=$model->amount;
-                $customerbalance->last_updated=SystemDate::getCurrentDate().' '.date('H:i:s');
-                $customerbalance->save();
-            }
             $model->checker_id=Yii::$app->user->identity->username;
             $model->checker_stamptime=SystemDate::getCurrentDate().' '.date('H:i:s');
             $model->auth_stat='A';
 
             if($model->save()){
-                TodayEntry::updateAll(['auth_stat'=>'A'],['trn_ref_no'=>$model->contract_ref_no]);
+                $role_events=ProductAccrole::getRoleEvents($model->product,$event=EventType::INIT);
+                if($role_events!=null) {
+                    foreach ($role_events as $role_event) {
+                        if ($role_event->dr_cr_indicator == 'C') {
+
+
+                            //saves customer leg
+                            TodayEntry::saveEntry(
+                                $module = 'LD',
+                                $model->contract_ref_no,
+                                SystemDate::getCurrentDate(),
+                                $model->settle_account,
+                                Customer::getBranchByCustomerNo($model->customer_number),
+                                $model->amount,
+                                $ind = 'C',
+                                $model->customer_number,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+                            //updates customer account balance
+
+                            AccdailyBal::updateAccountBalance($model->settle_account, $model->amount, 'C');
+
+
+                        } elseif ($role_event->dr_cr_indicator == 'D') {
+
+                            //saves GL leg
+                            TodayEntry::saveEntry(
+                                $module = 'LD',
+                                $model->contract_ref_no,
+                                SystemDate::getCurrentDate(),
+                                $role_event->mis_head,
+                                Customer::getBranchByCustomerNo($model->customer_number),
+                                $model->amount,
+                                $ind = 'D',
+                                $model->customer_number,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+
+                            //updates GL balance
+
+                            GlDailyBalance::updateGLBalance($role_event->mis_head, $model->amount, 'D');
+
+
+                        }
+                    }
+                }
+                TodayEntry::updateAll(['auth_stat'=>'A','checker_id'=>$model->checker_id,'checker_time'=>$model->checker_stamptime],['trn_ref_no'=>$model->contract_ref_no,'auth_stat'=>'U']);
             }
             return $this->redirect(['view', 'id' => $model->contract_ref_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDisburse($id)
+    {
+        if(!Yii::$app->user->isGuest) {
+            $model = $this->findModel($id);
+            $model->is_disbursed = 'Y';
+            if ($model->save()) {
+
+
+
+                $role_events=ProductAccrole::getRoleEvents($model->product,$event=EventType::LDS);
+                if($role_events!=null) {
+                    foreach ($role_events as $role_event) {
+                        if ($role_event->dr_cr_indicator == 'D') {
+
+
+                            //saves customer leg
+                            TodayEntry::saveEntry(
+                                $module = 'LD',
+                                $model->contract_ref_no,
+                                SystemDate::getCurrentDate(),
+                                $model->settle_account,
+                                Customer::getBranchByCustomerNo($model->customer_number),
+                                $model->amount,
+                                $ind = 'D',
+                                $model->customer_number,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+                            //updates customer account balance
+
+                            AccdailyBal::updateAccountBalance($model->settle_account, $model->amount, 'D');
+
+
+                        } elseif ($role_event->dr_cr_indicator == 'C') {
+
+                            //saves GL leg
+                            TodayEntry::saveEntry(
+                                $module = 'LD',
+                                $model->contract_ref_no,
+                                SystemDate::getCurrentDate(),
+                                $role_event->mis_head,
+                                Customer::getBranchByCustomerNo($model->customer_number),
+                                $model->amount,
+                                $ind = 'C',
+                                $model->customer_number,
+                                $model->product,
+                                SystemDate::getCurrentDate(),
+                                $event
+                            );
+
+
+                            //updates GL balance
+
+                            GlDailyBalance::updateGLBalance($role_event->mis_head, $model->amount, 'C');
+
+
+                        }
+                    }
+                }
+                TodayEntry::updateAll(['auth_stat'=>'A','checker_id'=>Yii::$app->user->identity->username,'checker_time'=>SystemDate::getCurrentDate() . ' ' . date('H:i:s')],['trn_ref_no'=>$model->contract_ref_no,'auth_stat'=>'U']);
+
+                $payment = new ContractPayment();
+                $payment->trn_dt = SystemDate::getCurrentDate();
+                $payment->contract_ref_number = $model->contract_ref_no;
+                $payment->debit = $model->amount;
+                $payment->credit = 0.00;
+                $payment->transaction_type = 1;
+                $payment->balance = $payment->debit - $payment->credit;
+                $payment->maker_id = Yii::$app->user->identity->username;
+                $payment->maker_time = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
+                $payment->save();
+
+
+                return $this->redirect(['view', 'id' => $model->contract_ref_no]);
+            }
         }
         else{
             $model = new LoginForm();
@@ -521,10 +650,23 @@ class ContractMasterController extends Controller
 
     }
 
+    public function actionWriteOff($id)
+    {
+        if(!Yii::$app->user->isGuest){
+            $model=$this->findModel($id);
+            $model->contract_status='WF';
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->contract_ref_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
 
 
-
-
+    }
 
 
 
@@ -578,16 +720,6 @@ class ContractMasterController extends Controller
 
     }
 
-      protected function findGLBalance($id)
-    {
-
-            if (($model = GlDailyBalance::find()->where(['gl_code'=>$id])->orderBy('id DESC')->one()) !== null) {
-                return $model;
-            } else {
-                return null;
-            }
-
-    }
 
 
     public function actionList($id)

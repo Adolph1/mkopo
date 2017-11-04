@@ -76,12 +76,12 @@ $this->title = $model->cust_ac_no;
                     echo Html::a(Yii::t('app', '<i class="fa fa-times text-red"></i> Disable'), ['delete', 'id' => $model->cust_ac_no], [
                         'class' => 'btn btn-default',
                         'data' => [
-                            'confirm' => Yii::t('app', 'Are you sure you want to delete this customer?'),
+                            'confirm' => Yii::t('app', 'Are you sure you want to Disable this customer?'),
                             'method' => 'post',
                         ],
                     ]);
                 } elseif($model->acc_status=='D'){
-                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['enable', 'id' => $model->check_stamptime], [
+                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Enable'), ['enable', 'id' => $model->cust_ac_no], [
                         'class' => 'btn btn-default',
                         'data' => [
                             'confirm' => Yii::t('app', 'Are you sure you want to enable this customer?'),
@@ -110,11 +110,56 @@ $this->title = $model->cust_ac_no;
             'ac_desc',
             'cust_no',
             'account_class',
-            'ac_stat_no_dr',
-            'ac_stat_no_cr',
-            'ac_stat_no_block',
-            'ac_stat_stop_pay',
-            'ac_stat_dormant',
+            [
+                    'attribute'=>'ac_stat_no_dr',
+                    'value'=>function ($model){
+                        if($model->ac_stat_no_dr==\backend\models\ContractMaster::ACTION_NO){
+                            return 'NO';
+                        }elseif ($model->ac_stat_no_dr==\backend\models\ContractMaster::ACTION_YES){
+                            return 'YES';
+                        }
+                    }
+            ],
+            [
+                'attribute'=>'ac_stat_no_cr',
+                'value'=>function ($model){
+                    if($model->ac_stat_no_cr==\backend\models\ContractMaster::ACTION_NO){
+                        return 'NO';
+                    }elseif ($model->ac_stat_no_cr==\backend\models\ContractMaster::ACTION_YES){
+                        return 'YES';
+                    }
+                }
+            ],
+            [
+                'attribute'=>'ac_stat_no_block',
+                'value'=>function ($model){
+                    if($model->ac_stat_no_block==\backend\models\ContractMaster::ACTION_NO){
+                        return 'NO';
+                    }elseif ($model->ac_stat_no_block==\backend\models\ContractMaster::ACTION_YES){
+                        return 'YES';
+                    }
+                }
+            ],
+            [
+                'attribute'=>'ac_stat_stop_pay',
+                'value'=>function ($model){
+                    if($model->ac_stat_stop_pay==\backend\models\ContractMaster::ACTION_NO){
+                        return 'NO';
+                    }elseif ($model->ac_stat_stop_pay==\backend\models\ContractMaster::ACTION_YES){
+                        return 'YES';
+                    }
+                }
+            ],
+            [
+                'attribute'=>'ac_stat_dormant',
+                'value'=>function ($model){
+                    if($model->ac_stat_dormant==\backend\models\ContractMaster::ACTION_NO){
+                        return 'NO';
+                    }elseif ($model->ac_stat_dormant==\backend\models\ContractMaster::ACTION_YES){
+                        return 'YES';
+                    }
+                }
+            ],
             'acc_open_date',
             'ac_opening_bal',
             'dormancy_date',
@@ -151,19 +196,35 @@ $this->title = $model->cust_ac_no;
             'align' => TabsX::ALIGN_LEFT,
             'items' => [
                 [
-                    'label' => 'Statements',
-                    //'content' => $this->render('_member_form',['model'=>$model,]),
+                    'label' => 'Account Statement',
+                    'content' => $this->render('statement',['model'=>$model,]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['style' => 'background:#ccc'],
+                    'options' => ['style' => 'background:#fff'],
+
+                ],
+                [
+                    'label' => 'Available Balance',
+                    'content' => $this->render('balance',['model'=>$model,]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
+
+                ],
+                [
+                    'label' => 'Daily Balances',
+                    'content' => $this->render('historyBalance',['model'=>$model,]),
+                    //'active' => $model->status==1,
+                    'headerOptions' => ['style'=>'font-weight:bold'],
+                    'options' => ['style' => 'background:#fff'],
 
                 ],
                 [
                     'label' => 'Linked Loans',
-                    //'content' => $this->render('_member_form',['model'=>$model,]),
+                    'content' => $this->render('linkedLoans',['model'=>$model,]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['style' => 'background:#ccc'],
+                    'options' => ['style' => 'background:#fff'],
 
                 ],
 

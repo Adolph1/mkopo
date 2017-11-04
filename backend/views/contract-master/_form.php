@@ -28,7 +28,7 @@ use yii\web\JsExpression;
     </div>
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+            <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\ContractMaster::getArrayMethods(),['prompt'=>Yii::t('app','--Select--')]) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'amount')->textInput(['maxlength' => 20]) ?>
@@ -38,8 +38,11 @@ use yii\web\JsExpression;
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-4">
             <?= $form->field($model, 'customer_name')->dropDownList(\backend\models\Customer::getAll(),['prompt'=>Yii::t('app','--Select--')]) ?>
+        </div>
+        <div class="col-md-4">
+            <?= $form->field($model, 'settle_account')->dropDownList(['prompt'=>Yii::t('app','--Select--')]) ?>
         </div>
         <div class="col-md-4">
             <?= $form->field($model, 'customer_number')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
@@ -53,7 +56,7 @@ use yii\web\JsExpression;
                 [
                     //'name' => 'purchase_date',
                     //'value' => date('d-M-Y', strtotime('+2 days')),
-                    'options' => ['placeholder' => 'Enter expire date'],
+                    'options' => ['placeholder' => 'Enter booking date'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'autoclose' => true,
@@ -66,7 +69,7 @@ use yii\web\JsExpression;
                 [
                     //'name' => 'purchase_date',
                     //'value' => date('d-M-Y', strtotime('+2 days')),
-                    'options' => ['placeholder' => 'Enter expire date'],
+                    'options' => ['placeholder' => 'Enter value date'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'autoclose' => true,
@@ -90,7 +93,7 @@ use yii\web\JsExpression;
                 [
                     //'name' => 'purchase_date',
                     //'value' => date('d-M-Y', strtotime('+2 days')),
-                    'options' => ['placeholder' => 'Enter expire date','id'=>'datechange'],
+                    'options' => ['placeholder' => 'Enter first payment date','id'=>'datechange'],
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                         'autoclose' => true,

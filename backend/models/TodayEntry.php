@@ -49,9 +49,9 @@ class TodayEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['batch_number','ac_branch'], 'integer'],
+            [['batch_number','ac_branch','event'], 'integer'],
             [['amount'], 'number'],
-            [['module', 'trn_ref_no', 'trn_dt', 'entry_sr_no', 'ac_no', 'event_sr_no', 'event','amount_tag', 'drcr_ind', 'trn_code', 'related_customer','product', 'value_dt', 'finacial_year', 'period_code', 'maker_id', 'maker_stamptime', 'checker_id', 'auth_stat', 'delete_stat', 'instrument_code'], 'string', 'max' => 200]
+            [['module', 'trn_ref_no', 'trn_dt', 'entry_sr_no', 'ac_no', 'event_sr_no', 'amount_tag', 'drcr_ind', 'trn_code', 'related_customer','product', 'value_dt', 'finacial_year', 'period_code', 'maker_id', 'maker_stamptime', 'checker_id', 'auth_stat', 'delete_stat', 'instrument_code'], 'string', 'max' => 200]
         ];
     }
 
@@ -91,12 +91,13 @@ class TodayEntry extends \yii\db\ActiveRecord
 
     //saves today entry
 
-    public static function saveEntry($module,$ref,$trn_dt,$acc,$branch,$amount,$ind,$customer,$product,$value_date)
+    public static function saveEntry($module,$ref,$trn_dt,$acc,$branch,$amount,$ind,$customer,$product,$value_date,$event)
     {
         $model=new TodayEntry();
         $model->ac_branch=$branch;
         $model->ac_no=$acc;
         $model->amount=$amount;
+        $model->event=$event;
         $model->module=$module;
         $model->trn_ref_no=$ref;
         $model->trn_dt=$trn_dt;
@@ -121,7 +122,7 @@ class TodayEntry extends \yii\db\ActiveRecord
 
     public static function getUnauthorised()
     {
-         $count=TodayEntry::find()->where(['auth_stat'=>'U','trn_dt'=>SystemDate::getCurrentDate()])->count();
+         $count=TodayEntry::find()->where(['auth_stat'=>'U','trn_dt'=>SystemDate::getCurrentDate()])->andWhere(['!=','delete_stat','D'])->count();
          return $count;
     }
 

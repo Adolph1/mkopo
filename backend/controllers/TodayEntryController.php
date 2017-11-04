@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\EventType;
 use Yii;
 use backend\models\TodayEntry;
 use backend\models\TodayEntrySearch;
@@ -45,7 +46,7 @@ class TodayEntryController extends Controller
     public function actionUnauthorised()
     {
         $searchModel = new TodayEntrySearch();
-        $dataProvider = $searchModel->searchunauthorised();
+        $dataProvider = $searchModel->searchUnauthorised();
 
         return $this->render('unauthorised', [
             'searchModel' => $searchModel,
@@ -113,6 +114,44 @@ class TodayEntryController extends Controller
             ]);
         }
     }
+    public function actionStatement($id,$start_date,$end_date)
+    {
+        $statements=$this->loadStatement($id,$start_date,$end_date);
+        if($statements!=null){
+            $balance=0.00;
+            echo '<table class="table table-condensed">';
+            echo '<tr><th>Date</th><th>Reference</th><th>Description</th><th>Credit</th><th>Debit</th><th>Balance</th></tr>';
+            foreach ($statements as $statement){
+                echo '<tr>';
+                echo '<td>'.$statement->trn_dt.'</td>';
+                echo '<td>'.$statement->trn_ref_no.'</td>';
+                if($statement->event==EventType::INIT){
+                    echo '<td>New Transaction</td>';
+                }elseif ($statement->event==EventType::LDS){
+                    echo '<td>Disbursement</td>';
+                } elseif ($statement->event==EventType::LQD){
+                    echo '<td>Repayment</td>';
+                }
+                elseif ($statement->event==EventType::RVS){
+                    echo '<td>Reversal</td>';
+                }else{
+                    echo '<td></td>';
+                }
+                if($statement->drcr_ind=='C'){
+                    echo '<td>'.$statement->amount.'</td>';
+                    echo '<td>0.00</td>';
+                    echo '<td>'.$balance=$balance+$statement->amount.'</td>';
+                }elseif ($statement->drcr_ind=='D'){
+                    echo '<td>0.00</td>';
+                    echo '<td>'.$statement->amount.'</td>';
+                    echo '<td>'.$balance=$balance-$statement->amount.'</td>';
+                }
+                echo '</tr>';
+            }
+
+            echo '</table>';
+        }
+    }
 
     /**
      * Deletes an existing TodayEntry model.
@@ -137,6 +176,15 @@ class TodayEntryController extends Controller
     protected function findModel($id)
     {
         if (($model = TodayEntry::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    protected function loadStatement($account,$start_date,$end_date)
+    {
+        if (($model = TodayEntry::find()->where(['ac_no'=>$account])->andWhere(['between','trn_dt',$start_date,$end_date])->all()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -26,6 +26,13 @@ class ContractPayment extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    const DISBURSEMENT=1;
+    const REPAYMENT=2;
+    const REVERSAL=3;
+    public $amount;
+    public $payment_method;
+    public $receipt;
+
     public static function tableName()
     {
         return 'tbl_contract_payment';
@@ -52,7 +59,7 @@ class ContractPayment extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'trn_dt' => Yii::t('app', 'Trn Dt'),
+            'trn_dt' => Yii::t('app', 'Transaction Date'),
             'transaction_type' => Yii::t('app', 'Transaction Type'),
             'contract_ref_number' => Yii::t('app', 'Contract Ref Number'),
             'debit' => Yii::t('app', 'Debit'),
@@ -66,4 +73,17 @@ class ContractPayment extends \yii\db\ActiveRecord
             'checker_time' => Yii::t('app', 'Checker Time'),
         ];
     }
+
+    public static function getLastBalance($id)
+    {
+        $model = ContractPayment::find()->where(['contract_ref_number'=>$id])->orderBy('id DESC')->one();
+        if($model!=null){
+            return $model->balance;
+        }else{
+            return 0;
+        }
+    }
+
+
+
 }

@@ -19,13 +19,48 @@ use kartik\tabs\TabsX;
     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN DETAILS</strong></h3>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-right">
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 text-right">
 
 
             <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-default text-green']) ?>
 
 
             <?= Html::a(Yii::t('app', '<i class="fa fa-th text-green"></i> LOANS LIST'), ['index'], ['class' => 'btn btn-default text-green']) ?>
+
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
+
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <?php
+                if($model->contract_status=='A') {
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-pencil text-blue"></i> Reverse'), ['reverse', 'id' => $model->contract_ref_no], ['class' => 'btn btn-default']) ;
+
+                    echo Html::a(Yii::t('app', '<i class="fa fa-times text-red"></i> Write Off'), ['write-off', 'id' => $model->contract_ref_no], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to write off this loan contract?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                } elseif($model->contract_status=='WF'){
+                    echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Write On'), ['write-on', 'id' => $model->contract_ref_no], [
+                        'class' => 'btn btn-default',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to write on this loan contract?'),
+                            'method' => 'post',
+                        ],
+                    ]);
+                }
+
+                ?>
+            </ul>
+        </div>
 
     </div>
 
@@ -55,7 +90,7 @@ use kartik\tabs\TabsX;
                 <?= $form->field($model, 'amount')->textInput(['maxlength' => 20,'readonly'=>'readonly']) ?>
             </div>
             <div class="col-md-6">
-                <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
+                <?= $form->field($model, 'payment_method')->dropDownList(\backend\models\ContractMaster::getArrayMethods(),['prompt'=>Yii::t('app','--Select--'),'disabled'=>'disabled']) ?>
             </div>
 
         </div>
@@ -66,6 +101,13 @@ use kartik\tabs\TabsX;
             </div>
             <div class="col-md-4">
                 <?= $form->field($model, 'customer_number')->textInput(['maxlength' => 200,'readonly'=>'readonly']) ?>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'settle_account')->textInput(['readonly'=>'readonly']) ?>
+
             </div>
 
         </div>
@@ -145,21 +187,23 @@ use kartik\tabs\TabsX;
         </div>
 
         <div class="row">
-            <div class="col-md-6 text-right">
-                <legend class="scheduler-border" style="color:#005DAD">Contract Status:</legend>
-            </div>
-            <div class="col-md-6">
-                <legend class="scheduler-border" style="color:#31708f">
+            <div class="col-md-12">
                 <?php if(!$model->isNewRecord) {
                     if($model->contract_status=='D'){
-                        echo 'Deleted';
+                     echo $form->field($model, 'contract_status')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'Deleted']);
                     }elseif($model->contract_status=='L'){
-                        echo 'Liquidated';
+                        echo $form->field($model, 'contract_status')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'Liquidated']);
                     }elseif ($model->contract_status=='A'){
-                        echo 'Active';
+                        echo $form->field($model, 'contract_status')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'Active']);
+                    }
+                    elseif ($model->contract_status=='PDO'){
+                        echo $form->field($model, 'contract_status')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'PDO']);
+                    }
+                    elseif ($model->contract_status=='WF'){
+                        echo $form->field($model, 'contract_status')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'Written Off']);
                     }
                 } ?>
-                </legend>
+
             </div>
         </div>
 
@@ -203,7 +247,7 @@ use kartik\tabs\TabsX;
                 ],
                 [
                     'label' => 'Schedule',
-                    'content' => $this->render('schedule',['model'=>$model,'loanSchedule'=>$loanSchedule]),
+                    'content' => $this->render('schedule',['model'=>$model,'payment'=>$payment]),
                     //'active' => $model->status==1,
                     'headerOptions' => ['style'=>'font-weight:bold'],
                     'options' => ['style' => 'background:#fff'],
@@ -243,15 +287,29 @@ use kartik\tabs\TabsX;
                         elseif($model->contract_status=='A') {
                             if($model->auth_stat=='U') {
                                 echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->contract_ref_no], [
-                                    'class' => 'btn btn-danger btn-block',
+                                    'class' => yii::$app->User->can('LoanOfficer')? 'btn btn-danger enabled btn-block':'btn btn-danger disabled btn-block',
                                     'data' => [
                                         'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
                                         'method' => 'post',
                                     ],
                                 ]);
-                                echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Approve'), ['approve','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-warning enabled btn-block':'btn btn-warning disabled btn-block']);
+                                echo Html::a(Yii::t('app', 'Approve'), ['approve', 'id' => $model->contract_ref_no], [
+                                    'class' => yii::$app->User->can('LoanManager')? 'btn btn-warning enabled btn-block':'btn btn-warning disabled btn-block',
+                                    'data' => [
+                                        'confirm' => Yii::t('app', 'Are you sure you want to approve this Loan Contract?'),
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                               // echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Approve'), ['approve','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-warning enabled btn-block':'btn btn-warning disabled btn-block']);
 
                             }
+
+
+                        }
+                        if($model->is_disbursed=='N' && $model->contract_status=='A' && $model->auth_stat=='A'){
+                            echo Html::a(Yii::t('app', '<i class="fa fa-check text-green"></i> Disburse Loan'), ['disburse','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-warning enabled ':'btn btn-warning disabled']);
+
+                            echo Html::a(Yii::t('app', '<i class="fa fa-times text-green"></i> Reject Loan'), ['reject','id' => $model->contract_ref_no], ['class' =>yii::$app->User->can('LoanManager') ? 'btn btn-default enabled':'btn btn-default disabled']);
 
 
                         }

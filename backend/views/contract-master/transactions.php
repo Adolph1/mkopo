@@ -11,45 +11,51 @@ use yii\helpers\Html;
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <?php
-        $searchModel = new \backend\models\TodayEntrySearch();
-        $dataProvider = $searchModel->searchByReference($model->contract_ref_no,$model->customer_number);
+        //$searchModel = new \backend\models\TodayEntrySearch();
+       // $dataProvider = $searchModel->searchByReference($model->contract_ref_no,$model->customer_number);
+
+        $searchModel = new \backend\models\ContractPaymentSearch();
+        $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
         ?>
-        <?= \fedemotta\datatables\DataTables::widget([
+        <?= \yii\grid\GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
                 'trn_dt',
-                'value_dt',
-                'amount',
-                'ac_no',
-                'drcr_ind',
                 [
-                    'class'=>'yii\grid\ActionColumn',
-                    'header'=>'Actions',
-                    'template'=>'{view}',
-                    'buttons'=>[
-                        'view' => function ($url, $model) {
-                            if($model->module=='DE'){
-                                $path='teller';
-                                $id=\backend\models\Teller::getIDByReference($model->trn_ref_no);
-                            }elseif($model->module=='LD'){
-                                $path='contract-master';
-                                $id=$model->trn_ref_no;
-                            }
-                            $url=[$path.'/view','id' => $id];
-                            return Html::a('<span class="fa fa-eye"></span>', $url, [
-                                'title' => 'View',
-                                'data-toggle'=>'tooltip','data-original-title'=>'Save',
-                                'class'=>'btn btn-info',
+                  'attribute'=>'transaction_type',
+                    'value'=>function ($model){
+                    if($model->transaction_type==\backend\models\ContractPayment::DISBURSEMENT){
 
-                            ]);
+                        return 'Disbursement';
 
+                    }elseif ($model->transaction_type==\backend\models\ContractPayment::REPAYMENT){
 
-                        },
+                        return 'Repayment';
 
-                    ]
+                    }elseif ($model->transaction_type==\backend\models\ContractPayment::REVERSAL){
+
+                        return 'Reversal';
+                    }
+                    }
                 ],
+                'debit',
+                'credit',
+                'balance',
+        [
+        'attribute'=>'description',
+        'value'=>function ($model){
+            if($model->description=="")
+            {
+                return "";
+            }else{
+                return $model->description;
+            }
+
+        }
+        ],
+
             ],
         ]); ?>
     </div>

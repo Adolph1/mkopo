@@ -152,26 +152,8 @@ desired effect
                 if (!Yii::$app->user->isGuest) {
                     ?>
 
-                System Date:<?= \backend\models\SystemDate::getCurrentDate();?> |
-                    System Stage:<?php
-                    $curren_stage=\backend\models\SystemSetup::getCurrentStage();
-                    if($curren_stage==\backend\models\SystemStage::TI){
-                        echo 'TRANSACTIONS INPUT';
+                System Date:<?= \backend\models\SystemDate::getCurrentDate();?>
 
-                    }elseif($curren_stage==\backend\models\SystemStage::EOTI) {
-                        echo 'END OF TRANSACTIONS INPUT';
-
-                    }elseif($curren_stage==\backend\models\SystemStage::EOTI){
-
-                        echo 'END OF FINANCIAL INPUT';
-
-                    }elseif($curren_stage==\backend\models\SystemStage::EOD){
-
-                        echo 'END OF DAY';
-
-                    }
-
-                    ?>
                 <?php }?>
             </a>
 
@@ -184,6 +166,7 @@ desired effect
                         <ul class="dropdown-menu">
 
                             <li>
+
                                 <!-- inner menu: contains the messages -->
                                 <ul class="menu">
                                     <?php
@@ -210,6 +193,32 @@ desired effect
                             <!-- The user image in the navbar-->
 
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs" style="margin-right: 200px"> <?php
+                            $curren_stage=\backend\models\SystemSetup::getCurrentStage();
+                            if($curren_stage==\backend\models\SystemStage::TI){
+                                echo 'TRANSACTIONS INPUT';
+
+                            }elseif($curren_stage==\backend\models\SystemStage::EOTI) {
+                                echo 'END OF TRANSACTIONS INPUT';
+
+                            }elseif($curren_stage==\backend\models\SystemStage::EOFI){
+
+                                echo 'END OF FINANCIAL INPUT';
+
+                            }elseif($curren_stage==\backend\models\SystemStage::EOD){
+
+                                echo 'END OF DAY';
+
+                            }
+
+                            ?>
+                            </span>
+                            <span class="hidden-xs">
+                                <?php
+                                if (!Yii::$app->user->isGuest) {
+                                   // echo '<i>welcome:</i>'. Yii::$app->user->identity->username;
+                                }
+                                ?></span>
                             <span class="hidden-xs">
                                 <?php
                                 if (!Yii::$app->user->isGuest) {
@@ -507,7 +516,8 @@ desired effect
                             ],
 
 
-                            [
+
+                            /*[
                                 "label" =>Yii::t('app','Interests & Charges'),
                                 "url" =>  "#",
                                 "icon" => "fa fa-lock",
@@ -528,7 +538,9 @@ desired effect
 
 
 
-                            ],
+
+                             ],
+                            */
                             [
                                 'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')||yii::$app->User->can('admin'),
                                 "label" =>Yii::t('app','Employees'),
@@ -592,7 +604,7 @@ desired effect
                                     [
                                         'visible' => yii::$app->User->can('LoanManager') || yii::$app->User->can('admin'),
                                         'label' => Yii::t('app', 'EOD'),
-                                        'url' => ['/system-setup/run-eod'],
+                                        'url' => ['/eod-cycle/index'],
                                         'icon' => 'fa fa-lock',
                                     ],
 
@@ -756,22 +768,21 @@ desired effect
 <?php $this->endPage() ?>
 <script>
     $("#run-ti").click(function(){
-        $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-ti']);?>",function(data) {
-            //alert('yes bro');
-        });
-    });
-
-    $("#run-eoti").click(function(){
+        //alert('yes bro');
         $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eoti']);?>",function(data) {
             //alert('yes bro');
         });
     });
+
     $("#run-eofi").click(function(){
+        alert('yes bro');
         $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eofi']);?>",function(data) {
             //alert('yes bro');
         });
     });
+
     $("#run-eod").click(function(){
+        alert('yes bro');
         $.get("<?php echo Yii::$app->urlManager->createUrl(['system-setup/run-eod']);?>",function(data) {
             //alert('yes bro');
         });
@@ -828,7 +839,6 @@ desired effect
     });
 
     $(document).ready(function(){
-
         //alert('yes bro');
         var account_role=document.getElementById('productevententry-product_code').value;
         //alert(account_role);
@@ -981,8 +991,46 @@ desired effect
         $('.activity-view-link').click(function() {
            // alert('yes bro');
             var elementId = $(this).closest('tr').data('key');
-            alert(elementId);
-        }
+            //alert(elementId);
+        });
+
+        $("#repay-id").click(function(){
+           var id= document.getElementById('contractpayment-id').value;
+            var amount= document.getElementById('contractpayment-amount').value;
+            //alert('yes bro');
+            $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-payment/create-payment', 'id' => '']);?>" + id+'&amount='+amount, function (data) {
+                alert(data);
+                //document.getElementById("contractmaster-maturity_date").value = data;
+
+
+            });
+        });
+</script>
+
+<script>
+    window.onload = function() {
+        //alert('yes bro');
+        //gets statement
+        var id=document.getElementById("account-id").innerHTML;
+        var from=document.getElementById("from-id").innerHTML;
+        var to=document.getElementById("to-id").innerHTML;
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['today-entry/statement', 'id' => '']);?>"+ id +'&start_date='+ from +'&end_date='+ to, function (data) {
+            $("#statement-table").html(data);
+        });
+
+
+    };
+
+    $("#print-preview").click(function(){
+        var printContents = document.getElementById('statement').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    });
 </script>
 
 
