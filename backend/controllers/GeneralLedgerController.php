@@ -108,6 +108,33 @@ class GeneralLedgerController extends Controller
         return $this->redirect(['index']);
     }
 
+
+
+
+    public function actionFetchCredit($id)
+    {
+        $countGls = GeneralLedger::find()
+            ->where(['!=','gl_code',$id])
+            ->count();
+
+        $gls = GeneralLedger::find()
+            ->where(['!=','gl_code',$id])
+            ->orderBy('gl_code DESC')
+            ->all();
+
+        if($countGls>0){
+            echo "<option> --Select-- </option>";
+            foreach($gls as $gl){
+
+                echo "<option value='".$gl->gl_code."'>".$gl->gl_description."</option>";
+            }
+        }
+        else{
+            echo "<option> </option>";
+        }
+
+    }
+
     /**
      * Finds the GeneralLedger model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

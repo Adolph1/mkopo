@@ -723,7 +723,7 @@ class ContractMasterController extends Controller
 
 
     public function actionList($id)
-{
+    {
     $countPosts = Account::find()
         ->where(['cust_no' => $id])
         ->count();
@@ -742,7 +742,7 @@ class ContractMasterController extends Controller
         echo "<option> </option>";
     }
 
-}
+    }
     public function actionProductgroup($id)
 {
     $countProducts = Product::find()

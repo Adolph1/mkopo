@@ -517,30 +517,6 @@ desired effect
 
 
 
-                            /*[
-                                "label" =>Yii::t('app','Interests & Charges'),
-                                "url" =>  "#",
-                                "icon" => "fa fa-lock",
-                                "items" => [
-                                    [
-                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Interests'),
-                                        "url" =>["/teller/create"],
-                                        "icon" => "fa fa-angle-double-right",
-                                    ],
-                                    [
-                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Charges'),
-                                        "url" =>["/teller/index"],
-                                        "icon" => "fa fa-angle-double-right",
-                                    ],
-                                ],
-
-
-
-
-                             ],
-                            */
                             [
                                 'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')||yii::$app->User->can('admin'),
                                 "label" =>Yii::t('app','Employees'),
@@ -556,7 +532,29 @@ desired effect
 
                             //["label" =>Yii::t('app','Locations'), "url" =>  ["/location/index"], "icon" => "fa fa-sitemap",],
 
+                            [
+                                "label" =>Yii::t('app','SMS Module'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-envelope-o",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','SMS Templates'),
+                                        "url" =>["/sms-template/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','SMS Logs'),
+                                        "url" =>["/sms-log/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
 
+
+
+
+                            ],
 
 
                             [
@@ -954,6 +952,12 @@ desired effect
 
 
     });
+
+
+
+
+
+
 </script>
 
 <script>
@@ -970,6 +974,24 @@ desired effect
 
         });
     });
+
+    $("#journalentry-debit_account").change(function() {
+
+
+        var id = document.getElementById("journalentry-debit_account").value;
+
+        alert(id);
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['general-ledger/fetch-credit', 'id' => '']);?>" + id, function (data) {
+            alert(data);
+
+            $("#journalentry-credit_account").html(data);
+
+
+        });
+
+    });
+
 
 </script>
 
@@ -1019,7 +1041,21 @@ desired effect
         });
 
 
+
+
     };
+
+
+        $("#new-entry").click(function () {
+            var refno = 'JRN';
+            //alert(refno);
+            $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference', 'id' => '']);?>" + refno, function (data) {
+                //alert(data);
+                document.getElementById("journalentry-trn_ref_no").value = data;
+                $("#prodid").html('');
+
+        });
+    });
 
     $("#print-preview").click(function(){
         var printContents = document.getElementById('statement').innerHTML;

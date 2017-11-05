@@ -22,6 +22,8 @@ class EventType extends \yii\db\ActiveRecord
     const RVS=2;
     const LQD=3;
     const LDS=4;
+    const JN_TO=5;
+    const JN_BY=6;
 
 
     public static function tableName()

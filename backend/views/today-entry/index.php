@@ -30,6 +30,17 @@ $this->title = 'Today Entries';
              'ac_no',
              'amount',
             'drcr_ind',
+           [
+                   'attribute'=>'event',
+                    'value'=>function ($model){
+                        if($model->event==\backend\models\EventType::JN_BY){
+
+                            return 'By '.\backend\models\JournalEntry::getDebitAccount($model->trn_ref_no);
+                        }elseif ($model->event==\backend\models\EventType::JN_TO){
+                            return 'To '.\backend\models\JournalEntry::getCreditAccount($model->trn_ref_no);
+                        }
+                    }
+           ],
             [
                 'header'=>'Customer Name',
                 'value'=>function($model){
