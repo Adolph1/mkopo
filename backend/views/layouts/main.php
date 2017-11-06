@@ -185,6 +185,36 @@ desired effect
                         </ul>
                     </li><!-- /.Languages-menu -->
 
+                    <?php
+                    if (!Yii::$app->user->isGuest && yii::$app->User->can('LoanOfficer')) {
+                        //echo Yii::$app->user->identity->username;
+
+                        ?>
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <li class="dropdown messages-menu">
+                            <!-- Menu toggle button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <?php
+                                $awatingRepayments=\backend\models\ContractAmountReduceDue::getAwaiting();
+                                ?>
+                                <span class="label label-warning"><?= $awatingRepayments;?></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li class="header"><i class="fa fa-th text-aqua"></i> You have <?= $awatingRepayments;?> members awaiting for contribution this month</li>
+                                <?php
+                                if($awatingRepayments>0){
+                                    echo  '<li><div class="col-sm-12 text-center" style="padding: 10px">'.Html::a(Yii::t('app', 'View'), ['parent-detail/awaiting'], ['class' => 'btn btn-primary']).'</div></li>';
+                                }
+                                ?>
+
+                            </ul>
+
+                        </li><!-- /.messages-menu -->
+                    <?php }?>
+
+
 
                     <!-- User Account Menu -->
                     <li class="dropdown user user-menu">

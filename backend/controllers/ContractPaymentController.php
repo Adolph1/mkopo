@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\AccdailyBal;
 use backend\models\Account;
 use backend\models\ContractAmountReduceDue;
+use backend\models\ContractBalance;
 use backend\models\ContractMaster;
 use backend\models\Customer;
 use backend\models\EventType;
@@ -188,13 +189,21 @@ class ContractPaymentController extends Controller
                     $model->maker_id = Yii::$app->user->identity->username;
                     $model->maker_time = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
                     $model->balance = ContractPayment::getLastBalance($schedule->contract_ref_number) - $amount;
+                    if($model->balance<0){
+                        $model->balance=0.00;
+                        ContractMaster::updateAll(['contract_status'=>'L'],['contract_ref_no'=>$schedule->contract_ref_number]);
+                    }
                     $model->transaction_type = ContractPayment::REPAYMENT;
                     $model->debit = 0.00;
                     if ($model->save()) {
                         $schedule->interest_amount_settled = $schedule->interest_amount_due;
                         $schedule->principal_amount_settled = $schedule->principal_amount_due;
                         $schedule->status = 'L';
-                        $schedule->save();
+                        if($schedule->save()){
+                            $remainBalance=ContractBalance::getOutstanding($schedule->contract_ref_number);
+                            $remainBalance=$remainBalance-$amount;
+                            ContractBalance::updateAll(['contract_outstanding'=>$remainBalance],['contract_ref_number'=>$schedule->contract_ref_number]);
+                        }
 
                     }
                 }

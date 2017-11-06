@@ -10,14 +10,17 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Sms Logs');
 ?>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file text-yellow"></i><strong> SMS Logs </strong></h3>
     </div>
-        <div class="col-md-4">
-            <?= Html::a(Yii::t('app', 'Compose SMS'), ['create'], ['class' => 'btn btn-info btn-block']) ?>
+
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <?= Html::a(Yii::t('app', 'Compose SMS'), ['create'], ['class' => 'btn btn-info']) ?>
         </div>
 </div>
+<hr/>
 <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <?= \fedemotta\datatables\DataTables::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -33,4 +36,5 @@ $this->title = Yii::t('app', 'Sms Logs');
             ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
         ],
     ]); ?>
+    </div>
 </div>

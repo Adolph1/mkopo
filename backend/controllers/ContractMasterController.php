@@ -376,6 +376,7 @@ class ContractMasterController extends Controller
                       $interest = $model->amount*$rate;
                       $principal = $monthlypayment - $interest;
                       $balance=$model->amount-$principal;
+                      $contract_amount=$model->amount;
 
 
 
@@ -420,7 +421,7 @@ class ContractMasterController extends Controller
                       }
                       $contractbalance = new ContractBalance();
                       $contractbalance->contract_ref_number = $model->contract_ref_no;
-                      $contractbalance->contract_amount = $model->amount;
+                      $contractbalance->contract_amount = $contract_amount;
                       $contractbalance->contract_outstanding = $monthlypayment*$model->frequency;
                       $contractbalance->save();
                   }
@@ -565,6 +566,7 @@ class ContractMasterController extends Controller
                         } elseif ($role_event->dr_cr_indicator == 'C') {
 
                             //saves GL leg
+
                             TodayEntry::saveEntry(
                                 $module = 'LD',
                                 $model->contract_ref_no,

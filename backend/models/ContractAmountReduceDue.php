@@ -90,4 +90,16 @@ class ContractAmountReduceDue extends \yii\db\ActiveRecord
             return 0;
         }
     }
+
+
+    public static function getAwaiting()
+    {
+        //$subQuery = ContractAmountReduceDue::find()->select('parent_id')->where(['fc_year'=>'FY'.date('Y'),'fc_period'=>'M'.date('m')]);
+        $total=ContractAmountReduceDue::find()->where(['status'=>'A'])->andWhere(['<=','due_date',date('Y-m-d')])->count();
+        if($total!=null){
+            return $total;
+        }else{
+            return 0;
+        }
+    }
 }
