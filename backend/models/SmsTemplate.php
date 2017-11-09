@@ -54,4 +54,6 @@ class SmsTemplate extends \yii\db\ActiveRecord
             return "";
         }
     }
+
+
 }

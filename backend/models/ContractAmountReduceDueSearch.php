@@ -105,4 +105,32 @@ class ContractAmountReduceDueSearch extends ContractAmountReduceDue
 
         return $dataProvider;
     }
+
+
+    public function searchAwaiting()
+    {
+        $query = ContractAmountReduceDue::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 150,
+            ]
+        ]);
+
+
+        $query->andFilterWhere([
+            'status'=>'A'
+            //'status'=>'A'
+        ]);
+
+        $query->andWhere([
+            '<=','due_date',date('Y-m-d')
+        ]);
+
+
+
+        return $dataProvider;
+    }
+
 }

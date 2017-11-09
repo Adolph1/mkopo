@@ -83,4 +83,18 @@ class CustomerSearch extends Customer
 
         return $dataProvider;
     }
+
+    public function lineChart()
+    {
+        $query=Customer::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        $query->select(['count(*) as customers','branch_id']);
+        $query->andWhere(['record_stat'=>'O']);
+        $query->groupBy(['branch_id']);
+        return $dataProvider;
+    }
 }

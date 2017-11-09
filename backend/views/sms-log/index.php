@@ -32,6 +32,7 @@ $this->title = Yii::t('app', 'Sms Logs');
             'to',
             'content:ntext',
             'created_dt',
+            'delivery_status',
 
             ['class' => 'yii\grid\ActionColumn','header'=>'Actions'],
         ],

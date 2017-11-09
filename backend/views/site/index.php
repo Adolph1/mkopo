@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Mkopo Manager';
+$this->title = 'PSS';
 use yii\bootstrap\Html;
 use backend\models\ContractMasterSearch;
 use sjaakp\gcharts\PieChart;
@@ -12,6 +12,7 @@ use kartik\grid\GridView;
 <div class="site-index" >
     <div class="row">
         <div class="col-md-8">
+            <strong><span class="text-info">Pesa Secured System</span> - Dashboard</strong>
         </div>
         <div class="col-md-1">
             <?= Html::a(Yii::t('app', '<i class="fa fa-user-plus"></i> New Customer'), ['customer/create'],
@@ -50,62 +51,136 @@ use kartik\grid\GridView;
 <hr/>
 
     <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+        <div class="col-md-4">
+            <div class="box box-solid bg-teal-gradient">
+            <div class="box-header ui-sortable-handle" style="cursor: move;">
+                <i class="fa fa-th"></i>
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Total Customers</span>
-                    <span class="info-box-number"><?= \backend\models\Customer::getCustomerCount();?></span>
+                <h3 class="box-title">Today Transactions</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
                 </div>
-                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
+            <div class="box-body border-radius-none">
+                <?php
+                $searchModel1 = new \backend\models\TodayEntrySearch();
+                $dataProvider1 = $searchModel1->lineChart();
+                ?>
+                <?= \sjaakp\gcharts\ColumnChart::widget([
+                    'height' => '400px',
+                    'dataProvider' => $dataProvider1,
+                    'columns' => [
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Total Loans</span>
-                    <span class="info-box-number"><?= \backend\models\ContractMaster::getLoanCount();?></span>
+                        [
+                            'attribute'=>'module',
+                            'value'=>function($model, $a, $i, $w) {
+                               if($model->module=='DE'){
+                                   return 'Savings';
+                               }elseif ($model->module=='LD'){
+                                   return 'Loans';
+                               }elseif ($model->module=='JRN'){
+                                   return 'Journal Entries';
+                               }
+                            },
+                            'type' => 'string',
+                        ],
+                        'amount:number',
+
+
+
+
+
+                    ],
+
+                ]) ?>
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+        </div>
+        <div class="col-md-5">
+            <div class="box box-solid bg-teal-gradient">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title">Customers per Branch</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+
+                    </div>
                 </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
+                <div class="box-body border-radius-none">
+                    <?php
+                    $searchModel1 = new \backend\models\CustomerSearch();
+                    $dataProvider1 = $searchModel1->lineChart();
+                    ?>
+                    <?= \sjaakp\gcharts\ColumnChart::widget([
+                        'height' => '400px',
+                        'dataProvider' => $dataProvider1,
+                        'columns' => [
 
-        <!-- fix for small devices only -->
-        <div class="clearfix visible-sm-block"></div>
+                            [
+                                'attribute'=>'branch_id',
+                                'type' => 'string',
+                                'value'=>function ($model){
+                                    return $model->branch->branch_name;
+                                }
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa fa-money"></i></span>
+                            ],
+                            'customers:number',
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Active Loans</span>
-                    <span class="info-box-number"><?= \backend\models\ContractMaster::getActiveLoanCount();?></span>
+
+
+
+
+                        ],
+
+                    ]) ?>
                 </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box">
-                <span class="info-box-icon bg-yellow"><i class="fa fa-money"></i></span>
+                <!-- /.box-body -->
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Liquidated Loans</span>
-                    <span class="info-box-number"><?= \backend\models\ContractMaster::getLiquidatedLoanCount();?></span>
-                </div>
-                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
         </div>
-        <!-- /.col -->
+        <div class="col-md-3">
+            <div class="box box-solid box-warning">
+                <div class="box-header ui-sortable-handle" style="cursor: move;">
+                    <i class="fa fa-th"></i>
+
+                    <h3 class="box-title"><strong>Awaiting for operations</strong></h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn bg-default btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body border-radius-none">
+                 <div class="row">
+
+                     <div class="col-md-4"><strong>Teller Module</strong></div>
+                     <div class="col-md-4"><strong>Loans Module</strong></div>
+                     <div class="col-md-4"><strong>Customer Module</strong></div>
+
+                 </div>
+                    <div class="row">
+                        <div class="col-md-4 text-yellow">Unauthorised (<?= \backend\models\Teller::getUnauthorised()?>)</div>
+                        <div class="col-md-4 text-yellow">Unapproved (<?= \backend\models\ContractMaster::getPendingCount();?>)</div>
+                        <div class="col-md-4 text-yellow">Unapproved Customers</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4 text-green">Awaiting for disbursement (<?= \backend\models\ContractMaster::getAwaitingDisbursementCount()?>)</div>
+                        <div class="col-md-4 text-yellow">Unapproved Accounts</div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+            </div>
+        </div>
     </div>
+
 
 </div>

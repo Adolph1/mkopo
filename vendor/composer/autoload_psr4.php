@@ -20,6 +20,7 @@ return array(
     'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform'),
     'vova07\\console\\' => array($vendorDir . '/vova07/yii2-console-runner-extension'),
     'spanjeta\\modules\\backup\\' => array($vendorDir . '/spanjeta/yii2-backup'),
+    'sjaakp\\gcharts\\' => array($vendorDir . '/sjaakp/yii2-gcharts'),
     'rmrevin\\yii\\fontawesome\\' => array($vendorDir . '/rmrevin/yii2-fontawesome'),
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
     'microinginer\\dropDownActionColumn\\' => array($vendorDir . '/microinginer/yii2-dropdown-action-column/src'),

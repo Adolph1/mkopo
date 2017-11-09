@@ -138,9 +138,9 @@ desired effect
         <!-- Logo -->
         <a href="#" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>MM</b>5.0</span>
+            <span class="logo-mini"><b>PSS</b>2.0.1</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Mkopo Manager</b></span>
+            <span class="logo-lg"><b>PSS</b></span>
         </a>
 
         <!-- Header Navbar -->
@@ -202,10 +202,10 @@ desired effect
                             </a>
 
                             <ul class="dropdown-menu">
-                                <li class="header"><i class="fa fa-th text-aqua"></i> You have <?= $awatingRepayments;?> members awaiting for contribution this month</li>
+                                <li class="header"><i class="fa fa-th text-aqua"></i> There are <?= $awatingRepayments;?> installments awaiting  for repayments</li>
                                 <?php
                                 if($awatingRepayments>0){
-                                    echo  '<li><div class="col-sm-12 text-center" style="padding: 10px">'.Html::a(Yii::t('app', 'View'), ['parent-detail/awaiting'], ['class' => 'btn btn-primary']).'</div></li>';
+                                    echo  '<li><div class="col-sm-12 text-center" style="padding: 10px">'.Html::a(Yii::t('app', 'View'), ['contract-amount-reduce-due/awaiting'], ['class' => 'btn btn-primary']).'</div></li>';
                                 }
                                 ?>
 
@@ -369,16 +369,17 @@ desired effect
                                 "items" => [
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Account List'),
-                                        "url" =>["/account/index"],
+                                        "label" => Yii::t('app','Add Account'),
+                                        "url" =>["/account/create"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Account Classes'),
-                                        "url" =>["/account-class/index"],
+                                        "label" => Yii::t('app','Account List'),
+                                        "url" =>["/account/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
+
 
                                 ],
 
@@ -414,13 +415,6 @@ desired effect
                                         "url" =>["/customer-identification/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
-                                    [
-                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Customer balances'),
-                                        "url" =>["/customer-balance/index"],
-                                        "icon" => "fa fa-angle-double-right",
-                                    ],
-
                                 ],
 
                             ],
@@ -718,7 +712,7 @@ desired effect
             Powered by Adotech
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; Mkopo Manager <?= date("Y") ?>
+        <strong>Copyright &copy; PSS <?= date("Y") ?>
     </footer>
 
     <!-- Control Sidebar -->
@@ -1097,6 +1091,57 @@ desired effect
 
         document.body.innerHTML = originalContents;
     });
+
+
+
+
+    //sends sms notification
+    $("#send-sms").click(function() {
+        //alert('yes bro');
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-amount-reduce-due/filter-unpaid']);?>", function (data) {
+           // alert(data);
+            var sms = data.split(';');
+            alert(sms);
+
+            for (var i = 1; i < sms.length; i++) {
+                var num = sms[i].split(',');
+                for(var j=1;j<num.length;j++) {
+                    var sms1="Dear " + num[1] +",You are reminded to repay your loan as of "+ num[2] +" Tsh "+ num[3];
+                    var to=num[0];
+                    var data = JSON.stringify({
+                        "from": "InfoText",
+                        "to": to,
+                        "text": sms1
+                    });
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+
+                xhr.addEventListener("readystatechange", function () {
+                    if (this.readyState === this.DONE) {
+                        console.log(this.responseText);
+                    }
+                });
+
+                xhr.open("POST", "https://api.infobip.com/sms/1/text/single");
+                xhr.setRequestHeader("authorization", "Basic QWRvdGVjaFRaOlRlc3QxMjM0");
+                xhr.setRequestHeader("content-type", "application/json");
+                xhr.setRequestHeader("accept", "application/json");
+
+                xhr.send(data);
+                //alert('Successfully sent');
+                theUrl = 'http://localhost/mkopo/index.php?r=sms-log/create-log&to=' + to + '&sms=' + sms1;
+                 $.get(theUrl, function (data) {
+                 alert(data);
+                 });
+            }
+
+
+        });
+    });
+
 </script>
 
 

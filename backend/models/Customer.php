@@ -42,6 +42,7 @@ class Customer extends \yii\db\ActiveRecord
     public $customer_photo;
     public $current_balance;
     public $customer_detail;
+    public $customers;
     const DELETED='D';
     const ACTIVE='O';
 
@@ -122,6 +123,16 @@ class Customer extends \yii\db\ActiveRecord
         }
     }
 
+
+    public static function getCustPhoneNumber($id)
+    {
+        $branch=Customer::find()->where(['customer_no'=>$id])->one();
+        if($branch!=null) {
+            return $branch->mobile_no1;
+        }else{
+            return "";
+        }
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

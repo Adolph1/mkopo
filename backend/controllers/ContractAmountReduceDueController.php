@@ -2,12 +2,14 @@
 
 namespace backend\controllers;
 
+use backend\models\Customer;
 use Yii;
 use backend\models\ContractAmountReduceDue;
 use backend\models\ContractAmountReduceDueSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\LoginForm;
 
 /**
  * ContractAmountReduceDueController implements the CRUD actions for ContractAmountReduceDue model.
@@ -44,6 +46,44 @@ class ContractAmountReduceDueController extends Controller
         ]);
     }
 
+
+    public function actionAwaiting()
+    {
+        if(!Yii::$app->user->isGuest) {
+            $searchModel = new ContractAmountReduceDueSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+            return $this->render('awaitingRepayment', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        } else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    public function actionFilterUnpaid()
+    {
+        if(!Yii::$app->user->isGuest) {
+            $parent = $this->findModelUnpaid();
+            if ($parent != null) {
+                foreach ($parent as $par) {
+                    echo Customer::getCustPhoneNumber($par->customer_number) . ',' . Customer::getFullNameByCustomerNumber($par->customer_number) . ',' . $par->due_date . ',' . $par->monthly_payment . ';';
+                }
+            }
+        } else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+    }
+
+
     /**
      * Displays a single ContractAmountReduceDue model.
      * @param integer $id
@@ -73,6 +113,8 @@ class ContractAmountReduceDueController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * Updates an existing ContractAmountReduceDue model.
@@ -143,4 +185,15 @@ class ContractAmountReduceDueController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    protected function findModelUnpaid()
+    {
+        $pending=ContractAmountReduceDue::find()->where(['status'=>'A'])->andWhere(['<=','due_date',date('Y-m-d')])->all();
+        if($pending!=null){
+            return $pending;
+        }else{
+            return 0;
+        }
+    }
+
 }

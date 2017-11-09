@@ -92,5 +92,17 @@ class Teller extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getUnauthorised()
+    {
+        $unauthorisedcount = Teller::find()
+            ->Where(['status'=>'U'])
+            ->count();
+        if($unauthorisedcount>0){
+            return $unauthorisedcount;
+        }else{
+            return 0;
+        }
+    }
+
 
 }

@@ -149,4 +149,34 @@ class TodayEntrySearch extends TodayEntry
 
         return $dataProvider;
     }
+
+    public function lineChart()
+    {
+        $query=TodayEntry::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        $query->select(['module, sum(amount) AS amount']);
+        $query->andWhere(['auth_stat'=>'A']);
+        $query->andFilterWhere(['trn_dt'=>SystemDate::getCurrentDate()]);
+        $query->groupBy(['module']);
+        return $dataProvider;
+    }
+
+    public function lineChart1()
+    {
+        $query=TodayEntry::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        $query->select(['module,trn_dt,ac_branch, sum(amount) AS amount']);
+        $query->andWhere(['event'=>EventType::LQD]);
+        $query->andFilterWhere(['trn_dt'=>SystemDate::getCurrentDate()]);
+        $query->groupBy(['ac_branch']);
+        return $dataProvider;
+    }
 }

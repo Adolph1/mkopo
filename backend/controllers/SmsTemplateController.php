@@ -93,6 +93,11 @@ class SmsTemplateController extends Controller
         }
     }
 
+    public function actionGetSMS($phone)
+    {
+
+    }
+
     /**
      * Deletes an existing SmsTemplate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -121,4 +126,14 @@ class SmsTemplateController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    protected function findDefault()
+    {
+        $sms=SmsTemplate::find()->where(['status'=>'D'])->one();
+        if($sms!=null){
+            return $sms;
+        }else{
+            return "";
+        }
+    }
+
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "54dd7c2a9f2ab67f518bcd7ded085087",
+    "content-hash": "e8eac83bf0da8e7e8e812ff7fb4ecf4a",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -1548,6 +1548,51 @@
                 "yii"
             ],
             "time": "2015-11-20T09:17:45+00:00"
+        },
+        {
+            "name": "sjaakp/yii2-gcharts",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sjaakp/yii2-gcharts.git",
+                "reference": "caf7ca1ca052f0ec8192bd8c78aab5bb5ee1ec6d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sjaakp/yii2-gcharts/zipball/caf7ca1ca052f0ec8192bd8c78aab5bb5ee1ec6d",
+                "reference": "caf7ca1ca052f0ec8192bd8c78aab5bb5ee1ec6d",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "sjaakp\\gcharts\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sjaak Priester",
+                    "email": "sjaak@sjaakpriester.nl",
+                    "homepage": "http://sjaakpriester.nl"
+                }
+            ],
+            "description": "Google Charts the Yii 2.0 way",
+            "keywords": [
+                "charts",
+                "extension",
+                "visualization",
+                "widget",
+                "yii",
+                "yii2"
+            ],
+            "time": "2017-09-17T11:41:34+00:00"
         },
         {
             "name": "spanjeta/yii2-backup",

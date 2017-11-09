@@ -42,7 +42,7 @@ $this->title = Yii::t('app', 'Branches');
             'branch_code',
             'branch_name',
             'location',
-            'status',
+            //'status',
             //'maker_id',
             // 'maker_time',
 
