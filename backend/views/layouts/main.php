@@ -333,13 +333,13 @@ desired effect
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                         "label" => Yii::t('app','Investments'),
-                                        "url" =>["/branch/index"],
+                                        "url" =>["/investment/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                         "label" => Yii::t('app','Shares'),
-                                        "url" =>["/branch/index"],
+                                        "url" =>["/share/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                 ],
@@ -355,6 +355,27 @@ desired effect
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                         "label" => Yii::t('app','Branches'),
                                         "url" =>["/branch/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Contributions'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-sitemap",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Contributions'),
+                                        "url" =>["/contribution/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Contributions Types'),
+                                        "url" =>["/contribution-type/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                 ],
@@ -416,6 +437,29 @@ desired effect
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                 ],
+
+                            ],
+
+                            [
+                                "label" =>Yii::t('app','Groups'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-sitemap",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('Level5')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','New Group'),
+                                        "url" =>["/group/create"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Groups List'),
+                                        "url" =>["/group/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
+
+
 
                             ],
 
@@ -699,7 +743,7 @@ desired effect
         </section>
 
         <!-- Main content -->
-        <section class="content" style="background: #fff">
+        <section class="content" style="background: #ecf0f5">
             <div style="padding-top: 10px"><?= Alert::widget() ?></div>
             <?= $content ?>
         </section><!-- /.content -->
@@ -862,13 +906,17 @@ desired effect
 
     $(document).ready(function(){
         //alert('yes bro');
+
+
         var account_role=document.getElementById('productevententry-product_code').value;
-        //alert(account_role);
+       // alert(account_role);
 
         $.get("<?php echo Yii::$app->urlManager->createUrl(['product-accrole/fetch-role','id'=>'']);?>"+account_role,function(data) {
            // alert(data);
             document.getElementById('productevententry-account_role_code').value=data;
         });
+
+
 
     });
 
@@ -931,8 +979,25 @@ desired effect
 
 
     });
-</script>
 
+
+    //load products and set product group
+    $("#contribution-product").change(function(){
+        var refno =document.getElementById("contribution-product").value;
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference', 'id' => '']);?>" + refno, function (data) {
+//alert(data);
+            document.getElementById("contribution-trn_ref_no").value = data;
+            $("#prodid").html('');
+
+        });
+
+
+
+    });
+
+
+</script>
 
 
 
@@ -1057,15 +1122,13 @@ desired effect
     window.onload = function() {
         //alert('yes bro');
         //gets statement
+
         var id=document.getElementById("account-id").innerHTML;
         var from=document.getElementById("from-id").innerHTML;
         var to=document.getElementById("to-id").innerHTML;
         $.get("<?php echo Yii::$app->urlManager->createUrl(['today-entry/statement', 'id' => '']);?>"+ id +'&start_date='+ from +'&end_date='+ to, function (data) {
             $("#statement-table").html(data);
         });
-
-
-
 
     };
 
@@ -1080,6 +1143,7 @@ desired effect
 
         });
     });
+
 
     $("#print-preview").click(function(){
         var printContents = document.getElementById('statement').innerHTML;

@@ -16,7 +16,7 @@ $this->title = 'Login';
 
     <div class="row">
         <div class="col-md-4 text-center"></div>
-        <div class="col-md-3 col-sm-12 col-xs-12">
+        <div class="col-md-4 col-sm-12 col-xs-12">
             <div style="background: #015EAC;padding: 25px;color: #fff" class="text-center"><strong>Login to PSS</strong></div>
             <div style="padding: 20px">
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>

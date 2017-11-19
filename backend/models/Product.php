@@ -89,7 +89,14 @@ class Product extends \yii\db\ActiveRecord
 
     public static function getAllLoans()
     {
-        return ArrayHelper::map(Product::find()->where(['product_group'=>'Loans'])->all(),'product_id','product_id');
+        return ArrayHelper::map(Product::find()->where(['product_group'=>['Loans','Deposits']])->all(),'product_id','product_id');
+    }
+
+    //gets all Contribution products
+
+    public static function getAllContributions()
+    {
+        return ArrayHelper::map(Product::find()->where(['product_group'=>'Contributions'])->all(),'product_id','product_id');
     }
 
     //gets all Teller products

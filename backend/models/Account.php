@@ -110,6 +110,16 @@ class Account extends \yii\db\ActiveRecord
         }
     }
 
+    public static function getAccount($id)
+    {
+        $account=Account::find()->where(['cust_no'=>$id])->one();
+        if($account!=null){
+            return $account->cust_ac_no;
+        }else{
+            return null;
+        }
+    }
+
     public static function getCustomerNumberByAccount($id){
 
         $account=Account::find()->where(['cust_ac_no'=>$id])->andWhere(['!=','auth_stat','U'])->one();

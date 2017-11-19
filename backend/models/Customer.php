@@ -58,9 +58,9 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['first_name', 'last_name', 'identification_id', 'identification_number', 'mobile_no1', 'customer_type_id',], 'required'],
-            [['identification_id', 'customer_type_id', 'customer_category_id', 'branch_id', 'mod_no'], 'integer'],
+            [['identification_id', 'customer_type_id', 'customer_category_id', 'branch_id', 'mod_no','group_id'], 'integer'],
             [['maker_time','expire_date','checker_time','date_of_birth'], 'safe'],
-            [['first_name', 'middle_name', 'last_name', 'identification_number', 'address', 'email', 'photo', 'maker_id','checker_id','gender'], 'string', 'max' => 200],
+            [['first_name', 'middle_name', 'last_name', 'identification_number','marital_status', 'address', 'email', 'photo', 'maker_id','checker_id','gender'], 'string', 'max' => 200],
             [['mobile_no1', 'mobile_no2'], 'string', 'max' => 13],
             [['customer_no'], 'string', 'max' => 10],
             [['customer_no'], 'unique'],
@@ -84,6 +84,7 @@ class Customer extends \yii\db\ActiveRecord
             'last_name' => Yii::t('app', 'Last Name'),
             'gender'=> Yii::t('app', 'Gender'),
             'date_of_birth'=> Yii::t('app', 'Date of Birth'),
+            'marital_status'=> Yii::t('app', 'Marital Status'),
             'identification_id' => Yii::t('app', 'Identification'),
             'identification_number' => Yii::t('app', 'Identification Number'),
             'expire_date'=> Yii::t('app', 'Expire Date'),
@@ -94,6 +95,7 @@ class Customer extends \yii\db\ActiveRecord
             'customer_type_id' => Yii::t('app', 'Type'),
             'customer_category_id' => Yii::t('app', 'Category'),
             'branch_id' => Yii::t('app', 'Branch'),
+            'group_id' => Yii::t('app', 'Group'),
             'photo' => Yii::t('app', 'Photo'),
             'mod_no' => Yii::t('app', 'Mod No'),
             'record_stat' => Yii::t('app', 'Status'),
@@ -181,7 +183,11 @@ class Customer extends \yii\db\ActiveRecord
             ->where(['customer_no' => $id])
             ->orderBy('customer_no DESC')
             ->One();
-        return $customer->address.'<br/> '.$customer->mobile_no1;
+        if($customer!=null){
+            return $customer->address.'<br/> '.$customer->mobile_no1;
+        }else{
+            return '';
+        }
 
     }
 
