@@ -79,4 +79,14 @@ class Contribution extends \yii\db\ActiveRecord
             'checker_time' => Yii::t('app', 'Checker Time'),
         ];
     }
+    public function getType()
+    {
+        return $this->hasOne(ContributionType::className(), ['id' => 'contribution_type']);
+    }public function getPayment()
+{
+    return $this->hasOne(PaymentMethod::className(), ['id' => 'payment_type']);
+}
+
+
+
 }

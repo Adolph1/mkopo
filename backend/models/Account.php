@@ -38,6 +38,8 @@ class Account extends \yii\db\ActiveRecord
      */
 
     public $customer_detail;
+    public $from_date;
+    public $to_date;
 
     public static function tableName()
     {
@@ -115,6 +117,16 @@ class Account extends \yii\db\ActiveRecord
         $account=Account::find()->where(['cust_no'=>$id])->one();
         if($account!=null){
             return $account->cust_ac_no;
+        }else{
+            return null;
+        }
+    }
+
+    public static function getAccountOwner($id)
+    {
+        $account=Account::find()->where(['cust_ac_no'=>$id])->one();
+        if($account!=null){
+            return $account->ac_desc;
         }else{
             return null;
         }

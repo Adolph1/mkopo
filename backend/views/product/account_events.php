@@ -75,15 +75,17 @@ use yii\bootstrap\Modal;
 ?>
 
 
-<?php
-Modal::begin([
-    'header' => '<h2>New Event Form</h2>',
-    'toggleButton' => ['label' => 'Add Event','class' => 'btn btn-success'],
-    'size' => Modal::SIZE_LARGE,
-    'options' => ['class'=>'slide'],
-]);
-?>
-<div class="product-accrole-form">
+
+<div class="row">
+    <div class="col-md-12">
+    <?php
+    Modal::begin([
+        'header' => '<h2>New Event Form</h2>',
+        'toggleButton' => ['label' => 'Add Event','class' => 'btn btn-success'],
+        'size' => Modal::SIZE_LARGE,
+        'options' => ['class'=>'slide'],
+    ]);
+    ?>
 
     <?php $form = ActiveForm::begin([
         'action' => ['product-event-entry/create'],
@@ -101,9 +103,10 @@ Modal::begin([
     </div>
 
     <?php ActiveForm::end(); ?>
+    <?php
 
+    Modal::end();
+    ?>
+    </div>
 </div>
-<?php
 
-Modal::end();
-?>

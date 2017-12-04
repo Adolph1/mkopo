@@ -97,4 +97,17 @@ class CustomerSearch extends Customer
         $query->groupBy(['branch_id']);
         return $dataProvider;
     }
+
+
+    public function searchAll()
+    {
+        $query=Customer::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        //$query->andWhere(['record_stat'=>'O']);
+        return $dataProvider;
+    }
 }

@@ -38,15 +38,21 @@ $this->title = $model->cust_ac_no;
                     
                     $('#memberssearch-family_name_id').val(ui.item.ac_desc);
                     var id=ui.item.cust_ac_no;
-                    alert(ui.item.cust_ac_no);
-                        $('#loader1' ).show( 'slow', function(){
-                      $.get('".Yii::$app->urlManager->createUrl(['account/search','id'=>''])."'+id,function(data) {
-                    
-                        setTimeout(refresh, 30000);
+                   // alert(ui.item.cust_ac_no);
+                        document.getElementById(\"loader1\").style.display = \"block\";
+                        setTimeout(function(){
+                        $.get('".Yii::$app->urlManager->createUrl(['account/search','id'=>''])."'+id,function(data) {
+                      
+                        document.getElementById(\"loader1\").style.display = \"none\";
+                   
+         
                  
                         });
+                        },3000
+                        
+                        );
+                     
 
-                     });
                   
                  }")],
         ]);
@@ -187,7 +193,6 @@ $this->title = $model->cust_ac_no;
             ?>
         </p>
     </div>
-    <div id="loader1" style="display: none"></div>
     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <?php
 
@@ -233,4 +238,8 @@ $this->title = $model->cust_ac_no;
         ?>
         <div class="col-md-1"></div>
     </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" id="loader1" style="display: none"></div>
 </div>

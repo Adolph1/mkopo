@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBalSearch;
+use backend\models\CustomerSearch;
 use Yii;
 use backend\models\Report;
 use backend\models\ReportSearch;
@@ -104,6 +106,33 @@ class ReportController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+
+    //gets all customers
+    public function actionCustomers()
+    {
+        $searchModel = new CustomerSearch();
+        $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
+
+        return $this->render('customers', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+
+    //gets all customer balances
+    public function actionAccountBalance()
+    {
+        $searchModel = new AccdailyBalSearch();
+        $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
+
+        return $this->render('cust_balances', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

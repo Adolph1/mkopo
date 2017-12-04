@@ -78,22 +78,20 @@ desired effect
 
     }
 
+    /* Center the loader */
     #loader1 {
         position: absolute;
         left: 50%;
         top: 50%;
         z-index: 1;
-        width: 150px;
-        height: 150px;
+        width: 50px;
+        height: 50px;
         margin: -75px 0 0 -75px;
-        border: 16px solid #f3f3f3;
+        border: 10px solid #f3f3f3;
         border-radius: 50%;
-        border-top: 16px solid #3498db;
-        border-right: 16px solid #f3f3f3;
-        border-bottom: 16px solid #3498db;
-
-        width: 120px;
-        height: 120px;
+        border-top: 10px solid #3498db;
+        width: 50px;
+        height: 50px;
         -webkit-animation: spin 2s linear infinite;
         animation: spin 2s linear infinite;
     }
@@ -126,6 +124,7 @@ desired effect
         from{ bottom:-100px; opacity:0 }
         to{ bottom:0; opacity:1 }
     }
+
 
 </style>
 
@@ -623,7 +622,55 @@ desired effect
 
 
                             ],
+                            [
+                                "label" =>Yii::t('app','Reports'),
+                                "url" =>  "#",
+                                "icon" => "fa fa-line-chart",
+                                "items" => [
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Customers'),
+                                        "url" =>"#",
+                                        "icon" => "fa fa-user",
+                                        "items" => [
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','All customers'),
+                                                "url" =>["/report/customers"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Accounts balances'),
+                                                "url" =>["/report/account-balance"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Customers collateral'),
+                                                "url" =>["/report/collateral"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Customers branch-wise'),
+                                                "url" =>["/report/customer-branch-wise"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                        ],
+                                    ],
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','SMS Logs'),
+                                        "url" =>["/sms-log/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+                                ],
 
+
+
+
+                            ],
 
                             [
                                 'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
@@ -1124,13 +1171,30 @@ desired effect
         //gets statement
 
         var id=document.getElementById("account-id").innerHTML;
-        var from=document.getElementById("from-id").innerHTML;
-        var to=document.getElementById("to-id").innerHTML;
+        var from=document.getElementById("from-id").value;
+        var to=document.getElementById("to-id").value;
         $.get("<?php echo Yii::$app->urlManager->createUrl(['today-entry/statement', 'id' => '']);?>"+ id +'&start_date='+ from +'&end_date='+ to, function (data) {
             $("#statement-table").html(data);
         });
 
     };
+
+    $("#load-data").click(function () {
+        document.getElementById("loader1").style.display = "block";
+        setTimeout(showPage, 3000);
+
+    });
+    function showPage() {
+        var id=document.getElementById("account-id").innerHTML;
+        var from=document.getElementById("from-id").value;
+        var to=document.getElementById("to-id").value;
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['today-entry/statement', 'id' => '']);?>"+ id +'&start_date='+ from +'&end_date='+ to, function (data) {
+
+                document.getElementById("loader1").style.display = "none";
+                $("#statement-table").html(data);
+
+        });
+    }
 
 
         $("#new-entry").click(function () {

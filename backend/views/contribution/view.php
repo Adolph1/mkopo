@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Contribution */
 
-$this->title = $model->id;
+$this->title = \backend\models\Customer::getFullNameByCustomerNumber($model->customer_number);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contributions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -14,29 +14,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Approve'), ['approve', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+    <p class="text text-right">
+        <?if($model->auth_stat=='U' && Yii::$app->user->can('LoanManager')) echo Html::a(Yii::t('app', 'Approve'), ['approve', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //'id',
             'trn_ref_no',
             'trn_dt',
             'payment_date',
-            'payment_type',
-            'customer_number',
+            [
+                'attribute'=>'payment_type',
+                'value'=>$model->payment->method_name,
+            ],
+            [
+                'attribute'=>'customer_number',
+                'value'=>function ($model){
+
+                    return \backend\models\Customer::getFullNameByCustomerNumber($model->customer_number);
+                }
+            ],
             'amount',
-            'contribution_type',
+            [
+                'attribute'=>'contribution_type',
+                'value'=>$model->type->title,
+            ],
+
             'period',
             'financial_year',
             'reference',
@@ -48,5 +53,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'checker_time',
         ],
     ]) ?>
+
+    <p class="text text-right">
+        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'method' => 'post',
+            ],
+        ]) ?>
+    </p>
 
 </div>

@@ -24,23 +24,11 @@ $this->title = 'Today Entries';
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'module',
             'trn_ref_no',
             'trn_dt',
              'ac_no',
              'amount',
             'drcr_ind',
-           [
-                   'attribute'=>'event',
-                    'value'=>function ($model){
-                        if($model->event==\backend\models\EventType::JN_BY){
-
-                            return 'By '.\backend\models\JournalEntry::getDebitAccount($model->trn_ref_no);
-                        }elseif ($model->event==\backend\models\EventType::JN_TO){
-                            return 'To '.\backend\models\JournalEntry::getCreditAccount($model->trn_ref_no);
-                        }
-                    }
-           ],
             [
                 'header'=>'Customer Name',
                 'value'=>function($model){
@@ -48,12 +36,6 @@ $this->title = 'Today Entries';
                 }
             ],
             'branch.branch_name',
-            'product',
-            'value_dt',
-            'period_code',
-            'finacial_year',
-            'maker_id',
-            'maker_stamptime',
             'auth_stat',
 
             [
@@ -61,7 +43,9 @@ $this->title = 'Today Entries';
                 'header'=>'Actions',
                 'template'=>'{view}',
                 'buttons'=>[
-                    'view' => function ($url, $model) {
+                    'view' => function ($path, $model) {
+                            $path='';
+                            $id='';
                         if($model->module=='DE'){
                             $path='teller';
                             $id=\backend\models\Teller::getIDByReference($model->trn_ref_no);

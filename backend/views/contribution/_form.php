@@ -26,8 +26,11 @@ use kartik\date\DatePicker;
     </div>
 </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <?= $form->field($model, 'payment_type')->dropDownList(\backend\models\PaymentMethod::getAll(),['prompt'=>'--Select--']) ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'reference')->textInput(['placeholder'=>'Enter reference']) ?>
         </div>
         <div class="col-md-6">
     <?= $form->field($model, 'payment_date')->widget(DatePicker::ClassName(),
@@ -47,8 +50,9 @@ use kartik\date\DatePicker;
         <div class="col-md-6">
             <?= $form->field($model, 'contribution_type')->dropDownList(\backend\models\ContributionType::getAll(),['prompt'=>'--Select--']) ?>
         </div>
+
         <div class="col-md-6">
-            <?= $form->field($model, 'amount')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'amount')->textInput(['placeholder'=>'Enter amount']) ?>
         </div>
     </div>
     <div class="row">
@@ -59,7 +63,6 @@ use kartik\date\DatePicker;
     <?= $form->field($model, 'financial_year')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>'FY'.date('Y')]) ?>
         </div>
     </div>
-    <?= $form->field($model, 'reference')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 

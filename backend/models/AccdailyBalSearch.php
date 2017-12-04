@@ -94,4 +94,19 @@ class AccdailyBalSearch extends AccdailyBal
 
         return $dataProvider;
     }
+
+    public function searchAll()
+    {
+        $query=AccdailyBal::find();
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        $pagination = false;
+        $query->select(['account',])->distinct();
+        $query->orderBy('id DESC');
+        return $dataProvider;
+    }
+
 }

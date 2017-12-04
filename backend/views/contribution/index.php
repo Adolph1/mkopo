@@ -30,15 +30,30 @@ $this->title = Yii::t('app', 'Contributions');
 
             //'id',
             'trn_ref_no',
+            [
+                'attribute'=>'contribution_type',
+                'value'=>'type.title',
+            ],
             'payment_date',
-             'customer_number',
+            [
+                'attribute'=>'customer_number',
+                'value'=>function ($model){
+
+                    return \backend\models\Customer::getFullNameByCustomerNumber($model->customer_number);
+                }
+            ],
              'amount',
-             'contribution_type',
+            [
+                'attribute'=>'payment_type',
+                'value'=>'payment.method_name',
+            ],
              'period',
              'financial_year',
             'trn_dt',
             // 'reference',
-            // 'description',
+            // 'description
+
+
             'auth_stat',
             // 'maker_id',
             // 'maker_time',

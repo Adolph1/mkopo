@@ -671,6 +671,25 @@ class ContractMasterController extends Controller
     }
 
 
+    public function actionWriteOn($id)
+    {
+        if(!Yii::$app->user->isGuest){
+            $model=$this->findModel($id);
+            $model->contract_status='A';
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->contract_ref_no]);
+        }
+        else{
+            $model = new LoginForm();
+            return $this->redirect(['site/login',
+                'model' => $model,
+            ]);
+        }
+
+
+    }
+
+
 
 
 

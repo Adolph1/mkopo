@@ -199,6 +199,7 @@ class TellerController extends Controller
     {
         if(!Yii::$app->user->isGuest) {
             $model=$this->findModel($id);
+            $model->status='R';
 
                 $role_events=ProductAccrole::getRoleEvents($model->product,$event=EventType::RVS);
                 if($role_events!=null) {
@@ -255,7 +256,7 @@ class TellerController extends Controller
                 TodayEntry::updateAll(['auth_stat'=>'A','checker_id'=>Yii::$app->user->identity->username,'checker_time'=>SystemDate::getCurrentDate().' '.date('H:i:s')],['trn_ref_no'=>$model->reference,'auth_stat'=>'U']);
 
 
-
+            $model->save();
             return $this->redirect(['teller/view','id'=>$id]);
         }
         else{
