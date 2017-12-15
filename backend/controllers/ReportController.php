@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\AccdailyBal;
 use backend\models\AccdailyBalSearch;
+use backend\models\Customer;
 use backend\models\CustomerSearch;
 use Yii;
 use backend\models\Report;
@@ -121,6 +122,18 @@ class ReportController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+
+    //gets all customer loans
+    public function actionCustomerLoan()
+    {
+        $model = new Customer();
+        return $this->render('customer_loan', [
+            'model'=>$model
+        ]);
+    }
+
+
 
 
 

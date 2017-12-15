@@ -87,9 +87,9 @@ desired effect
         width: 50px;
         height: 50px;
         margin: -75px 0 0 -75px;
-        border: 10px solid #f3f3f3;
+        border: 5px solid palevioletred;
         border-radius: 50%;
-        border-top: 10px solid #3498db;
+        border-top: 5px solid palegreen;
         width: 50px;
         height: 50px;
         -webkit-animation: spin 2s linear infinite;
@@ -483,7 +483,7 @@ desired effect
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                         "label" => Yii::t('app','Savings'),
-                                        "url" =>["/contract-master/index"],
+                                        "url" =>"#",
                                         "icon" => "fa fa-angle-double-right",
                                     ],
                                 ],
@@ -648,6 +648,12 @@ desired effect
                                             ],
                                             [
                                                 'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Customer Loans'),
+                                                "url" =>["/report/customer-loan"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
                                                 "label" => Yii::t('app','Accounts balances'),
                                                 "url" =>["/report/account-balance"],
                                                 "icon" => "fa fa-angle-double-right",
@@ -668,9 +674,32 @@ desired effect
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','SMS Logs'),
-                                        "url" =>["/sms-log/index"],
-                                        "icon" => "fa fa-angle-double-right",
+                                        "label" => Yii::t('app','Loans'),
+                                        "url" =>"#",
+                                        "icon" => "fa fa-money",
+
+
+                                        "items" => [
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','All Loans'),
+                                                "url" =>["/report/loans"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Repayment Schedule'),
+                                                "url" =>["/report/loans"],
+                                                "icon" => "fa fa-angle-double-right",
+                                            ],
+                                            [
+                                                'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                                "label" => Yii::t('app','Matured Loans'),
+                                                "url" =>["/report/matured"],
+                                                "icon" => "fa fa-bank",
+                                            ],
+
+                                            ],
                                     ],
                                 ],
 
@@ -1213,6 +1242,32 @@ desired effect
 
         });
     }
+
+
+    $("#report-customer-no").change(function () {
+        document.getElementById("loader1").style.display = "block";
+        setTimeout(showCustomerLoans, 3000);
+
+    });
+    function showCustomerLoans() {
+        var id=document.getElementById("report-customer-no").value;
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/customer-loan-report', 'id' => '']);?>"+ id, function (data) {
+
+            document.getElementById("loader1").style.display = "none";
+            $("#loans-table").html(data);
+
+        });
+
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['customer/customer-info', 'id' => '']);?>"+ id, function (data) {
+
+            document.getElementById("customer-name").innerHTML=data;
+
+
+        });
+    }
+
+
+
 
 
     $("#new-entry").click(function () {

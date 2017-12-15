@@ -978,5 +978,61 @@ class ContractMasterController extends Controller
 
 
 
+    /**---------------------------------------------------------------------------
+     * Loans Reports methods
+     * ---------------------------------------------------------------------------
+     * */
+
+public function actionCustomerLoanReport($id)
+{
+    $loans=$this->loadLoans($id);
+    if($loans!=null){
+
+        echo '<table class="table table-condensed">';
+        echo '<tr><th>Booking Date</th><th>Reference</th><th>Customer</th><th>Amount</th><th>Outstanding</th><th>Maturity</th><th>Status</th></tr>';
+        $totalamt=0.00;
+        $totalout=0.00;
+        foreach ($loans as $loan){
+            echo '<tr>';
+            echo '<td>'.$loan->booking_date.'</td>';
+            echo '<td>'.$loan->contract_ref_no.'</td>';
+            echo '<td>'.$loan->customer_number.'</td>';
+            echo '<td>'.$loan->amount.'</td>';
+            echo '<td>'.ContractBalance::getOutstanding($loan->contract_ref_no).'</td>';
+            echo '<td>'.$loan->maturity_date.'</td>';
+            echo '<td>'.$loan->contract_status.'</td>';
+            echo '</tr>';
+            $totalamt=$totalamt+$loan->amount;
+            $totalout=$totalout+ContractBalance::getOutstanding($loan->contract_ref_no);
+        }
+        echo '<tr>';
+        echo '<td></td>';
+        echo '<td></td>';
+        echo '<th>Total</th>';
+        echo '<th>'.$totalamt.'</th>';
+        echo '<th>'.$totalout.'</th>';
+        echo '<td></td>';
+        echo '<td></td>';
+       echo '</tr>';
+        echo '</table>';
+    }else{
+        echo '<table class="table table-condensed">';
+        echo '<tr><th>Booking Date</th><th>Reference</th><th>Customer</th><th>Amount</th><th>Outstanding</th><th>Maturity</th><th>Status</th></tr>';
+        echo 'No result found';
+        echo '</table>';
+    }
+}
+
+
+public function loadLoans($customer_no)
+{
+    $loans=ContractMaster::find()->where(['customer_number'=>$customer_no])->andWhere(['!=','auth_stat','U'])->all();
+    if($loans!=null){
+        return $loans;
+    }else{
+        return null;
+    }
+}
+
 
 }

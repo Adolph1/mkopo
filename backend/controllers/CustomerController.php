@@ -335,6 +335,16 @@ class CustomerController extends Controller
 
     }
 
+    public function actionCustomerInfo($id)
+    {
+        $customername=Customer::getFullNameByCustomerNumber($id);
+        if($customername!=null){
+            return $customername. " Loans List Report";
+        }else{
+            return null;
+        }
+    }
+
     /**
      * Finds the Customer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
