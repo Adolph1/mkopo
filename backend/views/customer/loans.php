@@ -23,13 +23,10 @@ $dataProvider = $searchModel->searchByCustomerNumber($model->customer_no);
             ['class' => 'yii\grid\SerialColumn'],
 
             'contract_ref_no',
-            'customer_number',
             'amount',
             'booking_date',
             'maturity_date',
-            'main_component_rate',
-            'loan_officer',
-            'auth_stat',
+            'contract_status',
 
             [
                 'class'=>'yii\grid\ActionColumn',

@@ -134,7 +134,7 @@ use yii\web\JsExpression;
                     
                     $('#memberssearch-family_name_id').val(ui.item.id);
                     var id=ui.item.id;
-                    alert(ui.item.id);
+                    //alert(ui.item.id);
                     $('#prod-id').html(id);
            
                         document.getElementById('contractmaster-loan_officer').value=id;

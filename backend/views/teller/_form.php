@@ -12,11 +12,8 @@ use yii\web\JsExpression;
 
     <?php $form = ActiveForm::begin(); ?>
 <div id="loader1" style="display: none"></div>
-    <div class="panel">
-        <div class="panel panel-success">
-        <div class="panel-heading">
             <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                     <?php
 
                     $data = \backend\models\Account::find()
@@ -103,14 +100,10 @@ use yii\web\JsExpression;
                     <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Submit') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
                 </div>
 
-            </div>
 
-
-        </div>
 
 
     <?php ActiveForm::end(); ?>
-    </div>
     </div>
 
 

@@ -38,8 +38,6 @@ class Account extends \yii\db\ActiveRecord
      */
 
     public $customer_detail;
-    public $from_date;
-    public $to_date;
 
     public static function tableName()
     {
@@ -52,8 +50,9 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class',], 'required'],
+            [['branch_code', 'cust_ac_no', 'ac_desc', 'cust_no', 'account_class','ac_opening_bal'], 'required'],
             [['dormancy_days', 'mod_no'], 'integer'],
+            [['cust_ac_no'], 'unique'],
             [['ac_opening_bal'], 'number'],
             [['dormancy_date'], 'safe'],
             [['branch_code', 'ac_stat_no_block', 'ac_stat_stop_pay'], 'string', 'max' => 5],

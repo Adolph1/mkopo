@@ -132,6 +132,8 @@ $this->title = $model->product_id;
             'default_principal',
             'min_principal',
             'max_principal',
+            'allowed_savings_percentage',
+            'grace_period',
             'auth_stat',
             [
                     'attribute'=>'interest_method',

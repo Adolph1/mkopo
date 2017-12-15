@@ -57,7 +57,15 @@ $form->field($model, 'product_type')->dropDownList(
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'product_descption')->textarea(['rows' => 5]) ?>
+                <?= $form->field($model, 'product_descption')->textarea(['rows' => 6,'placeholder'=>'Enter description'])->label(false) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <?= $form->field($model, 'allowed_savings_percentage')->textInput() ?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'grace_period')->textInput() ?>
             </div>
         </div>
     </div>

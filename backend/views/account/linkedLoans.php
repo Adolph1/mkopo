@@ -20,23 +20,7 @@ $dataProvider = $searchModel->searchByCustomerAccount($model->cust_ac_no);
 
                 'contract_ref_no',
                 'amount',
-                'settle_account',
                 'booking_date',
-                [
-                        'header'=>'Settled Amount',
-                        'value'=>function ($model){
-                            if($model->calculation_method==\backend\models\ContractMaster::FLAT_RATE){
-                                $settled=\backend\models\Payment::getSettled($model->contract_ref_no);
-                                return $settled;
-                            }elseif ($model->calculation_method==\backend\models\ContractMaster::REDUCING_BALANCE){
-                                $settled=\backend\models\ContractAmountReduceDue::getSettled($model->contract_ref_no);
-                                return $settled;
-                            }
-                        }
-                ],
-                [
-                    'header'=>'Outstanding Amount',
-                ],
                 'maturity_date',
                 'contract_status',
                 [

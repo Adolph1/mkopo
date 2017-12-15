@@ -151,7 +151,7 @@ desired effect
                 if (!Yii::$app->user->isGuest) {
                     ?>
 
-                System Date:<?= \backend\models\SystemDate::getCurrentDate();?>
+                    System Date:<?= \backend\models\SystemDate::getCurrentDate();?>
 
                 <?php }?>
             </a>
@@ -223,29 +223,29 @@ desired effect
 
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs" style="margin-right: 200px"> <?php
-                            $curren_stage=\backend\models\SystemSetup::getCurrentStage();
-                            if($curren_stage==\backend\models\SystemStage::TI){
-                                echo 'TRANSACTIONS INPUT';
+                                $curren_stage=\backend\models\SystemSetup::getCurrentStage();
+                                if($curren_stage==\backend\models\SystemStage::TI){
+                                    echo 'TRANSACTIONS INPUT';
 
-                            }elseif($curren_stage==\backend\models\SystemStage::EOTI) {
-                                echo 'END OF TRANSACTIONS INPUT';
+                                }elseif($curren_stage==\backend\models\SystemStage::EOTI) {
+                                    echo 'END OF TRANSACTIONS INPUT';
 
-                            }elseif($curren_stage==\backend\models\SystemStage::EOFI){
+                                }elseif($curren_stage==\backend\models\SystemStage::EOFI){
 
-                                echo 'END OF FINANCIAL INPUT';
+                                    echo 'END OF FINANCIAL INPUT';
 
-                            }elseif($curren_stage==\backend\models\SystemStage::EOD){
+                                }elseif($curren_stage==\backend\models\SystemStage::EOD){
 
-                                echo 'END OF DAY';
+                                    echo 'END OF DAY';
 
-                            }
+                                }
 
-                            ?>
+                                ?>
                             </span>
                             <span class="hidden-xs">
                                 <?php
                                 if (!Yii::$app->user->isGuest) {
-                                   // echo '<i>welcome:</i>'. Yii::$app->user->identity->username;
+                                    // echo '<i>welcome:</i>'. Yii::$app->user->identity->username;
                                 }
                                 ?></span>
                             <span class="hidden-xs">
@@ -400,6 +400,13 @@ desired effect
                                         "icon" => "fa fa-angle-double-right",
                                     ],
 
+                                    [
+                                        'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
+                                        "label" => Yii::t('app','Account Settings'),
+                                        "url" =>["/account-bal-setting/index"],
+                                        "icon" => "fa fa-angle-double-right",
+                                    ],
+
 
                                 ],
 
@@ -463,7 +470,7 @@ desired effect
                             ],
 
                             [
-                                "label" =>Yii::t('app','Loans & Deposits'),
+                                "label" =>Yii::t('app','Loans & Savings'),
                                 "url" =>  "#",
                                 "icon" => "fa fa-money",
                                 "items" => [
@@ -475,7 +482,7 @@ desired effect
                                     ],
                                     [
                                         'visible' => yii::$app->User->can('LoanOfficer') || yii::$app->User->can('LoanManager')|| yii::$app->User->can('admin'),
-                                        "label" => Yii::t('app','Deposits'),
+                                        "label" => Yii::t('app','Savings'),
                                         "url" =>["/contract-master/index"],
                                         "icon" => "fa fa-angle-double-right",
                                     ],
@@ -956,10 +963,10 @@ desired effect
 
 
         var account_role=document.getElementById('productevententry-product_code').value;
-       // alert(account_role);
+        // alert(account_role);
 
         $.get("<?php echo Yii::$app->urlManager->createUrl(['product-accrole/fetch-role','id'=>'']);?>"+account_role,function(data) {
-           // alert(data);
+            // alert(data);
             document.getElementById('productevententry-account_role_code').value=data;
         });
 
@@ -1133,36 +1140,47 @@ desired effect
 
 
 <script>
-        $('#account-branch_code').on('change', function () {
-            var cust_no = document.getElementById('account-cust_no').value;
-            if(cust_no==""){
-                alert('Kindly search customer first');
-                window.location.reload(true);
-            }
-            else{
+    $('#account-branch_code').on('change', function () {
+        var cust_no = document.getElementById('account-cust_no').value;
+        if(cust_no==""){
+            alert('Kindly search customer first');
+            window.location.reload(true);
+        }
+        else{
+            var cust_acc=document.getElementById('account-branch_code').value+cust_no;
 
-                document.getElementById("account-cust_ac_no").value=document.getElementById('account-branch_code').value+cust_no;
-            }
-
-        });
-
-        $('.activity-view-link').click(function() {
-           // alert('yes bro');
-            var elementId = $(this).closest('tr').data('key');
-            //alert(elementId);
-        });
-
-        $("#repay-id").click(function(){
-           var id= document.getElementById('contractpayment-id').value;
-            var amount= document.getElementById('contractpayment-amount').value;
-            //alert('yes bro');
-            $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-payment/create-payment', 'id' => '']);?>" + id+'&amount='+amount, function (data) {
-                alert(data);
-                //document.getElementById("contractmaster-maturity_date").value = data;
+            $.get("<?php echo Yii::$app->urlManager->createUrl(['account/check-exist', 'id' => '']);?>" + cust_acc, function (data) {
+              if(data==true){
+                  alert('Account exists');
+                  window.location.reload(true);
+              }else{
+                  document.getElementById("account-cust_ac_no").value=cust_acc;
+              }
 
 
             });
+
+        }
+
+    });
+
+    $('.activity-view-link').click(function() {
+        // alert('yes bro');
+        var elementId = $(this).closest('tr').data('key');
+        //alert(elementId);
+    });
+
+    $("#repay-id").click(function(){
+        var id= document.getElementById('contractpayment-id').value;
+        var amount= document.getElementById('contractpayment-amount').value;
+        //alert('yes bro');
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-payment/create-payment', 'id' => '']);?>" + id+'&amount='+amount, function (data) {
+            alert(data);
+            //document.getElementById("contractmaster-maturity_date").value = data;
+
+
         });
+    });
 </script>
 
 <script>
@@ -1190,20 +1208,20 @@ desired effect
         var to=document.getElementById("to-id").value;
         $.get("<?php echo Yii::$app->urlManager->createUrl(['today-entry/statement', 'id' => '']);?>"+ id +'&start_date='+ from +'&end_date='+ to, function (data) {
 
-                document.getElementById("loader1").style.display = "none";
-                $("#statement-table").html(data);
+            document.getElementById("loader1").style.display = "none";
+            $("#statement-table").html(data);
 
         });
     }
 
 
-        $("#new-entry").click(function () {
-            var refno = 'JRN';
-            //alert(refno);
-            $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference', 'id' => '']);?>" + refno, function (data) {
-                //alert(data);
-                document.getElementById("journalentry-trn_ref_no").value = data;
-                $("#prodid").html('');
+    $("#new-entry").click(function () {
+        var refno = 'JRN';
+        //alert(refno);
+        $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-master/reference', 'id' => '']);?>" + refno, function (data) {
+            //alert(data);
+            document.getElementById("journalentry-trn_ref_no").value = data;
+            $("#prodid").html('');
 
         });
     });
@@ -1228,7 +1246,7 @@ desired effect
         //alert('yes bro');
 
         $.get("<?php echo Yii::$app->urlManager->createUrl(['contract-amount-reduce-due/filter-unpaid']);?>", function (data) {
-           // alert(data);
+            // alert(data);
             var sms = data.split(';');
             alert(sms);
 
@@ -1261,9 +1279,9 @@ desired effect
                 xhr.send(data);
                 //alert('Successfully sent');
                 theUrl = 'http://localhost/mkopo/index.php?r=sms-log/create-log&to=' + to + '&sms=' + sms1;
-                 $.get(theUrl, function (data) {
-                 alert(data);
-                 });
+                $.get(theUrl, function (data) {
+                    alert(data);
+                });
             }
 
 

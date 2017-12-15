@@ -23,14 +23,6 @@ class CustomerController extends Controller
     /**
      * @inheritdoc
      */
-
-    public static function allowedDomains() {
-        return [
-            '*',                        // star allows all domains
-            //'http://165.227.124.243',
-        ];
-    }
-
     public function behaviors()
     {
         return [
@@ -38,16 +30,6 @@ class CustomerController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                ],
-            ],
-            'corsFilter'  => [
-                'class' => \yii\filters\Cors::className(),
-                'cors'  => [
-                    // restrict access to domains:
-                    'Origin'                           => static::allowedDomains(),
-                    'Access-Control-Request-Method'    => ['POST'],
-                    //'Access-Control-Allow-Credentials' => true,
-                    'Access-Control-Max-Age'           => 3600,                 // Cache (seconds)
                 ],
             ],
         ];

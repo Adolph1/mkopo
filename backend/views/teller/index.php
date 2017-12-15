@@ -40,18 +40,12 @@ $this->title = Yii::t('app', 'Transactions');
 
             //'id',
             'reference',
-            'product',
             'trn_dt',
             'amount',
             'txn_account',
-            'related_customer',
             'offset_account',
             'offset_amount',
             'status',
-            'maker_id',
-            'maker_time',
-            'checker_id',
-            'checker_time',
 
 
             [

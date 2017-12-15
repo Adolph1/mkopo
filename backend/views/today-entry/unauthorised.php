@@ -51,20 +51,38 @@ $this->title = 'Today Entries';
                 'template'=>'{view}',
                 'buttons'=>[
                     'view' => function ($url, $model) {
-                            if($model->module=='DE'){
-                                $path='teller';
-                                $id=\backend\models\Teller::getIDByReference($model->trn_ref_no);
-                            }elseif($model->module=='LD'){
-                                $path='contract-master';
-                                $id=$model->trn_ref_no;
-                            }
-                        $url=[$path.'/view','id' => $id];
-                        return Html::a('<span class="fa fa-eye"></span>', $url, [
-                            'title' => 'View',
-                            'data-toggle'=>'tooltip','data-original-title'=>'Save',
-                            'class'=>'btn btn-info',
+                        if($model->module=='DE'){
+                            $path='teller';
+                            $id=\backend\models\Teller::getIDByReference($model->trn_ref_no);
+                            $url=[$path.'/view','id' => $id];
+                            return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                'title' => 'View',
+                                'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                                'class'=>'btn btn-info',
 
-                        ]);
+                            ]);
+                        }elseif($model->module=='LD'){
+                            $path='contract-master';
+                            $id=$model->trn_ref_no;
+                            $url=[$path.'/view','id' => $id];
+                            return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                'title' => 'View',
+                                'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                                'class'=>'btn btn-info',
+
+                            ]);
+                        }elseif($model->module=='MD'){
+                            $path='contribution';
+                            $id=\backend\models\Contribution::getIDByReference($model->trn_ref_no);
+                            $url=[$path.'/view','id' => $id];
+                            return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                'title' => 'View',
+                                'data-toggle'=>'tooltip','data-original-title'=>'Save',
+                                'class'=>'btn btn-info',
+
+                            ]);
+                        }
+
 
 
                     },

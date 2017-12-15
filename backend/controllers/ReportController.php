@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\AccdailyBal;
 use backend\models\AccdailyBalSearch;
 use backend\models\CustomerSearch;
 use Yii;

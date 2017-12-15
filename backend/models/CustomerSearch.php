@@ -99,6 +99,7 @@ class CustomerSearch extends Customer
     }
 
 
+
     public function searchAll()
     {
         $query=Customer::find();

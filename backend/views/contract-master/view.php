@@ -16,10 +16,10 @@ use kartik\tabs\TabsX;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
-    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN DETAILS</strong></h3>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <h4 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-file-o"></i><strong> LOAN DETAILS</strong></h4>
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 text-right">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 text-right">
 
 
             <?= Html::a(Yii::t('app', '<i class="fa fa-file-o"></i> NEW LOAN'), ['create'], ['class' => 'btn btn-default text-green']) ?>
@@ -29,7 +29,7 @@ use kartik\tabs\TabsX;
 
     </div>
 
-    <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 
         <div class="btn-group">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">

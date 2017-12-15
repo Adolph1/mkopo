@@ -257,6 +257,7 @@ class TellerController extends Controller
 
 
             $model->save();
+
             return $this->redirect(['teller/view','id'=>$id]);
         }
         else{

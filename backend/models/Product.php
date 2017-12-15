@@ -45,8 +45,8 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['product_id', 'product_descption', 'product_remarks', 'product_start_date', 'product_group',], 'required'],
-            [['mod_no','interest_method',], 'integer'],
-            [['default_rate','min_rate','max_rate', 'fund','default_principal', 'min_principal', 'max_principal'], 'number'],
+            [['mod_no','interest_method','grace_period'], 'integer'],
+            [['default_rate','min_rate','max_rate', 'fund','default_principal', 'min_principal', 'max_principal','allowed_savings_percentage'], 'number'],
             [['product_id', 'product_descption', 'product_type', 'product_module', 'product_remarks', 'product_start_date', 'product_end_date', 'product_group', 'maker_id', 'maker_stamptime', 'checker_id', 'checker_stamptime'], 'string', 'max' => 200],
             [['record_stat'], 'string', 'max' => 20]
         ];
@@ -76,6 +76,8 @@ class Product extends \yii\db\ActiveRecord
             'default_rate'=>'Default Rate',
             'min_rate'=>'Minimum Rate',
             'max_rate'=>'Maximum Rate',
+            'allowed_savings_percentage'=>'Allowed saving percentage',
+            'grace_period'=>'Grace Period',
             'fund'=>'Fund',
             'default_principal'=>'Default Principal',
             'min_principal'=>'Minimum Principal',
@@ -127,6 +129,16 @@ class Product extends \yii\db\ActiveRecord
             return $product->interest_method;
         }else{
             return 3;
+        }
+    }
+
+    public static function getAllowedPercentage($productcode)
+    {
+        $product=Product::findOne($productcode);
+        if($product->allowed_savings_percentage!=0.00){
+            return $product->allowed_savings_percentage;
+        }else{
+            return 0.00;
         }
     }
 

@@ -151,9 +151,6 @@ class TodayEntryController extends Controller
 
             echo '</table>';
         }
-        else{
-            echo 'No transactions found';
-        }
     }
 
     /**

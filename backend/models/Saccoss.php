@@ -46,4 +46,15 @@ class Saccoss extends \yii\db\ActiveRecord
             'address' => Yii::t('app', 'Address'),
         ];
     }
+
+    //gets title
+    public static function getTitle()
+    {
+        $model=Saccoss::findOne(1);
+        if($model!=null){
+            return $model->title;
+        }else{
+            return 'Saccoss Title not set';
+        }
+    }
 }

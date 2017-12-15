@@ -13,10 +13,8 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Branch</th>
-                <th>Opened Date</th>
                 <th>Account Number</th>
-                <th>Customer Number</th>
+                <th>Branch</th>
                 <th>Opening Balance</th>
                 <th>Current Balance</th>
                 <th>Uncleared Balance</th>

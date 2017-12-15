@@ -8,14 +8,14 @@
 ?>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"">
         <?php
         $searchModel = new \backend\models\GuarantorSearch();
         $dataProvider = $searchModel->searchByReference($model->contract_ref_no);
         ?>
         <?= \fedemotta\datatables\DataTables::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 

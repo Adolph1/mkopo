@@ -152,29 +152,19 @@ use yii\widgets\Pjax;
                     'format' => ['decimal', 2],
                     'pageSummary' => true,
                 ],
-                [
-                    'attribute' => 'interest_amount_due',
-                    'format' => ['decimal', 2],
-                    'pageSummary' => true,
-                ],
-                [
-                    'attribute' => 'principal_amount_due',
-                    'format' => ['decimal', 2],
-                    'pageSummary' => true,
-                ],
                 'balance',
-
                 [
-                    'attribute' => 'interest_amount_settled',
-                    'format' => ['decimal', 2],
-                    'pageSummary' => true,
+                    'attribute'=>'status',
+                    'value'=>function ($model){
+
+                        if($model->status=='L'){
+                            return 'Paid';
+                        }else{
+                            return 'Pending';
+                        }
+                    }
                 ],
 
-                [
-                    'attribute' => 'principal_amount_settled',
-                    'format' => ['decimal', 2],
-                    'pageSummary' => true,
-                ],
                 [
                     'class' => 'kartik\grid\ActionColumn',
                     'header' => 'Actions',

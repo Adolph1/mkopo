@@ -144,294 +144,342 @@ class ContractMasterController extends Controller
                 //Calculating Flat rate
 
                 if ($model->load(Yii::$app->request->post()) ) {
-                    $model->calculation_method=Product::getInterestMethod($_POST['ContractMaster']['product']);
+                    //checks minimum savings balance
+                    $percentage = Product::getAllowedPercentage($_POST['ContractMaster']['product']);
 
-                        //saves to today's transactions
-                        //gets accounting roles and events
-                       /* $role_events=ProductAccrole::getRoleEvents($produtcode=$model->product,$event=EventType::INIT);
-                        if($role_events!=null){
-                        foreach($role_events as $role_event){
-                            if($role_event->dr_cr_indicator=='C'){
-                                TodayEntry::saveEntry(
-                                    $module = 'LD',
-                                    $model->contract_ref_no,
-                                    SystemDate::getCurrentDate(),
-                                    $model->settle_account,
-                                    Customer::getBranchByCustomerNo($model->customer_number),
-                                    $model->amount,
-                                    $ind = 'C',
-                                    $model->customer_number,
-                                    $model->product,
-                                    $model->value_date
-                                );
+                    if ($percentage != 0.00) {
 
+                        $result = $this->calculatePercentage($percentage, $_POST['ContractMaster']['amount'], $_POST['ContractMaster']['settle_account']);
+                        if ($result == true) {
 
-                                //update Account balance
+                            $model->calculation_method = Product::getInterestMethod($_POST['ContractMaster']['product']);
 
-                                //AccdailyBal::updateAccountBalance($model->settle_account,$model->amount,'C');
+                            if ($model->save()) {
+                                //saves gurantors
+                                $guarantors = Model::createMultiple(Guarantor::classname());
+                                Model::loadMultiple($guarantors, Yii::$app->request->post());
+                                // print_r($model);
+                                //exit;
 
-                            }elseif($role_event->dr_cr_indicator=='D'){
-                                TodayEntry::saveEntry(
-                                    $module = 'LD',
-                                    $model->contract_ref_no,
-                                    SystemDate::getCurrentDate(),
-                                    $role_event->mis_head,
-                                    Customer::getBranchByCustomerNo($model->customer_number),
-                                    $model->amount,
-                                    $ind = 'D',
-                                    $model->customer_number,
-                                    $model->product,
-                                    $model->value_date
-                                );
-                                
-                                //update GL balance
-
-                               // GlDailyBalance::updateGLBalance($role_event->mis_head,$model->amount,'D');
-
-                            }
-                            }*/
-                     if($model->save()){
-                    //saves gurantors
-                    $guarantors = Model::createMultiple(Guarantor::classname());
-                    Model::loadMultiple($guarantors, Yii::$app->request->post());
-                    // print_r($model);
-                    //exit;
-
-                    // validate all models
-                    $valid = $model->validate();
-                    $valid = Model::validateMultiple($guarantors) && $valid;
+                                // validate all models
+                                $valid = $model->validate();
+                                $valid = Model::validateMultiple($guarantors) && $valid;
 
 
-                    if ($valid) {
+                                if ($valid) {
 
 
-                        $transaction = \Yii::$app->db->beginTransaction();
-                        //print_r($transaction);
-                        //exit;
-                        try {
+                                    $transaction = \Yii::$app->db->beginTransaction();
+                                    //print_r($transaction);
+                                    //exit;
+                                    try {
 
 
-                            foreach ($guarantors as $guarantor) {
+                                        foreach ($guarantors as $guarantor) {
 
 
-                                $guarantor->contract_ref_number = $model->contract_ref_no;
-                                $guarantor->related_customer = $model->customer_number;
-                                $guarantor->maker_id = Yii::$app->user->identity->username;
-                                $guarantor->maker_time = date('Y-m-d:H:i:s');
+                                            $guarantor->contract_ref_number = $model->contract_ref_no;
+                                            $guarantor->related_customer = $model->customer_number;
+                                            $guarantor->maker_id = Yii::$app->user->identity->username;
+                                            $guarantor->maker_time = date('Y-m-d:H:i:s');
 
-                                if (!($flag = $guarantor->save(false))) {
-                                    $transaction->rollBack();
-                                    break;
-                                } else {
-                                    //$this->updateTotal($subitem->id,$subitem->qty,$subitem->price);
+                                            if (!($flag = $guarantor->save(false))) {
+                                                $transaction->rollBack();
+                                                break;
+                                            } else {
+                                                //$this->updateTotal($subitem->id,$subitem->qty,$subitem->price);
+                                            }
+                                        }
+
+                                        $transaction->commit();
+                                        //return $this->redirect(['view', 'id' => $model->id]);
+                                    } catch (Exception $e) {
+                                        $transaction->rollBack();
+                                    }
+
                                 }
+
+
+                                //calculate repayment schedule
+                                if ($model->calculation_method == ContractMaster::FLAT_RATE) {
+                                    if ($model->frequency == 0) {
+                                        $time = 1;
+                                        $rate = $model->main_component_rate;
+                                        $totalRepay = $this->getInterest($model->amount, $time, $rate / 100);
+
+                                        //for one month
+
+                                        $duemodel = new ContractAmountDue();
+                                        $duemodel->contract_ref_number = $model->contract_ref_no;
+                                        $duemodel->component = 'PRINCIPAL';
+                                        $duemodel->amount_due = $model->amount;
+                                        $duemodel->currency_amt_due = 'TZS';
+                                        $duemodel->account_due = $model->customer_number;
+                                        $duemodel->amount_settled = '0';
+                                        $duemodel->customer_number = $model->customer_number;
+                                        $duemodel->inflow_outflow = 'O';
+                                        $duemodel->basis_amount_tag = '';
+                                        $duemodel->adjusted_amount = '0';
+                                        $duemodel->scheduled_linkage = '';
+                                        $duemodel->component_type = 'P';
+                                        $duemodel->amount_prepaid = '0';
+                                        $duemodel->due_date = $model->payment_date;
+                                        $duemodel->original_due_date = $model->payment_date;
+                                        $duemodel->status = 'A';
+
+                                        $duemodel->save();
+
+
+                                        $duemodel1 = new ContractAmountDue();
+                                        $duemodel1->contract_ref_number = $model->contract_ref_no;
+                                        $duemodel1->currency_amt_due = 'TZS';
+                                        $duemodel1->account_due = $model->customer_number;
+                                        $duemodel1->amount_settled = '0';
+                                        $duemodel1->customer_number = $model->customer_number;
+                                        $duemodel1->inflow_outflow = 'O';
+                                        $duemodel1->basis_amount_tag = '';
+                                        $duemodel1->adjusted_amount = '0';
+                                        $duemodel1->scheduled_linkage = '';
+                                        $duemodel1->component_type = 'I';
+                                        $duemodel1->amount_prepaid = '0';
+                                        $duemodel1->due_date = $model->payment_date;
+                                        $duemodel1->original_due_date = $model->payment_date;
+                                        $duemodel1->component = 'INTEREST';
+                                        $duemodel1->amount_due = $totalRepay;
+                                        $duemodel1->status = 'A';
+
+                                        $duemodel1->save();
+                                        $contractBalance = new ContractBalance();
+                                        $contractBalance->contract_amount = $model->amount;
+                                        $contractBalance->contract_outstanding = $model->amount + $totalRepay;
+                                        $contractBalance->contract_ref_number = $model->contract_ref_no;
+                                        $contractBalance->last_updated = date('Y-m-d H:i:s');
+                                        $contractBalance->save();
+
+
+                                    } else {
+
+
+
+                                        //posts each payment date principal and interest
+
+                                        if($model->payment_method==ContractMaster::MONTHLY) {
+
+                                            $time = $model->frequency;
+                                            $rate = $model->main_component_rate;
+                                            $modelpaymentdate = $model->payment_date;
+                                            $totalInterst = $this->getInterest($model->amount, $time, $rate / 100);
+                                            $totalOutstanding = $model->amount + $totalInterst;
+                                            $monthlyRepayment = $totalOutstanding / $time;
+                                            $monthlyinterest = $this->getMonthlyInterest($model->amount, $rate / 100);
+                                            $monthlyprincipal = $monthlyRepayment - $monthlyinterest;
+
+                                            for ($i = 1; $i <= $model->frequency; $i++) {
+
+
+                                                $duemodel = new ContractAmountDue();
+                                                $duemodel->contract_ref_number = $model->contract_ref_no;
+                                                $duemodel->component = 'PRINCIPAL';
+                                                $duemodel->amount_due = $monthlyprincipal;
+                                                $duemodel->currency_amt_due = 'TZS';
+                                                $duemodel->account_due = $model->customer_number;
+                                                $duemodel->amount_settled = '0';
+                                                $duemodel->customer_number = $model->customer_number;
+                                                $duemodel->inflow_outflow = 'O';
+                                                $duemodel->basis_amount_tag = '';
+                                                $duemodel->adjusted_amount = '0';
+                                                $duemodel->scheduled_linkage = '';
+                                                $duemodel->component_type = 'P';
+                                                $duemodel->amount_prepaid = '0';
+                                                $duemodel->due_date = $model->payment_date;
+                                                $duemodel->original_due_date = $model->payment_date;
+                                                $duemodel->status = 'A';
+                                                $duemodel->save();
+
+
+                                                $duemodel1 = new ContractAmountDue();
+                                                $duemodel1->contract_ref_number = $model->contract_ref_no;
+                                                $duemodel1->currency_amt_due = 'TZS';
+                                                $duemodel1->account_due = $model->customer_number;
+                                                $duemodel1->amount_settled = '0';
+                                                $duemodel1->customer_number = $model->customer_number;
+                                                $duemodel1->inflow_outflow = 'O';
+                                                $duemodel1->basis_amount_tag = '';
+                                                $duemodel1->adjusted_amount = '0';
+                                                $duemodel1->scheduled_linkage = '';
+                                                $duemodel1->component_type = 'I';
+                                                $duemodel1->amount_prepaid = '0';
+                                                $duemodel1->due_date = $model->payment_date;
+                                                $duemodel1->original_due_date = $model->payment_date;
+                                                $duemodel1->component = 'INTEREST';
+                                                $duemodel1->amount_due = $monthlyinterest;
+                                                $duemodel1->status = 'A';
+
+                                                $duemodel1->save();
+
+
+                                                $month = $i . "months";
+                                                $nextdate = date_create($modelpaymentdate);
+                                                date_add($nextdate, date_interval_create_from_date_string($month));
+                                                $nextdate = date_format($nextdate, 'Y-m-d');
+
+                                                $model->payment_date = $nextdate;
+
+
+                                            }
+                                        }elseif ($model->payment_method==ContractMaster::WEEKLY){
+                                            $no_of_days=$this->calDays($model->maturity_date,$model->payment_date);
+                                            //print_r($no_of_days);
+                                            //exit;
+                                            $time = $no_of_days/30;
+                                            $rate = $model->main_component_rate;
+                                            $modelpaymentdate = $model->payment_date;
+                                            $totalInterst = $this->getInterest($model->amount, $time, $rate / 100);
+                                            $totalOutstanding = $model->amount + $totalInterst;
+                                            $weeklyRepayment = ($totalOutstanding / $time)*(7/30);
+                                            $weeklyinterest = $this->getMonthlyInterest($model->amount, $rate / 100)*(7/30);
+                                            $weeklyprincipal = $weeklyRepayment - $weeklyinterest;
+
+
+                                            for ($i = 1; $i <= $no_of_days/7; $i++) {
+
+                                                $duemodel = new ContractAmountDue();
+                                                $duemodel->contract_ref_number = $model->contract_ref_no;
+                                                $duemodel->component = 'PRINCIPAL';
+                                                $duemodel->amount_due = $weeklyprincipal;
+                                                $duemodel->currency_amt_due = 'TZS';
+                                                $duemodel->account_due = $model->customer_number;
+                                                $duemodel->amount_settled = '0';
+                                                $duemodel->customer_number = $model->customer_number;
+                                                $duemodel->inflow_outflow = 'O';
+                                                $duemodel->basis_amount_tag = '';
+                                                $duemodel->adjusted_amount = '0';
+                                                $duemodel->scheduled_linkage = '';
+                                                $duemodel->component_type = 'P';
+                                                $duemodel->amount_prepaid = '0';
+                                                $duemodel->due_date = $model->payment_date;
+                                                $duemodel->original_due_date = $model->payment_date;
+                                                $duemodel->status = 'A';
+                                                $duemodel->save();
+
+
+                                                $duemodel1 = new ContractAmountDue();
+                                                $duemodel1->contract_ref_number = $model->contract_ref_no;
+                                                $duemodel1->currency_amt_due = 'TZS';
+                                                $duemodel1->account_due = $model->customer_number;
+                                                $duemodel1->amount_settled = '0';
+                                                $duemodel1->customer_number = $model->customer_number;
+                                                $duemodel1->inflow_outflow = 'O';
+                                                $duemodel1->basis_amount_tag = '';
+                                                $duemodel1->adjusted_amount = '0';
+                                                $duemodel1->scheduled_linkage = '';
+                                                $duemodel1->component_type = 'I';
+                                                $duemodel1->amount_prepaid = '0';
+                                                $duemodel1->due_date = $model->payment_date;
+                                                $duemodel1->original_due_date = $model->payment_date;
+                                                $duemodel1->component = 'INTEREST';
+                                                $duemodel1->amount_due = $weeklyinterest;
+                                                $duemodel1->status = 'A';
+
+                                                $duemodel1->save();
+
+
+                                                $week = $i . "weeks";
+                                                $nextdate = date_create($modelpaymentdate);
+                                                date_add($nextdate, date_interval_create_from_date_string($week));
+                                                $nextdate = date_format($nextdate, 'Y-m-d');
+
+                                                $model->payment_date = $nextdate;
+
+
+                                            }
+                                        }
+
+                                        //saves contract balance
+                                        $contractBalance = new ContractBalance();
+                                        $contractBalance->contract_amount = $model->amount;
+                                        $contractBalance->contract_outstanding = $model->amount + $totalInterst;
+                                        $contractBalance->contract_ref_number = $model->contract_ref_no;
+                                        $contractBalance->last_updated = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
+                                        $contractBalance->save();
+
+
+                                    }
+                                } elseif ($model->calculation_method == ContractMaster::REDUCING_BALANCE) {
+
+                                    $rate = $model->main_component_rate / 1200;
+                                    $monthlypayment = $this->calRDPayment($model->amount, $rate, $model->frequency);
+
+                                    $interest = $model->amount * $rate;
+                                    $principal = $monthlypayment - $interest;
+                                    $balance = $model->amount - $principal;
+                                    $contract_amount = $model->amount;
+
+
+                                    for ($i = 1; $i <= $model->frequency; $i++) {
+
+
+                                        $duemodel = new ContractAmountReduceDue();
+                                        $duemodel->contract_ref_number = $model->contract_ref_no;
+                                        $duemodel->monthly_payment = $monthlypayment;
+                                        $duemodel->interest_amount_due = $interest;
+                                        $duemodel->principal_amount_due = $principal;
+                                        $duemodel->balance = $balance;
+                                        $duemodel->interest_amount_settled = '0.00';
+                                        $duemodel->principal_amount_settled = '0.00';
+                                        $duemodel->account_due = $model->settle_account;
+
+                                        $duemodel->customer_number = $model->customer_number;
+                                        $duemodel->inflow_outflow = 'O';
+                                        $duemodel->basis_amount_tag = '';
+                                        $duemodel->adjusted_amount = '0';
+                                        $duemodel->scheduled_linkage = '';
+                                        $duemodel->amount_prepaid = '0';
+                                        $duemodel->due_date = $model->payment_date;
+                                        $duemodel->original_due_date = $model->payment_date;
+                                        $duemodel->status = 'A';
+                                        $duemodel->save();
+
+                                        //increment month by i
+                                        $month = $i . "months";
+                                        $nextdate = date_create($model->payment_date);
+                                        date_add($nextdate, date_interval_create_from_date_string($month));
+                                        $nextdate = date_format($nextdate, 'Y-m-d');
+
+                                        $model->amount = $duemodel->balance;
+                                        $rate = $model->main_component_rate / 1200;
+                                        $interest = $duemodel->balance * $rate;
+                                        $principal = $monthlypayment - $interest;
+                                        $balance = $duemodel->balance - $principal;
+                                        $model->payment_date = $nextdate;
+
+
+                                    }
+                                    $contractbalance = new ContractBalance();
+                                    $contractbalance->contract_ref_number = $model->contract_ref_no;
+                                    $contractbalance->contract_amount = $contract_amount;
+                                    $contractbalance->contract_outstanding = $monthlypayment * $model->frequency;
+                                    $contractbalance->save();
+                                }
+
+                                $modelrefid = ReferenceIndex::getIDByRef($model->contract_ref_no);
+                                ReferenceIndex::updateReference($modelrefid);
+
+                                return $this->redirect(['view', 'id' => $model->contract_ref_no]);
                             }
-
-                            $transaction->commit();
-                            //return $this->redirect(['view', 'id' => $model->id]);
-                        } catch (Exception $e) {
-                            $transaction->rollBack();
+                        } else {
+                            Yii::$app->session->setFlash('danger', 'savings amount must be greater or equal to '.$percentage. '% of the loan amount');
+                            return $this->render('create', [
+                                'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
+                            ]);
                         }
-
+                    }else{
+                        Yii::$app->session->setFlash('warning', 'Please set the minimum allowed savings percentage for the loan product.');
+                        return $this->render('create', [
+                            'guarantors' => (empty($guarantors)) ? [new Guarantor()] : $guarantors, 'model' => $model
+                        ]);
                     }
-
-
-                    //calculate repayment schedule
-                  if($model->calculation_method==ContractMaster::FLAT_RATE) {
-                      if ($model->frequency == 0) {
-                          $time = 1;
-                          $rate = $model->main_component_rate;
-                          $totalRepay = $this->getInterest($model->amount, $time, $rate / 100);
-
-                          //for one month
-
-                          $duemodel = new ContractAmountDue();
-                          $duemodel->contract_ref_number = $model->contract_ref_no;
-                          $duemodel->component = 'PRINCIPAL';
-                          $duemodel->amount_due = $model->amount;
-                          $duemodel->currency_amt_due = 'TZS';
-                          $duemodel->account_due = $model->customer_number;
-                          $duemodel->amount_settled = '0';
-                          $duemodel->customer_number = $model->customer_number;
-                          $duemodel->inflow_outflow = 'O';
-                          $duemodel->basis_amount_tag = '';
-                          $duemodel->adjusted_amount = '0';
-                          $duemodel->scheduled_linkage = '';
-                          $duemodel->component_type = 'P';
-                          $duemodel->amount_prepaid = '0';
-                          $duemodel->due_date = $model->payment_date;
-                          $duemodel->original_due_date = $model->payment_date;
-                          $duemodel->status = 'A';
-
-                          $duemodel->save();
-
-
-                          $duemodel1 = new ContractAmountDue();
-                          $duemodel1->contract_ref_number = $model->contract_ref_no;
-                          $duemodel1->currency_amt_due = 'TZS';
-                          $duemodel1->account_due = $model->customer_number;
-                          $duemodel1->amount_settled = '0';
-                          $duemodel1->customer_number = $model->customer_number;
-                          $duemodel1->inflow_outflow = 'O';
-                          $duemodel1->basis_amount_tag = '';
-                          $duemodel1->adjusted_amount = '0';
-                          $duemodel1->scheduled_linkage = '';
-                          $duemodel1->component_type = 'I';
-                          $duemodel1->amount_prepaid = '0';
-                          $duemodel1->due_date = $model->payment_date;
-                          $duemodel1->original_due_date = $model->payment_date;
-                          $duemodel1->component = 'INTEREST';
-                          $duemodel1->amount_due = $totalRepay;
-                          $duemodel1->status = 'A';
-
-                          $duemodel1->save();
-                          $contractBalance = new ContractBalance();
-                          $contractBalance->contract_amount = $model->amount;
-                          $contractBalance->contract_outstanding = $model->amount + $totalRepay;
-                          $contractBalance->contract_ref_number = $model->contract_ref_no;
-                          $contractBalance->last_updated = date('Y-m-d H:i:s');
-                          $contractBalance->save();
-
-
-                      } else {
-                          $time = $model->frequency;
-                          $rate = $model->main_component_rate;
-                          $modelpaymentdate = $model->payment_date;
-                          $totalInterst = $this->getInterest($model->amount, $time, $rate / 100);
-                          $totalOutstanding = $model->amount + $totalInterst;
-                          $monthlyRepayment = $totalOutstanding / $time;
-                          $monthlyinterest = $this->getMonthlyInterest($model->amount, $rate / 100);
-                          $monthlyprincipal = $monthlyRepayment - $monthlyinterest;
-
-
-                          //posts each payment date principal and interest
-                          for ($i = 1; $i <= $model->frequency; $i++) {
-
-
-                              $duemodel = new ContractAmountDue();
-                              $duemodel->contract_ref_number = $model->contract_ref_no;
-                              $duemodel->component = 'PRINCIPAL';
-                              $duemodel->amount_due = $monthlyprincipal;
-                              $duemodel->currency_amt_due = 'TZS';
-                              $duemodel->account_due = $model->customer_number;
-                              $duemodel->amount_settled = '0';
-                              $duemodel->customer_number = $model->customer_number;
-                              $duemodel->inflow_outflow = 'O';
-                              $duemodel->basis_amount_tag = '';
-                              $duemodel->adjusted_amount = '0';
-                              $duemodel->scheduled_linkage = '';
-                              $duemodel->component_type = 'P';
-                              $duemodel->amount_prepaid = '0';
-                              $duemodel->due_date = $model->payment_date;
-                              $duemodel->original_due_date = $model->payment_date;
-                              $duemodel->status = 'A';
-                              $duemodel->save();
-
-
-                              $duemodel1 = new ContractAmountDue();
-                              $duemodel1->contract_ref_number = $model->contract_ref_no;
-                              $duemodel1->currency_amt_due = 'TZS';
-                              $duemodel1->account_due = $model->customer_number;
-                              $duemodel1->amount_settled = '0';
-                              $duemodel1->customer_number = $model->customer_number;
-                              $duemodel1->inflow_outflow = 'O';
-                              $duemodel1->basis_amount_tag = '';
-                              $duemodel1->adjusted_amount = '0';
-                              $duemodel1->scheduled_linkage = '';
-                              $duemodel1->component_type = 'I';
-                              $duemodel1->amount_prepaid = '0';
-                              $duemodel1->due_date = $model->payment_date;
-                              $duemodel1->original_due_date = $model->payment_date;
-                              $duemodel1->component = 'INTEREST';
-                              $duemodel1->amount_due = $monthlyinterest;
-                              $duemodel1->status = 'A';
-
-                              $duemodel1->save();
-                              $month = $i . "months";
-                              $nextdate = date_create($modelpaymentdate);
-                              date_add($nextdate, date_interval_create_from_date_string($month));
-                              $nextdate = date_format($nextdate, 'Y-m-d');
-
-                              $model->payment_date = $nextdate;
-
-
-                          }
-
-                          //saves contract balance
-                          $contractBalance = new ContractBalance();
-                          $contractBalance->contract_amount = $model->amount;
-                          $contractBalance->contract_outstanding = $model->amount + $totalInterst;
-                          $contractBalance->contract_ref_number = $model->contract_ref_no;
-                          $contractBalance->last_updated = SystemDate::getCurrentDate() . ' ' . date('H:i:s');
-                          $contractBalance->save();
-
-
-
-                      }
-                  }elseif($model->calculation_method==ContractMaster::REDUCING_BALANCE){
-
-                      $rate = $model->main_component_rate / 1200;
-                      $monthlypayment = $this->calRDPayment($model->amount, $rate, $model->frequency);
-
-                      $interest = $model->amount*$rate;
-                      $principal = $monthlypayment - $interest;
-                      $balance=$model->amount-$principal;
-                      $contract_amount=$model->amount;
-
-
-
-                      for ($i = 1; $i <= $model->frequency; $i++) {
-
-
-                          $duemodel = new ContractAmountReduceDue();
-                          $duemodel->contract_ref_number = $model->contract_ref_no;
-                          $duemodel->monthly_payment = $monthlypayment;
-                          $duemodel->interest_amount_due = $interest;
-                          $duemodel->principal_amount_due = $principal;
-                          $duemodel->balance=$balance;
-                          $duemodel->interest_amount_settled = '0.00';
-                          $duemodel->principal_amount_settled = '0.00';
-                          $duemodel->account_due = $model->settle_account;
-
-                          $duemodel->customer_number = $model->customer_number;
-                          $duemodel->inflow_outflow = 'O';
-                          $duemodel->basis_amount_tag = '';
-                          $duemodel->adjusted_amount = '0';
-                          $duemodel->scheduled_linkage = '';
-                          $duemodel->amount_prepaid = '0';
-                          $duemodel->due_date = $model->payment_date;
-                          $duemodel->original_due_date = $model->payment_date;
-                          $duemodel->status = 'A';
-                          $duemodel->save();
-
-                          //increment month by i
-                          $month = $i . "months";
-                          $nextdate = date_create($model->payment_date);
-                          date_add($nextdate, date_interval_create_from_date_string($month));
-                          $nextdate = date_format($nextdate, 'Y-m-d');
-
-                          $model->amount = $duemodel->balance;
-                          $rate = $model->main_component_rate / 1200;
-                          $interest=$duemodel->balance*$rate;
-                          $principal = $monthlypayment - $interest;
-                          $balance=$duemodel->balance-$principal;
-                          $model->payment_date = $nextdate;
-
-
-                      }
-                      $contractbalance = new ContractBalance();
-                      $contractbalance->contract_ref_number = $model->contract_ref_no;
-                      $contractbalance->contract_amount = $contract_amount;
-                      $contractbalance->contract_outstanding = $monthlypayment*$model->frequency;
-                      $contractbalance->save();
-                  }
-
-                    $modelrefid = ReferenceIndex::getIDByRef($model->contract_ref_no);
-                    ReferenceIndex::updateReference($modelrefid);
-
-                    return $this->redirect(['view', 'id' => $model->contract_ref_no]);
                 }
-            }
               else{
 
                   return $this->render('create', [
@@ -900,6 +948,24 @@ class ContractMasterController extends Controller
         return $days;
 
     }
+
+
+
+    public  function  calculatePercentage($percentage,$amount,$saving_account)
+    {
+      $accbal=AccdailyBal::getBalance($saving_account);
+
+      $percentageamount=($percentage/100)*$amount;
+      if($accbal->available_balance>=$percentageamount){
+          return true;
+      }else{
+          return false;
+      }
+
+
+
+    }
+
 
     public function findSystemRate()
     {

@@ -60,7 +60,7 @@ class Teller extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'reference' => Yii::t('app', 'Reference'),
             'product' => Yii::t('app', 'Product'),
-            'trn_dt' => Yii::t('app', 'Trn Dt'),
+            'trn_dt' => Yii::t('app', 'Transaction Date'),
             'amount' => Yii::t('app', 'Amount'),
             'txn_account' => Yii::t('app', 'Transaction Account'),
             'related_customer' => Yii::t('app', 'Related Customer'),

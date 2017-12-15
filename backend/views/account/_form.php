@@ -24,11 +24,14 @@ use dosamigos\datepicker\DatePicker;
     </div>
 </div>
     <div class="row">
-        <div class="col-lg-2 col-md-6 col-sm-12 col-xs-12">
+        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
             <?= $form->field($model, 'account_class')->dropDownList(\backend\models\AccountClass::getAll(),['prompt'=>'--Select--']) ?>
         </div>
-        <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-8 col-md-6 col-sm-12 col-xs-12">
     <?= $form->field($model, 'ac_desc')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+            <?= $form->field($model, 'ac_opening_bal')->textInput() ?>
         </div>
     </div>
 
@@ -87,8 +90,11 @@ use dosamigos\datepicker\DatePicker;
     </div>
 
 
-    <div class="form-group" align="center">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="form-group">
+        <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Save') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success btn-block' : 'btn btn-primary btn-block']) ?>
+        </div>
+
     </div>
 
     <?php ActiveForm::end(); ?>

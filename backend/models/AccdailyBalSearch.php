@@ -108,5 +108,4 @@ class AccdailyBalSearch extends AccdailyBal
         $query->orderBy('id DESC');
         return $dataProvider;
     }
-
 }

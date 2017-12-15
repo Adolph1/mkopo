@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\AccdailyBal;
+use backend\models\AccountBalSetting;
 use backend\models\Audit;
 use backend\models\SystemDate;
 use Yii;
@@ -80,19 +81,42 @@ class AccountController extends Controller
             $model->auth_stat = 'U';
 
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post())) {
 
-                $dailyBalance = new AccdailyBal();
-                $dailyBalance->branch_code = $model->branch_code;
-                $dailyBalance->account = $model->cust_ac_no;
-                $dailyBalance->available_balance = 0.00;
-                $dailyBalance->value_date = SystemDate::getCurrentDate();
-                $dailyBalance->Cedit_tur = 0.00;
-                $dailyBalance->Debit_tur = 0.00;
-                $dailyBalance->save();
+                $opening_balance=$_POST['Account']['ac_opening_bal'];
+
+                //checking balance against rule
+
+                $rule_balance=AccountBalSetting::getBalanceByAccClass($_POST['Account']['account_class']);
+                if($rule_balance!=null) {
+
+                    if ($opening_balance >= $rule_balance) {
+                        $model->save();
+                        $dailyBalance = new AccdailyBal();
+                        $dailyBalance->branch_code = $model->branch_code;
+                        $dailyBalance->account = $model->cust_ac_no;
+                        $dailyBalance->available_balance = $model->ac_opening_bal;
+                        $dailyBalance->value_date = SystemDate::getCurrentDate();
+                        $dailyBalance->Cedit_tur =$model->ac_opening_bal;
+                        $dailyBalance->Debit_tur = 0.00;
+                        $dailyBalance->save();
 
 
-                return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+                        return $this->redirect(['view', 'id' => $model->cust_ac_no]);
+                    }
+                    else{
+                        Yii::$app->session->setFlash('danger', 'Opening balance must be greater or equal to '.$rule_balance);
+                        return $this->render('create', [
+                            'model' => $model,
+                        ]);
+                    }
+
+                }else{
+                    Yii::$app->session->setFlash('warning', 'Please set your minimum account opening balance ');
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
+                }
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -238,6 +262,18 @@ class AccountController extends Controller
         }
     }
 
+    //check account existance
+
+    public function actionCheckExist($id)
+    {
+        $model=$this->findModel($id);
+        if($model!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
 
 
@@ -253,7 +289,7 @@ class AccountController extends Controller
         if (($model = Account::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            return null;
         }
     }
 

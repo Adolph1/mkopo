@@ -30,24 +30,11 @@ use kartik\tabs\TabsX;
     ); ?>
 
     <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8">
-        <h3 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-user text-green"></i><strong> CUSTOMER DETAILS</strong></h3>
+        <h4 style="color: #003b4c;font-family: Tahoma"><i class="fa fa-user text-green"></i><strong> CUSTOMER DETAILS</strong></h4>
 
 
     </div>
-    <div class="col-lg-1 col-md-1 col-sm-8 col-xs-8">
-    <?php
-
-    if($model->photo!=null) {
-        echo Html::img('uploads/' . $model['photo'],
-            ['width' => '70px', 'height' => '70px', 'class' => 'img-circle']);
-    }
-    else{
-        echo Html::img('uploads/avatar.jpeg',
-            ['width' => '70px', 'height' => '70px', 'class' => 'img-circle']);
-    }
-    ?>
-    </div>
-    <div class="col-lg-3 col-md-8 col-sm-8 col-xs-8">
+    <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
         <?php
 
         $data = \backend\models\Customer::find()
@@ -88,7 +75,7 @@ use kartik\tabs\TabsX;
         <?= Html::activeHiddenInput($model, 'customer_detail',['id'=>'prd-id'])?>
 
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-8 col-xs-8">
+    <div class="col-lg-4 col-md-4 col-sm-8 col-xs-8">
 
 
 
@@ -99,7 +86,7 @@ use kartik\tabs\TabsX;
 
     </div>
 
-    <div class="col-lg-2 col-md-2 col-sm-8 col-xs-8">
+    <div class="col-lg-1 col-md-1 col-sm-8 col-xs-8">
 
         <div class="btn-group">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -133,13 +120,27 @@ use kartik\tabs\TabsX;
         </div>
 
     </div>
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 text-center">
+        <?php
+
+        if($model->photo!=null) {
+            echo Html::img('uploads/' . $model['photo'],
+                ['width' => '70px', 'height' => '70px', 'class' => 'img-circle']);
+        }
+        else{
+            echo Html::img('uploads/avatar.jpeg',
+                ['width' => '70px', 'height' => '70px', 'class' => 'img-circle']);
+        }
+        ?>
+    </div>
 </div>
+<hr/>
 
 
 <hr>
 <div id="loader1" style="display: none"></div>
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-lg-5 col-md-5">
 
     <legend class="scheduler-border text-info">Personal Details</legend>
         <div class="row">
@@ -223,7 +224,7 @@ use kartik\tabs\TabsX;
         </div>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-7">
         <?php
 
         echo TabsX::widget([
@@ -257,24 +258,6 @@ use kartik\tabs\TabsX;
                 ],
                 [
                     'visible'=>!$model->isNewRecord,
-                    'label' => 'Deposits',
-                    //'content' => $this->render('_student',['student'=>$student,'model'=>$model]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    //'active' => $model->status==3,
-                    'options' => ['id' => 'student','class'=>'disabled'],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Shares',
-                    //'content' => $this->render('_regfee',['regfee'=>$regfee,'model'=>$model]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    //'active' => $model->status==4,
-                    'options' => ['id' => 'regfee','class'=>'disabled'],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
                     'label' => 'Collateral',
                     //'active' => $model->status==5,
                     //'content' => $this->render('_login',['model'=>$model,'user'=>$user,]),
@@ -284,25 +267,7 @@ use kartik\tabs\TabsX;
                 ],
                 [
                     'visible'=>!$model->isNewRecord,
-                    'label' => 'Contacts',
-                    //'active' => $model->status==6,
-                    //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'preview',],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Identifications',
-                    //'active' => $model->status==6,
-                    //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
-                    'headerOptions' => ['style'=>'font-weight:bold'],
-                    'options' => ['id' => 'preview',],
-
-                ],
-                [
-                    'visible'=>!$model->isNewRecord,
-                    'label' => 'Business Details',
+                    'label' => 'Contributions',
                     //'active' => $model->status==6,
                     //'content' => $this->render('_preview',['model'=>$model,'student'=>$student,]),
                     'headerOptions' => ['style'=>'font-weight:bold'],
@@ -318,21 +283,20 @@ use kartik\tabs\TabsX;
     <div class="row">
 
     </div>
-    <hr>
+    <hr/>
     <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center"></div>
-        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 text-center">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_id')->textInput(['readonly'=>'readonly']) ?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?php if(!$model->isNewRecord) echo $form->field($model, 'maker_time')->textInput(['readonly'=>'readonly']) ?>
         </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_id')->textInput(['readonly'=>'readonly']) ?>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <?php if(!$model->isNewRecord) echo $form->field($model, 'checker_time')->textInput(['readonly'=>'readonly']) ?>
                 </div>
             </div>

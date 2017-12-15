@@ -82,10 +82,19 @@ class Contribution extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(ContributionType::className(), ['id' => 'contribution_type']);
-    }public function getPayment()
-{
-    return $this->hasOne(PaymentMethod::className(), ['id' => 'payment_type']);
-}
+    }
+    public function getPayment()
+    {
+        return $this->hasOne(PaymentMethod::className(), ['id' => 'payment_type']);
+    }
+
+    public static function getIDByReference($id)
+    {
+        $contrb=Contribution::find()->where(['trn_ref_no'=>$id])->one();
+        if($contrb!=null){
+            return $contrb->id;
+        }
+    }
 
 
 

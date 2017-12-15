@@ -31,7 +31,7 @@ use kartik\grid\GridView;
             ?>
         </div>
         <div class="col-md-2">
-            <?= Html::a(Yii::t('app', '<i class="fa fa-building-o"></i> Post Deposit'), ['teller/create'],
+            <?= Html::a(Yii::t('app', '<i class="fa fa-building-o"></i> New Teller Transaction'), ['teller/create'],
                 [
                     'class' =>Yii::$app->user->can('createContract') ? 'btn btn-default enabled':'btn btn-default disabled',
 
@@ -40,7 +40,7 @@ use kartik\grid\GridView;
         </div>
 
         <div class="col-md-2">
-            <?= Html::a(Yii::t('app', '<i class="fa fa-sitemap"></i> New Branch'), ['branch/create'],
+            <?= Html::a(Yii::t('app', '<i class="fa fa-money"></i> New Contribution'), ['contribution/create'],
                 [
                     'class' =>Yii::$app->user->can('createContract') ? 'btn btn-default enabled':'btn btn-default disabled',
 
@@ -49,7 +49,56 @@ use kartik\grid\GridView;
         </div>
     </div>
 <hr/>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-purple"><i class="fa fa-user"></i></span>
 
+                <div class="info-box-content">
+                    <span class="info-box-text">Customers</span>
+                    <span class="info-box-number"><?= \backend\models\Customer::getCustomerCount();?></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-money"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Active Loans</span>
+                    <span class="info-box-number"><?= \backend\models\ContractMaster::getActiveLoanCount();?></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-bank"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Savings</span>
+                    <span class="info-box-number">41,410</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-purple"><i class="fa fa-building"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Groups</span>
+                    <span class="info-box-number">41,410</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="box box-solid bg-teal-gradient">
@@ -82,6 +131,9 @@ use kartik\grid\GridView;
                                    return 'Loans';
                                }elseif ($model->module=='JRN'){
                                    return 'Journal Entries';
+                               }
+                               elseif ($model->module=='MD'){
+                                   return 'Contributions';
                                }
                             },
                             'type' => 'string',
@@ -149,7 +201,7 @@ use kartik\grid\GridView;
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-solid box-warning">
+            <div class="box box-solid box-default">
                 <div class="box-header ui-sortable-handle" style="cursor: move;">
                     <i class="fa fa-th"></i>
 

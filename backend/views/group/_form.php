@@ -18,7 +18,7 @@ use kartik\date\DatePicker;
 
     </div>
     <div class="col-md-4">
-        <?= $model->isNewRecord ? $form->field($model, 'group_number')->textInput(['maxlength' => true,'value'=>\backend\models\Group::findLast()]) : $form->field($model, 'group_number')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+        <?= $model->isNewRecord ? $form->field($model, 'group_number')->textInput(['maxlength' => true,'readonly'=>'readonly','value'=>\backend\models\Group::findLast()]) : $form->field($model, 'group_number')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
 
     </div>
 </div>
@@ -55,8 +55,10 @@ use kartik\date\DatePicker;
     <div class="row">
         <div class="col-md-12 text-right">
     <div class="form-group">
+        <div class="col-md-3 col-sm-3 col-xs-3 pull-right">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Close'), ['index'], ['class' =>'btn btn-default']) ?>
+        </div>
     </div>
         </div>
     </div>
